@@ -1,0 +1,11 @@
+2021 :
+2 : sous-marin montant ou descendant
+8 => coder chiffres avec 7 signaux de 'a' à 'g'
+9 => recherche de bassins (découpage en régions astucieux)
+10 : chaînes ouvrantes/fermantes "{[(<"
+11 => flashes (checker utilisable)
+
+2022 :
+1 : comptage de calories
+2 : pierre feuille ciseaux
+3 => caractère commun à 2 chaînes ou plus
