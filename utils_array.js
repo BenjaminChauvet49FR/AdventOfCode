@@ -40,3 +40,28 @@ function shiftGreatestNumbers(p_number, p_array) {
 		}
 	}
 }
+
+
+function generateDoubleEntryArray(p_xLength, p_yLength, p_value) {
+	var answer = [];
+	for (y = 0 ; y < p_yLength ; y++) {
+		answer.push([]);
+		for (x = 0 ; x < p_xLength ; x++) {
+			answer[y].push(p_value);
+		}
+	}
+	return answer;
+}
+
+// Inserts an element into an array according to p_function, immediately before the first element for which the function is true. 
+// If it is never true, inserts it at the end.
+// https://stackabuse.com/javascript-how-to-insert-elements-into-a-specific-index-of-an-array/
+// Example : array = [1, 3, 5, 7]; shiftIntoArray(array, 4, function(element, already) { return element > already}); // array = [1, 3, 4, 5, 7]
+// Another xample : array = [9, 7, 5, 2]; shiftIntoArray(array, 4, function(element, already) { return element < already}); // array = [9, 7, 5, 4, 2]
+function shiftIntoArray(p_sortedArray, p_element, p_function) {
+	var i = 0;
+	while (i < p_sortedArray.length && p_function(p_element, p_sortedArray[i])) {
+		i++;
+	}
+	p_sortedArray.splice(i, 0, p_element);		
+}

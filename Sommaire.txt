@@ -4,6 +4,8 @@
 9 => recherche de bassins (découpage en régions astucieux)
 10 : chaînes ouvrantes/fermantes "{[(<"
 11 => flashes (checker utilisable)
+15 => recherche de risque minimal
+16 => décodage, pacekts et subpackets
 
 2022 :
 1 : comptage de calories
