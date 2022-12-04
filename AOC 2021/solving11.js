@@ -14,21 +14,28 @@ var rawData =
 // https://adventofcode.com/2021/day/11/input
 
 var dynamicData = digitPseudoArray_to_digitArray(rawData);
+const yLength = dynamicData.length;
+const xLength = dynamicData[0].length;
+var checkerFlashed = new CheckCollectionDoubleEntry(xLength, yLength);
+var newFlashes = [];
 
+function increaseAndTryToFlash(p_x, p_y) {
+	dynamicData[p_y][p_x]++;
+	if (dynamicData[p_y][p_x] == 10) {
+		newFlashes.push({x : p_x, y : p_y});
+		checkerFlashed.add(p_x, p_y);
+	}
+}
 
 function oneStep() {
+	checkerFlashed.clean();
 	var countFlashes = 0;
 	var x, y;
-	const yLength = dynamicData.length;
-	const xLength = dynamicData[0].length;
+	newFlashes = [];
 	// First, increase all values by 1 AND notice the ones who flashed
-	var newFlashes = [];
 	for (y=0 ; y < yLength ; y++) {
 		for (x=0 ; x < xLength ; x++) {
-			dynamicData[y][x]++;
-			if (dynamicData[y][x] == 10) {
-				newFlashes.push({x : x, y : y});
-			}
+			increaseAndTryToFlash(x, y);
 		}
 	}
 	
@@ -42,16 +49,12 @@ function oneStep() {
 			xOld = oldCoors.x;
 			yOld = oldCoors.y;
 			existingOrthoDiagonalNeighborsCoors(xOld, yOld, xLength, yLength).forEach(coors => {
-				dynamicData[coors.y][coors.x]++;
-				if (dynamicData[coors.y][coors.x] == 10) {
-					newFlashes.push({x : coors.x, y : coors.y});
-				}
+				increaseAndTryToFlash(coors.x, coors.y);
 			});
 		});
 	}
 	
 	// Last, set them all to 0.
-	// 551551 A FAIRE AVEC LES CHECKERS NORMALEMENT !
 	for (y=0 ; y < yLength ; y++) {
 		for (x=0 ; x < xLength ; x++) {
 			if (dynamicData[y][x] >= 10) {
@@ -60,10 +63,10 @@ function oneStep() {
 			}
 		}
 	}	
-	return countFlashes;
+	return checkerFlashed.list.length; 
 }
 
-function conclusion() {
+function conclusion_11_1() {
 	logArrayChars(dynamicData);
 	console.log("-----------");
 	var answer = 0;
@@ -75,17 +78,15 @@ function conclusion() {
 		console.log("Total = " + answer);
 		console.log("-----------");
 	}
-	console.log("Conclusion : answer is " + answer);
+	console.log("Conclusion : answer is " + answer + " (relaunch page before conclusion_11_2 !)"); // Correct answer = 1655
 }
 
-function conclusion2() {
+function conclusion_11_2() {
 	for (var i = 0 ; i < 5000 ; i++) {
 		countFlashes = oneStep();
 		if (countFlashes == dynamicData.length*dynamicData[0].length) {
-			console.log("Found the answer ! " + (i+1));
+			console.log("Found the answer ! " + (i+1)); // Correct answer = 337
 			return;
 		}
 	}
 }
-// NOT 2159
-// 1655 (I had one too many countFlashes++ in the first step...)

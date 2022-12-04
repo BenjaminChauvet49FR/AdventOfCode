@@ -255,31 +255,31 @@ function conclusion_8_2() {
 	return total;
 }
 
-// Returns the real values of displayed a, b, c, d, e, f and g (in that order) thanks to p_arrayEncoding
+// Returns the real values of displayed a, b, c, d, e, f and g (in that order) thanks to arrayEncoding
 function getMeaningDisplayed(p_stringEncoding) {
-	var p_arrayEncoding = p_stringEncoding.split(" "); // 551551 supprimer le p_, pas un param !
+	var arrayEncoding = p_stringEncoding.split(" "); 
 	var string1, string4, string7, string8;
 	var strings235 = [];
 	var strings690 = [];
 	for (var i = 0 ; i <= 9 ; i++) {
-		switch (p_arrayEncoding[i].length) {
+		switch (arrayEncoding[i].length) {
 			case 2 :
-				string1 = p_arrayEncoding[i];
+				string1 = arrayEncoding[i];
 			break;
 			case 3 :
-				string7 = p_arrayEncoding[i];
+				string7 = arrayEncoding[i];
 			break;
 			case 4 :
-				string4 = p_arrayEncoding[i];
+				string4 = arrayEncoding[i];
 			break;
 			case 5 :
-				strings235.push(p_arrayEncoding[i]);
+				strings235.push(arrayEncoding[i]);
 			break;
 			case 6 :
-				strings690.push(p_arrayEncoding[i]);
+				strings690.push(arrayEncoding[i]);
 			break;
 			case 7 :
-				string8 = p_arrayEncoding[i];
+				string8 = arrayEncoding[i];
 			break;
 		}
 	}
@@ -363,8 +363,6 @@ function charInNeitherStringLength5(p_string1, p_string2) {
 	
 }
 
-// 551551 faire un sommaire des défis (on trouvera des similitudes entre != défis)
-// 551551 et gitifier
 function addCharCorrespondance(p_real, p_displayed, p_r2d) {
 	p_r2d[charToDistFromChar_a(p_real)] = p_displayed;
 }
