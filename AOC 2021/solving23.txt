@@ -1,0 +1,17 @@
+#############
+#...........#
+###A#D#A#B###
+  #B#C#D#C#
+  #########
+  
+Départ : BA|CD|DA|CB
+Sortir A de c (Ranger tout à gauche - A.*.*.*.*.. - 7)
+Sortir B de d (Ranger entre 1* et 2*, A.*B*.*.*.. - 60)
+Ranger les deux D (12000)
+Ranger les deux C (1100)
+Ranger B (30)
+Sortir A (2)
+Ranger B (50)
+Ranger les deux A (6)
+Total : 67 + 13100 + 88 (too low !)
+(il me manquait ... mais c'est même pas ça)

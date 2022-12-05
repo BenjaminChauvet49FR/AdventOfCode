@@ -351,20 +351,20 @@ function charInNeitherStringLength5(p_string1, p_string2) {
 	var areThere = [false, false, false, false, false, false, false];
 	var i;
 	for (i = 0 ; i < 5 ; i++) {
-		areThere[charToDistFromChar_a(p_string1[i])] = true;
-		areThere[charToDistFromChar_a(p_string2[i])] = true;
+		areThere[charToASCIIRelativePosition(p_string1[i], 'a')] = true;
+		areThere[charToASCIIRelativePosition(p_string2[i], 'a')] = true;
 	}
 	for (i = 0 ; i <= 6 ; i++) {
 		if (!areThere[i]) {
 			break;
 		}
 	}
-	return distFromChar_a_ToChar(i);
+	return asciiRelativePositionToChar(i, 'a');
 	
 }
 
 function addCharCorrespondance(p_real, p_displayed, p_r2d) {
-	p_r2d[charToDistFromChar_a(p_real)] = p_displayed;
+	p_r2d[charToASCIIRelativePosition(p_real, 'a')] = p_displayed;
 }
 
 function value(p_encodingRealToDisplayed, p_displayedDigit) {

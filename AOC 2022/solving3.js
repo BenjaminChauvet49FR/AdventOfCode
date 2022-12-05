@@ -312,9 +312,9 @@ function conclusion_3_1() {
 		array2 = sortString(data[i].slice(data[i].length/2, data[i].length));
 		charac = commonChar(array1, array2);
 		if (charac < 'a') {
-			total += 27 + charToDistFromChar_A(charac);
+			total += 27 + charToASCIIRelativePosition(charac, 'A');
 		} else {
-			total += 1 + charToDistFromChar_a(charac);			
+			total += 1 + charToASCIIRelativePosition(charac, 'a');			
 		}
 		console.log(charac + " " + total);
 	}
@@ -350,9 +350,9 @@ function conclusion_3_2() {
 		characs = commonChars(array1, array2); // characs already sorted due to the nature of commonChar
 		charac = commonChar(characs, array3);
 		if (charac < 'a') {
-			total += 27 + charToDistFromChar_A(charac);
+			total += 27 + charToASCIIRelativePosition(charac, 'A');
 		} else {
-			total += 1 + charToDistFromChar_a(charac);			
+			total += 1 + charToASCIIRelativePosition(charac, 'a');			
 		}
 		console.log(charac + " " + total);
 	}
