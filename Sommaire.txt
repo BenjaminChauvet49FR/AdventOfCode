@@ -2,12 +2,19 @@
 2 : sous-marin montant ou descendant
 8 => coder chiffres avec 7 signaux de 'a' à 'g'
 9 => recherche de bassins (découpage en régions astucieux)
-10 : chaînes ouvrantes/fermantes "{[(<"
+10 x : chaînes ouvrantes/fermantes "{[(<"
 11 => flashes (checker utilisable)
 15 => recherche de risque minimal
 16 => décodage, pacekts et subpackets
+22 x => pavés droits, de dimensions -100K à 100K
+23 x => déplacements d'items
 
 2022 :
 1 : comptage de calories
 2 : pierre feuille ciseaux
 3 => caractère commun à 2 chaînes ou plus
+4 : couples min-max
+5 : déplacements de paquets
+6 : première série de 4 ou 14 caractères non répétés
+7 => taille de fichiers, arborescence linuxienne (ressemble à 2021-16)
+8 => visions dans une grille
