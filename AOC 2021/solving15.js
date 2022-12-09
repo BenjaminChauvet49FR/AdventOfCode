@@ -124,7 +124,7 @@ function conclusion_15_1() {
 			xx = coors.x;
 			if (minimalDistancesArray[yy][xx] == -1) {
 				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + data[yy][xx];
-				shiftIntoArray(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
+				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
 			}
 		});
 	}
@@ -148,7 +148,7 @@ function conclusion_15_2() {
 			xx = coors.x;
 			if (minimalDistancesArray[yy][xx] == -1) {
 				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + realRisk(xx, yy);
-				shiftIntoArray(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
+				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
 			}
 		});
 	}

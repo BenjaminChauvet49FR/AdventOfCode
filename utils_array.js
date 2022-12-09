@@ -53,15 +53,28 @@ function generateDoubleEntryArray(p_xLength, p_yLength, p_value) {
 	return answer;
 }
 
-// Inserts an element into an array according to p_function, immediately before the first element for which the function is true. 
+// Inserts an element into an array (or list, whatever) according to p_function, immediately before the first element for which the function is true. 
 // If it is never true, inserts it at the end.
 // https://stackabuse.com/javascript-how-to-insert-elements-into-a-specific-index-of-an-array/
-// Example : array = [1, 3, 5, 7]; shiftIntoArray(array, 4, function(element, already) { return element > already}); // array = [1, 3, 4, 5, 7]
-// Another xample : array = [9, 7, 5, 2]; shiftIntoArray(array, 4, function(element, already) { return element < already}); // array = [9, 7, 5, 4, 2]
-function shiftIntoArray(p_sortedArray, p_element, p_function) {
+// Example : array = [1, 3, 5, 7]; shiftIntoList(array, 4, function(element, already) { return element > already}); // array = [1, 3, 4, 5, 7]
+// Another xample : array = [9, 7, 5, 2]; shiftIntoList(array, 4, function(element, already) { return element < already}); // array = [9, 7, 5, 4, 2]
+function shiftIntoList(p_sortedList, p_element, p_function) {
 	var i = 0;
-	while (i < p_sortedArray.length && p_function(p_element, p_sortedArray[i])) {
+	while (i < p_sortedList.length && p_function(p_element, p_sortedList[i])) {
 		i++;
 	}
-	p_sortedArray.splice(i, 0, p_element);		
+	p_sortedList.splice(i, 0, p_element);		
+}
+
+// Inserts numbers in ascending order, but without repetition. Returns the index of the new element if a new number was actually inserted, or -1 otherwise.
+function shiftIntoListUniqueNumbers(p_sortedList, p_element) {
+	var i = 0;
+	while (i < p_sortedList.length && p_element > p_sortedList[i]) {
+		i++;
+	}
+	if (i == p_sortedList.length || p_element != p_sortedList[i]) {		
+		p_sortedList.splice(i, 0, p_element);
+		return i;
+	}
+	return -1;
 }
