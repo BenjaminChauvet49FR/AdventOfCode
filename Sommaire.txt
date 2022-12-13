@@ -17,4 +17,7 @@
 5 : déplacements de paquets
 6 : première série de 4 ou 14 caractères non répétés
 7 => taille de fichiers, arborescence linuxienne (ressemble à 2021-16)
-8 => visions dans une grille
+8 => visions dans une grille (haut, bas, gauche, droite)
+9 => corde à noeuds baladée (checker)
+10 xx => opérations et cycles (exécution de sommaire)
+11 => Monkey in the middle (classement de données)
