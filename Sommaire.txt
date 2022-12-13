@@ -4,7 +4,7 @@
 9 => recherche de bassins (découpage en régions astucieux)
 10 x : chaînes ouvrantes/fermantes "{[(<"
 11 => flashes (checker utilisable)
-15 => recherche de risque minimal
+15 => recherche de risque minimal (plus court chemin)
 16 => décodage, pacekts et subpackets
 22 x => pavés droits, de dimensions -100K à 100K
 23 x => déplacements d'items
@@ -21,3 +21,4 @@
 9 => corde à noeuds baladée (checker)
 10 xx => opérations et cycles (exécution de sommaire)
 11 => Monkey in the middle (classement de données)
+12 => recherche de plus court chemin possible (réutilise 2021-15)
