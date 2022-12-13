@@ -298,11 +298,12 @@ function conclusion_10_1() {
 	var step, j, tokens;
 	var x = 1;
 	var total = 0;
-	var duringCycle = 0;
+	var duringCycle = 1;
 	var coef = 20;
 	var value, delay;
-	for (step = 0 ; step < rawData2.length ; step++) {
-		tokens = rawData2[step].split(" "); 
+	const data = rawData2;
+	for (step = 0 ; step < data.length ; step++) {
+		tokens = data[step].split(" "); 
 		if (tokens.length == 2) {
 			value = parseInt(tokens[1],10);
 			delay = 2;
@@ -322,4 +323,38 @@ function conclusion_10_1() {
 		x += value;
 	}
 	return total;
-}
+} // Correct answer : 14360
+
+function conclusion_10_2() {
+	var step, j, tokens;
+	var x = 1;
+	var total = 0;
+	var duringCycle = 1;
+	var value, delay;
+	const data = rawData;
+	var strings = [""];
+	var nextBascule = 40;
+	var lastBascule = 0;
+	for (step = 0 ; step < data.length ; step++) {
+		tokens = data[step].split(" "); 
+		if (tokens.length == 2) {
+			value = parseInt(tokens[1], 10);
+			delay = 2;
+		} else {
+			value = 0;
+			delay = 1;
+		}
+		for (j = 0 ; j < delay ; j++) {			
+			strings[strings.length-1] += (x - duringCycle + lastBascule <= 0 && x - duringCycle + lastBascule >= -2) ? "#" : ".";
+			if (duringCycle == nextBascule) {
+				console.log(strings[strings.length-1]);
+				strings.push("");
+				nextBascule += 40;
+				lastBascule += 40;
+			}
+			duringCycle++
+		}
+		x += value;
+	}
+	return total;
+} // Correct answer : BGKAEREZ
