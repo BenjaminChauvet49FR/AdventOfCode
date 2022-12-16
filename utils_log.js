@@ -9,3 +9,12 @@ function logArrayChars(p_arrayChars) {
 		console.log(string);
 	}
 }
+
+// Log ranges by pairs (assume there are an even number)... [3, 2, 8, 10] => "3-2  8-10"
+function rangesString(p_array) {
+	var answer = "";
+	for (var i = 0 ; i < p_array.length ; i+=2) {
+		answer += p_array[i] + "-" + p_array[i+1] + "  "
+	}
+	return answer;
+}

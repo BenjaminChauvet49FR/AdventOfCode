@@ -1,3 +1,7 @@
+var logParams = {
+	shouldLog : true
+}
+
 var rawData =
 ["on x=-9..45,y=-15..37,z=-2..46",
 "on x=-48..2,y=-11..37,z=3..48",
@@ -470,16 +474,24 @@ function conclusion_22_1() {
 	return answer; //Good answer = 653798. Je suis choqué que cette méthode ait pu aller si vite !
 }
 
+var bigBoxSteps = [];
+var data = [];
 function conclusion_22_2() {	
+	return conclusion_22_2_aux(20, 20, 20, true);
+}
+
+function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer = false : calculate only bigBoxSteps;
+	bigBoxSteps = [];
 	var tokens;
-	var data = [];
+	data = [];
 	var xMin = 0;
 	var xMax = 0;
 	var yMin = 0;
 	var yMax = 0;
 	var zMin = 0;
 	var zMax = 0;
-	for (var i = 0 ; i < rawData.length ; i++) {
+	var x, y, z, i;
+	for (i = 0 ; i < rawData.length ; i++) {
 		tokens = rawData[i].split(/[\s=\.,]/);
 		data.push({
 			activate : (tokens[0].length == 2),
@@ -499,7 +511,7 @@ function conclusion_22_2() {
 	} 
 	// For the sake of simplicity, I'll consider bounds to be -100000 and 99999. Thank you for the analysis anyway !
 	// and boxes to be 10k side from -100k..-90001, 
-	var bigBoxSteps = []
+
 	for (x = 0 ; x < 20 ; x++) {
 		bigBoxSteps.push([]);
 		for (y = 0 ; y < 20 ; y++) {
@@ -542,15 +554,25 @@ function conclusion_22_2() {
 	// "off x=-62738..-27200,y=9928..29860,z=-82061..-55735",
 	// "off x=-21896..-1639,y=-6683..12111,z=-86947..-66486",
 	// "on x=-26274..-8974,y=-11082..14341,z=-95770..-63704",
-	/*var answer = 0;
-	for (x = 0 ; x < 20 ; x++) {
-		for (y = 0 ; y < 20 ; y++) {
-			for (z = 0 ; z < 20 ; z++) {
-				answer += numberOfCubesWithin(data, bigBoxSteps[x][y][z], getFloor(x), getFloor(x+1)-1, 
-				getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);
+	var answer = 0;
+	var cubesHere;
+	if (p_gimmeAnswer) {		
+		for (x = 0 ; x < p_xL ; x++) {
+			for (y = 0 ; y < p_yL ; y++) {
+				for (z = 0 ; z < p_zL ; z++) {
+					cubesHere = numberOfCubesWithin(data, bigBoxSteps[x][y][z], getFloor(x), getFloor(x+1)-1, 
+					getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);
+					if (cubesHere > 0) {
+						console.log(x + "," + y + "," +z + " : " + cubesHere);
+					}
+					answer += cubesHere;
+				}
 			}
 		}
-	}*/
+	} 
+	// bigBoxSteps 11,14,12 : 69966000000 // Step 237 : "on x=6679..29613,y=46958..81428,z=27700..55392" (3042*2300*10K)
+	// bigBoxSteps 18,11,9 : 647900000000 // Step 237 : "on x=6679..29613,y=46958..81428,z=27700..55392"
+	return answer;
 /*
 Floors[-30000, -27199, -27144, -26274, -21896, -20000]
 yFloors[10000, 12112, 12258, 14342, 20000]
@@ -563,9 +585,11 @@ Total : 272508111270
 
 */
 	
-	x = 7 ; y = 11 ; z = 1;
+	/*x = 7 ; y = 11 ; z = 1;
 	return numberOfCubesWithin(data, bigBoxSteps[x][y][z], getFloor(x), getFloor(x+1)-1, 
-				getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);
+				getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);*/
+				
+				// 1 250 237 228 954 471 is NOT the right answer !
 }
 
 function getSimplifiedRange(p_number) {
@@ -574,6 +598,19 @@ function getSimplifiedRange(p_number) {
 
 function getFloor(p_simplifiedRange) {
 	return 10000*(p_simplifiedRange-10);
+}
+
+function logSteps(p_x, p_y, p_z) {
+	if (bigBoxSteps.length == 0) {
+		conclusion_22_2_aux();
+	}
+	console.log("Slice " + getFloor(p_x) + "-" + (getFloor(p_x+1)-1) + "  " +
+				getFloor(p_y)+ "-" + (getFloor(p_y+1)-1) + "  " + getFloor(p_z) + "-" + (getFloor(p_z+1)-1));
+	for (var i = 0 ; i < bigBoxSteps[p_x][p_y][p_z].length ; i++) {
+		console.log(rawData[bigBoxSteps[p_x][p_y][p_z][i]]);
+	}
+	console.log("Result for this slice : " + numberOfCubesWithin(data, bigBoxSteps[p_x][p_y][p_z], getFloor(p_x), getFloor(p_x+1)-1, 
+				getFloor(p_y), getFloor(p_y+1)-1, getFloor(p_z), getFloor(p_z+1)-1))
 }
 
 // min and max coors are contained in the cube. 
@@ -635,9 +672,18 @@ function numberOfCubesWithin(p_allSteps, p_ourSteps, p_xMin, p_xMax, p_yMin, p_y
 	zFloors.push(p_zMax+1);
 	for (x = 0 ; x < xFloors.length-1 ; x++) {
 		for (y = 0 ; y < yFloors.length-1 ; y++) {
-			for (z = 0 ; z <= zFloors.length-1 ; z++) {
+			for (z = 0 ; z < zFloors.length-1 ; z++) {
 				if(lightCubes[x][y][z]) {
-					answer += (xFloors[x+1]-xFloors[x]) * (yFloors[y+1]-yFloors[y]) * (zFloors[z+1]-zFloors[z]);
+					theSize = (xFloors[x+1]-xFloors[x]) * (yFloors[y+1]-yFloors[y]) * (zFloors[z+1]-zFloors[z]);
+					answer += theSize;
+					if (logParams.shouldLog) {
+						console.log("Min incl. to max excl. : " + rangesString([xFloors[x],xFloors[x+1],yFloors[y],yFloors[y+1],zFloors[z],zFloors[z+1]]) + " : " + theSize + " : " + answer);
+					} 
+				}
+				else {
+					if (logParams.shouldLog) {
+						console.log("000 : " + rangesString([xFloors[x],xFloors[x+1],yFloors[y],yFloors[y+1],zFloors[z],zFloors[z+1]]));
+					}
 				}
 			}			
 		}
