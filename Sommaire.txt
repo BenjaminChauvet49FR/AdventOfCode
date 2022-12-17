@@ -19,6 +19,8 @@
 7 => taille de fichiers, arborescence linuxienne (ressemble à 2021-16)
 8 => visions dans une grille (haut, bas, gauche, droite)
 9 => corde à noeuds baladée (checker)
-10 xx => opérations et cycles (exécution de sommaire)
+10 => opérations et cycles (exécution de sommaire)
 11 => Monkey in the middle (classement de données)
 12 => recherche de plus court chemin possible (réutilise 2021-15)
+13 => listes emboîtées à classer
+16 => écoulement maximal dans un réseau + aide de l'éléphant (établissement d'un graphe + recherche par arbre + estimation temps restant)
