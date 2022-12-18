@@ -193,9 +193,7 @@ function establish(p_start, p_minutesLeft) {
                   dataNotOpenedYet.push(flowOpening(p_start, i, p_minutesLeft));
             }
       }
-      dataNotOpenedYet.sort(function(a, b) {
-            return standardComparison(a, b, [function(c) {return c.flow}, function(c) {return c.minutesAfter}, function(c) {return c.idDest}]);
-      });
+      sortDescending(dataNotOpenedYet, [function(c) {return c.flow}, function(c) {return c.minutesAfter}, function(c) {return c.idDest}]);
       dataNotOpenedYet.forEach(data => {
             if (data.minutesAfter > 0) {
                   globalData.total += data.flow;
@@ -258,9 +256,7 @@ function dataForValves(p_startId, p_minutesLeft) {
                   dataNotOpenedYet.push(flowOpening(p_startId, i, p_minutesLeft));
             }
       }
-      dataNotOpenedYet.sort(function(a, b) {
-            return standardComparison(a, b, [function(c) {return c.flow}, function(c) {return c.minutesAfter}, function(c) {return c.idDest}]);
-      });	
+	  sortDescending(dataNotOpenedYet, [function(c) {return c.flow}, function(c) {return c.minutesAfter}, function(c) {return c.idDest}]);
 	  return dataNotOpenedYet;
 }
 
