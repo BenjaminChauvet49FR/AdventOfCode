@@ -14,6 +14,21 @@ function digitPseudoArray_to_digitArray(p_pseudoArray) {
 	return answer;
 }
 
+// To modify easily string-like structures...
+function stringArray_to_charDoubleEntryArray(p_pseudoArray) {
+	var i, j;
+	var answer = [];
+	var str;
+	for (i = 0 ; i < p_pseudoArray.length ; i++) {
+		answer.push([]);
+		str = p_pseudoArray[i];
+		for (j = 0 ; j < str.length ; j++) {
+			answer[i].push(str.charAt(j));
+		}
+	}
+	return answer;
+}
+
 // Copies lists of "x,y" coordinates one into another
 // Note : some ways to empty an array (not tested) : https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
 function copiesCoorsList(p_source, p_destination) {

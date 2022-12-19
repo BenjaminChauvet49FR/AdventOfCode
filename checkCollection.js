@@ -78,6 +78,10 @@ CheckCollectionDoubleEntry.prototype.add = function(p_x, p_y) {
 	return this.addGeneric(p_x, p_y, true);
 }
 
+CheckCollectionDoubleEntry.prototype.get = function(p_x, p_y) { 
+	return this.array[p_y][p_x];
+}
+
 // Considers that one space that has been added should be removed before general clean.
 CheckCollectionDoubleEntryGeneric.prototype.cleanOne = function(p_x, p_y) {
 	this.array[p_y][p_x] = this.defaultValue;
