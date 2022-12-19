@@ -26,3 +26,4 @@
 14 : écoulement du sable, gravité
 15 => scanners qui ne détectent que les balises les plus proches (fait intervenir les intervalles)
 16 => écoulement maximal dans un réseau + aide de l'éléphant (établissement d'un graphe + recherche par arbre + estimation temps restant)
+17 => Eboulement à la Tetris (partie 2 = truc périodique)

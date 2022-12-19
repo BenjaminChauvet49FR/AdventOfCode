@@ -41,9 +41,18 @@ function shiftGreatestNumbers(p_number, p_array) {
 	}
 }
 
+function generateArray(p_xLength, p_value) {
+	var answer = [];
+	for (var x = 0 ; x < p_xLength ; x++) {
+		answer.push(value);
+	}
+	return answer;
+}
+
 
 function generateDoubleEntryArray(p_xLength, p_yLength, p_value) {
 	var answer = [];
+	var x, y;
 	for (y = 0 ; y < p_yLength ; y++) {
 		answer.push([]);
 		for (x = 0 ; x < p_xLength ; x++) {
