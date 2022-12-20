@@ -1,0 +1,33 @@
+clé triviale : clé qui :
+-est dans une impasse
+-est plus rapide à prendre quand on part d'un embranchement, considère le trajet embranchement-cette clé-embranchement-autre clé que embranchement-autre clé-embranchement-cette clé, indépendemment de si on a besoin ou non de l'autre clé
+-ne nécessite pas de déverouiller une autre porte (on peut donc la prendre dès qu'on passe devant l'embranchement correspondant)
+-ne sert pas à déverouiller une autre porte (on peut donc la prendre la dernière fois qu'on passe devant l'embranchement correspondant)
+Clé t : triviale (ajouter 24)
+Clé k : semi-triviale (on peut pas la prendre au 1er passage... mais !)
+Clé q : trivile si on a pris J avant
+Clé v : inutile (derrière la clé d depuis le centre ; les portes D et V donnant accès aux mêmes endroits)
+Clé u : inutile (derrière la clé f ; les portes F et U sont ensemble
+Clé w ou x : l'une d'elles est triviale
+
+Analyser le cas des clés b et h
+
+Clés e,n,s : inutieles
+
+Algorithme "glouton" : si on peut prendre TOUTES les clés à un noeud donné et repartir, il suffit de prendre la somme des poids de ce noeud
+
+Portes : A
+
+___
+
+
+En fait, dès qu'on arrive à un noeud, il faut examiner les chemins les plus profonds :
+-si un chemin ne contient que des clés accessibles ET non-finales, les prendre toutes (la distance se calcule simplement) immédiatement
+-si un chemin contient au moins une clé non-accessible OU la clé finale : laisser ce chemin pour plus tard. 
+
+Au fait, quelle clé (des 4 quadrants) peut être "finale" ? Voyons voir...
+la k, la o, la t (peu de sens pour elle), la w, la x
+
+Et dans mon propre labyrinthe : 
+m*, o*, t, u, w, y
+Permettez-moi d'en douter pour ces 2 là !
