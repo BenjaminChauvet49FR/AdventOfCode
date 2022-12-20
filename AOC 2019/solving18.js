@@ -379,18 +379,22 @@ function distanceWithinSection(p_section, p_nodeA, p_nodeB) {
 // No more setup, let's solve this !
 
 var gAnswer = {}
+const NUMBER_SEEDS = 100;
+const NUMBER_KEYS = 30;
 
 function conclusion_18_1() {
 	initKeys();
 	gAnswer.keysNumber = gData.keys.length; 
 	initGlobalAnswerData();
-	for (var i = 0 ; i < 10 ; i++) {
+	for (var i = 0 ; i < NUMBER_SEEDS ; i++) {
 		seed();
-		console.log(gAnswer.distance + " " + gAnswer.min);
+		/*console.log(gAnswer.distance + " " + gAnswer.min);
 		console.log(gAnswer.currentChain);
-		console.log("---");
+		console.log("---");*/
 	}
-}
+	gAnswer.seededBestChain = gAnswer.bestChain.slice();
+	return findAnswer(NUMBER_KEYS); // Ok, first we'll try to take 5 keys, then we'll raise this number !
+} // Correct answer = 3962. Correct collect order = 5,22,0,12,3,17,19,25,4,2,10,14,16,1,13,24,20
 
 function seed() {
 	initOnePathData();
@@ -416,6 +420,7 @@ function seed() {
 function initGlobalAnswerData() {
 	gAnswer.min = X_LENGTH*Y_LENGTH*26;		
 	gAnswer.bestChain = [];
+	gAnswer.seededBestChain = [];
 }
 
 function initOnePathData() {
@@ -464,6 +469,62 @@ function updateAnswerIfBest() {
 	}
 }
 
+// No more seeding below !
+function findAnswer(p_numberKeysToTake) {
+	initOnePathData();
+	if (p_numberKeysToTake > gData.usefulKeyIDs.length) {
+		p_numberKeysToTake = gData.usefulKeyIDs.length;
+	}
+	gAnswer.keysLeftToTake = p_numberKeysToTake;
+	var iKey;
+	gAnswer.distance = 2; // Going on any section mark
+	for (var i = 0 ; i < gAnswer.seededBestChain.length ; i++) {
+		iKey = gAnswer.seededBestChain[i];
+		if (correctIndex(iKey)) {
+			collectKey(iKey, gData.keys[iKey].distFSM);
+			findAnswerAux();
+			uncollectKey(2);
+		}
+	}
+}
+
+function findAnswerAux() {
+	if (gAnswer.distance > gAnswer.min) {
+		return;
+	}
+	if (gAnswer.keysLeftToTake == 0) {
+		updateAnswerIfBest();
+		return;
+	}
+	var iKey;
+	const distSoFar = gAnswer.distance;
+	const iStart = gAnswer.currentChain[gAnswer.currentChain.length-1];
+	for (var i = 0 ; i < gAnswer.seededBestChain.length ; i++) {
+		iKey = gAnswer.seededBestChain[i];
+		if (correctIndex(iKey)) {
+			collectKey(iKey, distancesBetweenKeys[iStart][iKey]);
+			findAnswerAux();
+			uncollectKey(distSoFar);
+		}
+	}
+}
+
+function collectKey(p_index, p_extraDistance) {
+	gAnswer.keysLeftToTake--;
+	gAnswer.keyTakenYet[p_index] = true;
+	gAnswer.currentChain.push(p_index);
+	gAnswer.distance += p_extraDistance;
+}
+
+function uncollectKey(p_formerDistance) {
+	gAnswer.distance = p_formerDistance;
+	const iKey = gAnswer.currentChain.pop();
+	gAnswer.keyTakenYet[iKey] = false;
+	gAnswer.keysLeftToTake++;
+}
+
+//---
+// Checking methods
 
 // Make sure the distances are... well... consistent
 function autoCheckKeysAndDistance(p_arrayKeys) {
@@ -473,3 +534,6 @@ function autoCheckKeysAndDistance(p_arrayKeys) {
 	}
 	return p_arrayKeys.length + " " + answer;
 }
+
+// -----------------------------
+
