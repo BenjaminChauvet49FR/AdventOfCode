@@ -222,38 +222,62 @@ const rawDataPathOfficial = "16L48L13R34L44L21R31R17R42R37R48L39L40R16R29L12R23R
 
 const rawDataPath = rawDataPathOfficial;
 const rawDataField = rawDataFieldOfficial;
-
-const 
-const unfoldedCubePairs : []
+//const rawDataPath = rawDataPathExample;
+//const rawDataField = rawDataFieldExample;
 
 const gData = {
 	posByRows : [],
 	posByColumns : [],
 	field : [],
+	// Official !
 	unfoldedCubeMatchingEdges : [ // direct : up to down, or left to right
 		[{faceId : 1, direction : DIRECTION.DOWN, direct : true}, 
 		 {faceId : 2, direction : DIRECTION.RIGHT, direct : true}],
 
-		[{faceId : 0, direction : DIRECTION.UP, direct : true},
+		[{faceId : 0, direction : DIRECTION.UP, direct : false},
 		 {faceId : 5, direction : DIRECTION.LEFT, direct : false}],	
 		
-		[{faceId : 4, direction : DIRECTION.DOWN},
-		 {faceId : 5, direction : DIRECTION.RIGHT}],	
+		[{faceId : 4, direction : DIRECTION.DOWN, direct : false},
+		 {faceId : 5, direction : DIRECTION.RIGHT, direct : false}],	
 
-		[{faceId : 2, direction : DIRECTION.LEFT},
-		 {faceId : 3, direction : DIRECTION.UP}],
+		[{faceId : 2, direction : DIRECTION.LEFT, direct : false},
+		 {faceId : 3, direction : DIRECTION.UP, direct : false}],
 
-		[{faceId : 0, direction : DIRECTION.LEFT},	
-		 {faceId : 3, direction : DIRECTION.LEFT}];
+		[{faceId : 0, direction : DIRECTION.LEFT, direct : false},	
+		 {faceId : 3, direction : DIRECTION.LEFT, direct : true}],
 		
-		[{faceId : 1, direction : DIRECTION.RIGHT},	
-		 {faceId : 4, direction : DIRECTION.RIGHT}],
+		[{faceId : 1, direction : DIRECTION.RIGHT, direct : false},	
+		 {faceId : 4, direction : DIRECTION.RIGHT, direct : true}],
 		
-		[{faceId : 1, direction : DIRECTION.UP},
-		 {faceId : 5, direction : DIRECTION.DOWN}]	
+		[{faceId : 1, direction : DIRECTION.UP, direct : false},
+		 {faceId : 5, direction : DIRECTION.DOWN, direct : false}]	
 		],
-	],
 	unfoldedCubeFacePositions : [{yFace : 0, xFace : 1}, {yFace : 0, xFace : 2}, {yFace : 1, xFace : 1}, {yFace : 2, xFace : 0}, {yFace : 2, xFace : 1}, {yFace : 3, xFace : 0}]
+	/*
+	// Example
+	unfoldedCubeMatchingEdges : [
+		[{faceId : 3, direction : DIRECTION.RIGHT, direct : true}, 
+		 {faceId : 5, direction : DIRECTION.UP, direct : false}],
+
+		[{faceId : 0, direction : DIRECTION.RIGHT, direct : false},
+		 {faceId : 5, direction : DIRECTION.RIGHT, direct : true}],	
+		
+		[{faceId : 0, direction : DIRECTION.UP, direct : false},
+		 {faceId : 1, direction : DIRECTION.UP, direct : true}],	
+
+		[{faceId : 0, direction : DIRECTION.LEFT, direct : false},
+		 {faceId : 2, direction : DIRECTION.UP, direct : false}],
+
+		[{faceId : 1, direction : DIRECTION.LEFT, direct : false},	
+		 {faceId : 5, direction : DIRECTION.DOWN, direct : true}],
+		
+		[{faceId : 1, direction : DIRECTION.DOWN, direct : false},	
+		 {faceId : 4, direction : DIRECTION.DOWN, direct : true}],
+		
+		[{faceId : 2, direction : DIRECTION.DOWN, direct : true},
+		 {faceId : 4, direction : DIRECTION.LEFT, direct : false}]	
+	],
+	unfoldedCubeFacePositions : [{yFace : 0, xFace : 2}, {yFace : 1, xFace : 0}, {yFace : 1, xFace : 1}, {yFace : 1, xFace : 2}, {yFace : 2, xFace : 2}, {yFace : 2, xFace : 3}]*/
 }
 // Pattern for "my" raw data :
 // .01
@@ -261,12 +285,19 @@ const gData = {
 // 34.
 // 5..
 
+// Pattern for "the example" raw data :
+//..0.
+//123.
+//..45
+
 var path = [];
 const X_LENGTH = rawDataField[0].length;
 const Y_LENGTH = rawDataField.length;
 const EMPTY = 0;
 const BLOCK = 1;
 const VOID = 2;
+const EDGE_SIZE = Math.min(Y_LENGTH, X_LENGTH)/3; // Could be < 5, too
+const DIRECTION_VALUATION = [2, 3, 0, 1]; // Assuming LURD = 0123
 
 function initialize() {
 	var x, y;
@@ -439,27 +470,160 @@ function conclusion_22_1() {
 		}
 		if (ind < rawDataPath.length) {
 			if (rawDataPath[ind] == 'L') {
-				direction = TurningLeftDirection[direction];
+				gData.direction = TurningLeftDirection[gData.direction];
 			} else {
-				direction = TurningRightDirection[direction];
+				gData.direction = TurningRightDirection[gData.direction];
 			}
 			ind++;
 		}
 		console.log("Walked to " + x + " " + y);
 	}
 	console.log("Now facing " + LabelDirection[direction]);
-	const advice = [2, 3, 0, 1]; // Assuming LURD = 0123
-	return 1000*(y+1) + 4*(x+1) + advice[direction]; // Don't forget their x and y's aren't the same as mine !
+	return 1000*(y+1) + 4*(x+1) + DIRECTION_VALUATION[direction]; // Don't forget their x and y's aren't the same as mine !
 	// Correct answer = 126350 (and not 125346)
 }
 
 // ---------
 // 2nd part, with the cube
 
+// edge.isHorizontal, edge.x, edge.yMin
 
+function conclusion_22_2() {
+	initializeEdges();
+	initialize();
+	var i;
+	gData.y = 0;
+	gData.x = gData.posByRows[0].xMin;
+	gData.direction = DIRECTION.RIGHT;
+	var ind = 0;
+	while (ind < rawDataPath.length) {
+		dist = 0;
+		while (ind < rawDataPath.length && rawDataPath[ind] != 'L' && rawDataPath[ind] != 'R') {
+			dist *= 10;
+			dist += parseInt(rawDataPath[ind], 10);
+			ind++;
+		}
+		for (i = 0 ; i < dist ; i++) {
+			if (!nextStep()) {
+				break;
+			}
+		}
+		if (ind < rawDataPath.length) {
+			if (rawDataPath[ind] == 'L') {
+				gData.direction = TurningLeftDirection[gData.direction];
+			} else {
+				gData.direction = TurningRightDirection[gData.direction];
+			}
+			ind++;
+		}
+		console.log("Walked to " + gData.x + " " + gData.y);
+	}
+	console.log ("Final answer = " + ((gData.y+1) * 1000 + ((gData.x+1) * 4) + DIRECTION_VALUATION[gData.direction]));
+} // Correct answer = 129339
 
-function initializeCube() {
-	
-	
+function initializeEdges() {
+	var i, j, edge, face, xOrigin, yOrigin;
+	for (i = 0 ; i < gData.unfoldedCubeMatchingEdges.length ; i++) {
+		for (j = 0 ; j <= 1 ; j++) {
+			edge = gData.unfoldedCubeMatchingEdges[i][j];
+			face = gData.unfoldedCubeFacePositions[edge.faceId];
+			xMin = EDGE_SIZE*face.xFace;
+			yMin = EDGE_SIZE*face.yFace;
+			xMax = EDGE_SIZE*(face.xFace + 1) - 1;
+			yMax = EDGE_SIZE*(face.yFace + 1) - 1;
+			if (edge.direction == DIRECTION.LEFT || edge.direction == DIRECTION.RIGHT) {
+				edge.isHorizontal = false;
+				if (edge.direction == DIRECTION.LEFT) {
+					edge.x = xMin;
+				} else {
+					edge.x = xMax;
+				}
+				edge.yMin = yMin;
+				edge.yMax = yMax;
+			} else {
+				edge.isHorizontal = true;
+				if (edge.direction == DIRECTION.UP) {
+					edge.y = yMin;
+				} else {
+					edge.y = yMax;
+				}
+				edge.xMin = xMin;
+				edge.xMax = xMax;
+			}
+		}
+	}
 }
 
+function nextStep() {
+	const x = gData.x;
+	const y = gData.y;
+	const dir = gData.direction;
+	
+	var i, j;
+	var nx, ny, nDir;
+	var coorsDir = null;
+	for (i = 0 ; i < gData.unfoldedCubeMatchingEdges.length && coorsDir == null ; i++) {
+		for (j = 0 ; j <= 1 && coorsDir == null ; j++) {
+			if (dir == gData.unfoldedCubeMatchingEdges[i][j].direction) {
+				coorsDir = getNextCoorsAndDir(x, y, gData.unfoldedCubeMatchingEdges[i][j], gData.unfoldedCubeMatchingEdges[i][1-j]);
+				if (coorsDir != null) {
+					nx = coorsDir.x;
+					ny = coorsDir.y;
+					nDir = coorsDir.direction;	
+					console.log("Switch edge !");
+				}
+			}
+		}
+	}	
+	if (coorsDir == null) {		
+		nx = gData.x + DeltaX[dir];
+		ny = gData.y + DeltaY[dir];
+		nDir = dir;
+	}
+	console.log(nx, " ", ny, " ", nDir);
+	//if (true) {
+	if (gData.field[ny][nx].kind != BLOCK) {
+		gData.x = nx;
+		gData.y = ny;
+		gData.direction = nDir;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// Are we on the edge ?
+function getNextCoorsAndDir(p_x, p_y, p_edge, p_otherEdge) {
+	var dir, countFromLT;
+	dir = null;
+	if (p_edge.isHorizontal) {
+		if (p_x >= p_edge.xMin && p_x <= p_edge.xMax && p_y == p_edge.y) {
+			dir = OppositeDirection[p_otherEdge.direction];
+			countFromLT = (p_edge.direct ? p_x-p_edge.xMin : p_edge.xMax-p_x);
+		}
+	} else {
+		if (p_y >= p_edge.yMin && p_y <= p_edge.yMax && p_x == p_edge.x) {
+			dir = OppositeDirection[p_otherEdge.direction];
+			countFromLT = (p_edge.direct ? p_y-p_edge.yMin : p_edge.yMax-p_y);			
+		}		
+	}
+	if (dir != null) {
+		var nx, ny;
+		if (p_otherEdge.isHorizontal) {
+			ny = p_otherEdge.y;
+			nx = p_otherEdge.direct ? p_otherEdge.xMin + countFromLT : p_otherEdge.xMax - countFromLT;
+		} else {
+			nx = p_otherEdge.x;
+			ny = p_otherEdge.direct ? p_otherEdge.yMin + countFromLT : p_otherEdge.yMax - countFromLT;
+		}
+		return {
+			x : nx,
+			y : ny,
+			direction : dir
+		}
+		
+		
+
+	}
+	return null;
+} 
