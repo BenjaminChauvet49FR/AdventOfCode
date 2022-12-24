@@ -36,3 +36,4 @@
 21 => processing d'opérations avec ordre à retrouver
 22x : déplacement sur une carte bi-dimensionnelle puis patron de cube
 23 => dispersion d'elfes (optimisable)
+24 => traversée du blizzard, nord-ouest vers sud-est
