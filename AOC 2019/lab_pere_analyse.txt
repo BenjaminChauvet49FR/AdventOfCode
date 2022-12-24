@@ -26,7 +26,7 @@ En fait, dès qu'on arrive à un noeud, il faut examiner les chemins les plus pr
 -si un chemin contient au moins une clé non-accessible OU la clé finale : laisser ce chemin pour plus tard. 
 
 Au fait, quelle clé (des 4 quadrants) peut être "finale" ? Voyons voir...
-la k, la o, la t (peu de sens pour elle), la w, la x
+la k, la o, la q, la t (peu de sens pour elle), la w, la x
 
 Et dans mon propre labyrinthe : 
 m*, o*, t, u, w, y

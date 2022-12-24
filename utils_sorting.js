@@ -17,3 +17,7 @@ function sortAscending(p_array, p_functionArray) {
 function sortDescending(p_array, p_functionArray) {
 	p_array.sort(function(a,b) {return standardComparison(b, a, p_functionArray) });
 }
+
+function sortAlphabetical(p_array, p_functionAlphabetical) {
+	p_array.sort(function(p_a, p_b) {return (p_functionAlphabetical(p_a) < p_functionAlphabetical(p_b) ? -1 : p_functionAlphabetical(p_a) == p_functionAlphabetical(p_b) ? 0 : 1)});
+}

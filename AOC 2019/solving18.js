@@ -165,7 +165,92 @@ const rawDataClaude = [
 "#################################################################################" // Claude's maze
 ];
 
-const rawData = rawDataClaude;
+const rawDataGithub = [
+// Données de mon "compte Github pour le labyrinthe" :
+"#################################################################################",
+"#.#...#.....#...............#.....#v....#.........#p....#...#...................#",
+"#.#.#.#.#.#.#M#############.#.###.#####.#####.###.#.###.#.#.#################.#.#",
+"#..n#...#.#...#.#...........#...#.......#.....#.....#.#...#...#.......#...#...#.#",
+"#########.#####.#.###########.#.#######.#.###########.#######.#C#####.#.#.#.###.#",
+"#.........#.#.....#.........#.#.#.......#...........#...........#...#.#.#...#...#",
+"#.#########.#.#########.#####.#W###.###############.###.#########.###.#.#####.###",
+"#.Y...#...#...#.......#z......#...#.#...#...#.....#..d#.#.#..x..#...#.#.#...#.#.#",
+"#####.#.#.#.###.#.###.#####.#####.#.#.#.#.#.#.###.###.#.#.#.###.#.#.#.#.#.#.#.#.#",
+"#.....#.#...#...#.#.#.....#...#...#.#.#.#.#...#.......#...#.#...#.#.....#.#...#.#",
+"#.#######.#######.#.#####.#####.#####.#.#.#############.###.#.###.#########.###.#",
+"#...#...#.#...#...#.#...#.....#...B...#.#.....#...#.....#...#.#.....#....t#.....#",
+"#.#.#.#.#.#.#.#.###.#.#.#####.#.#######.#.###.#.#.###.###.###.#.#####.###.#####N#",
+"#.#...#.#...#.#.#.....#...#...#.#...#...#...#.#.#...#.#...#...#...#...#.#...#.#.#",
+"#.#####.#####.#.#########.#.###.#.#.#.#.###.#.#.###.###.###.#######.###.###.#.#.#",
+"#.#...#.#.......#...#.....#...#...#.#.#.#.#.#...#.#.....#...#.....#.#...#...#.#.#",
+"#.#.###.#########.#.#.###.###.#####.#.#.#.#.#####.#######.###.###.#.#.###.###.#.#",
+"#.#...#.#...#.....#.#...#...#.#...#.#.#.#.#.#.....#.....#...#.#.#...#...#.#...#.#",
+"#.###.#.#.#.#.#####.#.#.#####.#.###.#.###.#.#.###.###.#.###.#.#.#####.#.#J#E###.#",
+"#.....#.#.#...#...#.#.#.....#.#.....#...#.#.#.#.......#.#...#.#...#...#...#.....#",
+"#######.#.#####.###.#######.#.#########.#.#.#.#########.#.###.#.#.#.#########.###",
+"#.......#.#.....#.I.#.....#.............#...#...#.....#.#...#.#.#.#.........#...#",
+"#.#######.###.###.#.#####.#.###########.#.###.#.###.###.###.#####.#########.###.#",
+"#.......#...#.#...#.....#.#.#.......#...#.#...#.#...#.....#.........#.....#.#...#",
+"#.#####.###.#.#.#######.#.###.#####.#.###.#####.#.###.#######.#####.#.###.#.###.#",
+"#.#...#...#.#.#.......#.#.....#.#...#...#.#...#.#...#u#.....#...#...#.#.#.#...#.#",
+"#.###.#.###.#.#######.#.#######.#.#####.#.#.#.#.#.#.#.#.#.#.###.#####.#.#.###.#.#",
+"#...#.#...#.....#.....#.#.....#...#...#.#...#.#.#.#...#.#.#...#.#.....#.#.#...#.#",
+"###.#.###.#####.#.#####.#.#.#.#.###.#.#.#####.#.#.#####.#.#.###.#.#####.#.#.###.#",
+"#...#...#.......#.#.....#.#.#.#.....#.#.#.....#.#.#.....#.#.#...#.....#.#.#.#..k#",
+"#.###.###########.#.#######.#.#######.#.#.#####.###.#####.###.#.#####.#.#.#.#.###",
+"#...#...........#.#.....#...#.......#.#.#...#.........#...#...#.#.....#.#...#.#.#",
+"###.#.###.###.###.#####.#.#.#######.#.#.###.#.#########.#.#.###.#.#####.#####.#.#",
+"#.#.#...#...#.#...#...#.#.#.#.....#.#.#.#.#.#...#.......#.#.#...#...#.....#...#.#",
+"#.#.###.###.#.#.###.#.#.#.###.###.###.###.#.#####.#######.#.#.#####.#.#.#.#.###.#",
+"#.#.#.....#.#.#.....#g#...#...#.#...#...#.#.......#...#...#.#...#.#.#.#.#.#.....#",
+"#.#.#######.#.#######.###.#.###.###.###.#.#########.###.###.###.#.#.#.#.#######.#",
+"#...#.....#.#.#.....#.#...#.......#.#...#.....#.......#.#.#...#...#.#.#.......#.#",
+"#.###.###.#.#.#.###.#.###########.#.#.###.###.#.#####.#.#.###.#####.#.#######.#.#",
+"#.....#.....#...#...#.A...........#.........#.......#.R.....#.......#.......#...#",
+"#######################################.@.#######################################",
+"#.....#.........#...........#......r#...........#.#...#.............#.......#...#",
+"###.###.#.#######.#.#######.#.#####.###.#.#.###.#.#.#.#.#######.###.#.#####.###.#",
+"#...#...#.........#...#...#.#.....#.....#.#...#...#.#...#...#...#.#.#.....#.....#",
+"#.###.###############.#.###.#.###.#####.#.###.#####.#######.#.###.#.#####.#######",
+"#.....#.......#.#.....#...#.#.#...#.....#.#.#.#.....#.......#.#...#.....#.......#",
+"#.#######.###.#.#.#######.#.###.#.#######.#.#.#.#########.###.#.#######G#.#####.#",
+"#.....#...#.#...#.#.......#...#.#.#.....#...#.#.#.....#..a#...#.#.....#.#i....#.#",
+"#####.#.###.###.#.###.#.#####.#.###.###.#####.#.###.#.#.#.#.###.#.###.#.#######.#",
+"#...#.#.#.....#.#...#.#.#.....#.....#...#...#.......#...#.#.#.....#.#.........#.#",
+"#.#.#.#.#.#####.###.#.###.###########.###.#.#.#############.#.#####.#########.#.#",
+"#.#.#.#.#.......#...#.....#.....#...#...#.#.#.#.............#.......#...#.....O.#",
+"#.#.#.#.#########.#######.#.###.#.#.###.#.#.###.###########.#########.#.#######.#",
+"#.#.#e#.........#.#.....#...#...#.#.....#.#.#...#...........#.......#.#.....#...#",
+"###.#.#########.#.#.###.#####P###.#######.#.#.#########.#####.#####.#.#####.#.###",
+"#...#.......#...#...#.#.#...#...#...#...#.#...#.......#.#w....#f..#...#...#.#...#",
+"#.#.#######.#.#######.#.#.#####.#.#.#.#.#.#.###.#####.###.###.#.#.#####.#.#.#####",
+"#.#.#...#...#.........#.#...#...#.#...#.#.#.#.......#.#...#...#.#...#...#.#.#...#",
+"#.#.#.###.#######.###.#.#.#.#.###.#####.#.###.#######.#.#######.###.#.###.#.#.#.#",
+"#.#...#...#.....#...#.#.#.#...#..o..#...#...#...#...#.#...#...F.#...#...#.#...#.#",
+"#.#####.###.###.###.###.#####.#####.#.#.#.#.#.###.#.#.###.#.#####L###.#.#.#####.#",
+"#.......#...#.#.#...#.#.....#.....#.#.#.#.#...#...#.#.#...#...#...#...#.#.....#.#",
+"#K#######.#.#.#.#.###.#####.#####X###.#.#######.###.#.#.#######.#####.#.#######.#",
+"#....j..#.#.#.....#...#.....#...#...#.#.#.......#...#.#.....#...#.S.#.#.........#",
+"#######.###.#####.#.###.#####.#.###.#.###.#######.###.#####.#.###.#.#.###########",
+"#.....#...#.....#.#...#.......#...#.#...#.....#.#.#.......#.#l....#.#.#...#.....#",
+"#T#.#####.#####.#####.#.#########.#.###.#.###.#.#.#####.#.#.#######.#.#.###.###.#",
+"#.#.....#.#.....#.....#.#.......#.#.#...#c#.#.#.....#...#.#...Z.#...#.#.....#...#",
+"#.###.###.#.#.###.#####.#.#####.#.#.#.#.#.#.#.#####.#.#######.###.###.#.#####.#.#",
+"#...#...#...#.#...#...#...#...#.#.#.#.#.#...#.....#...#.....#.#s..#...#.#.#...#.#",
+"###.###.#.#####.###.###.###.#.###.#.#.###.#######.###.#.#.###.#.###.###Q#.#.#####",
+"#.#.#.#.#.#...#...#...#.#...#.....#.#...#.#.....#.#...#.#.#...#.V.#.#...#.#.....#",
+"#.#.#.#.#.#.#.###.#.#.#.#.#########.###.#.#.###.#.#####.#.#.#####.#.#.###.#####.#",
+"#...#.#...#.#...#.#.#.#.#...#...#...#...#.#...#y..#...#.#.#.......#.#.#.......#.#",
+"#.###.#####.###.#.###.#.###.#.###.###.#.#####.#####.#.#.#.#########.#.#.#.#####.#",
+"#.#.....#...#.#...#...#.#...#.#.D.#.U.#.#.....#...#.#.#.#.......#...#..b#.#.....#",
+"#.#####.#.###.#####.###.#.###.#.###.###.#.#####.#.#.#.#.#######.#.#######.#.###.#",
+"#.H...#.#...#...........#.#...#.#.....#.#m......#...#...#.......#.#...#...#.#...#",
+"#####.#.###.#############.#.#.#.#####.#.#.###############.#######.#.#.#####.#.###",
+"#..q......#...............#.#.........#.#...............#...........#.......#..h#",
+"#################################################################################"
+];
+
+const rawData = rawDataGithub;//rawDataClaude;
 const X_LENGTH = rawData[0].length;
 const Y_LENGTH = rawData.length;
 
@@ -175,6 +260,7 @@ var gData = {
 	nodesSector : [[],[],[],[],[],[],[],[],[],[],[],[]],
 	checkerPaths : new CheckCollectionDoubleEntry(X_LENGTH, Y_LENGTH),
 	usefulKeyIDs : [],
+	potentiallyFinalKeyIDs : [] 
 };
 var distancesBetweenKeys; 
 
@@ -185,7 +271,7 @@ const Y_SPLIT_DOWN = 41;
 const WALL = '#';
 const ADDED_WALL = '+';
 const EMPTY = '.';
-const NOPE = -1;
+const NO_KEY = -1;
 const SECTION_MARK = '1';
 const LEFT_UP_1 = 1;
 const LEFT_UP_2 = 2;
@@ -198,12 +284,12 @@ const RIGHT_DOWN_2 = 8;
 
 function doorValue(p_x, p_y) {
 	const c = charToASCIIRelativePosition(field[p_y][p_x], 'A');
-	return ((c <= 25) && (c >= 0)) ? c : NOPE;
+	return ((c <= 25) && (c >= 0)) ? c : NO_KEY;
 }
 
 function keyValue(p_x, p_y) {
 	const c = charToASCIIRelativePosition(field[p_y][p_x], 'a');
-	return ((c <= 25) && (c >= 0)) ? c : NOPE;	
+	return ((c <= 25) && (c >= 0)) ? c : NO_KEY;	
 }
 
 function isSolid(p_x, p_y) {
@@ -212,7 +298,7 @@ function isSolid(p_x, p_y) {
 
 // No "." on the edges, so no need to check neighbors;
 function addWallsIfNeeded(p_x, p_y) {
-	if (keyValue(p_x, p_y) != NOPE) {
+	if (keyValue(p_x, p_y) != NO_KEY) {
 		return;
 	}
 	const wallUp = isSolid(p_x, p_y-1);
@@ -269,10 +355,10 @@ function initKeys() {
 	// Remove all dead ends + find all keys
 	for (y = 0 ; y < Y_LENGTH ; y++) {
 		for (x = 0 ; x < X_LENGTH ; x++) {
-			if (field[y][x] == EMPTY || doorValue(x, y) != NOPE) {
+			if (field[y][x] == EMPTY || doorValue(x, y) != NO_KEY) {
 				addWallsIfNeeded(x, y);
 			}
-			if (keyValue(x, y) != NOPE) {
+			if (keyValue(x, y) != NO_KEY) {
 				gData.keys[keyValue(x, y)].y = y;
 				gData.keys[keyValue(x, y)].x = x;
 			}
@@ -300,8 +386,8 @@ function initKeys() {
 		if (gData.keys[i].useful) {
 			for (j = i+1 ; j < gData.keys.length ; j++) {
 				if (gData.keys[j].useful) {
-					if (gData.keys[i].section == gData.keys[j].section && gData.keys[j].section) {
-						dist = distanceWithinSection(gData.keys[i].section, gData.keys[i].nodeInSection, gData.keys[j].nodeInSection);
+					if (gData.keys[i].section == gData.keys[j].section) {
+						dist = distanceWithinSection(gData.keys[i].section, gData.keys[i].nodeIndexInSection, gData.keys[j].nodeIndexInSection);
 					} else {
 						dist = gData.keys[i].distFSM + gData.keys[j].distFSM + distanceSectionMarkers(gData.keys[i].section,gData.keys[j].section);
 					}
@@ -312,7 +398,7 @@ function initKeys() {
 		}
 	}
 	
-	// And... the closest distances ?
+	// And... the closest distances from each key ?
 	for (i = 0 ; i < gData.keys.length ; i++) {
 		if (gData.keys[i].useful) {
 			gData.keys[i].closestDistances = gData.usefulKeyIDs.slice();
@@ -324,6 +410,48 @@ function initKeys() {
 			});
 		}
 	}
+	
+	// Now, purge "nodes of useless keys".
+	var nodesInsectI, node;
+	var iSect, iNode, iNodeFather;
+	for (iSect = 0 ; iSect < gData.nodesSector.length ; iSect++) {
+		nodesInsectI = gData.nodesSector[iSect]; // insect = "in sector..." lol, to avoid confusion with nodesSector.
+		for (iNode = 0 ; iNode < nodesInsectI.length ; iNode++) {
+			node = nodesInsectI[iNode];
+			if (node.idKey != NO_KEY && !gData.keys[node.idKey].useful) {
+				if (node.isCrossRoads) {
+					node.idKey = NO_KEY;
+				} else {
+					if (node.idFather != null) {
+						const index = nodesInsectI[node.idFather].idSons.indexOf(iNode); // It's a replacement
+						nodesInsectI[node.idFather].idSons[index] = node.idSons[0];
+					}
+					nodesInsectI[node.idSons[0]].idFather = node.idFather; // If the key is useless and it's not a crossroads : it must have exactly one son.
+					nodesInsectI[iNode] = {}
+				}
+			}
+		}
+	}
+	// Check for each node which doors guard it + calculate guarded distance (e.g. half the distance required to take all the keys and then leave).
+	for (iSect = 0 ; iSect < gData.nodesSector.length ; iSect++) {
+		nodesInsectI = gData.nodesSector[iSect]; // insect = "in sector..." lol, to avoid confusion with nodesSector.
+		for (iNode = 0 ; iNode < nodesInsectI.length ; iNode++) {
+			node = nodesInsectI[iNode];
+			if (node.idFather == null) {
+				findParametersGuarded(iSect, node);
+				break;
+			}
+		}
+	}
+	
+	// Also check which keys may be final. 
+	gData.potentiallyFinalKeyIDs = [];
+	gData.usefulKeyIDs.forEach(idKey => {
+		if (!gData.keys[idKey].requiredForAnyKey) {
+			gData.potentiallyFinalKeyIDs.push(idKey);
+		}
+	});
+	
 }
 
 function makeSearches(p_xStart, p_yStart, p_section) {
@@ -347,59 +475,56 @@ function makeSearchesAux(p_x, p_y, p_section, p_dist, p_reqdKeysList, p_reqdDoor
 	}
 	gData.checkerPaths.add(p_x, p_y);
 	const c = keyValue(p_x, p_y);
-	var node = p_closestNodeId;
+	var nodeId = p_closestNodeId;
+	
 	// Check key
-	if (c != NOPE) {
+	if (c != NO_KEY) {
 		gData.keys[c].requiresKeys = p_reqdKeysList.slice();
 		gData.keys[c].requiresDoors = p_reqdDoorsList.slice();
 		gData.keys[c].distFSM = p_dist;
 		gData.keys[c].section = p_section;
-		p_reqdKeysList.push(c);
-		
-		node = gData.nodesSector[p_section].length;
-		gData.nodesSector[p_section].push({
-			father : p_closestNodeId,
-			distFSM : p_dist,
-			sons : []
-		});
-		gData.keys[c].nodeInSection = node;
-		if (p_closestNodeId != null) {			
-			gData.nodesSector[p_section][p_closestNodeId].sons.push(node);
-		}
+		p_reqdKeysList.push(c);		
 	}
 	// Check doors
 	const c2 = doorValue(p_x, p_y);
-	if (c2 != NOPE) {
+	if (c2 != NO_KEY) {
 		if (p_reqdKeysList.indexOf(c2) == -1) {
 			p_reqdDoorsList.push(c2); // The door doesn't count if we need to take the key before
 		} else {
 			field[p_y][p_x] = EMPTY;
 		}
 	}
-	// Now, check crossroads
-	if (c == NOPE) {
-		const freeL = isSolid(p_x-1, p_y) ? 0 : 1;
-		const freeR = isSolid(p_x+1, p_y) ? 0 : 1;
-		const freeU = isSolid(p_x, p_y-1) ? 0 : 1;
-		const freeD = isSolid(p_x, p_y+1) ? 0 : 1;
-		if (freeL + freeR + freeU + freeD >= 3) {	
-		
-			node = gData.nodesSector[p_section].length;
-			gData.nodesSector[p_section].push({
-				father : p_closestNodeId,
-				distFSM : p_dist,
-				sons : []
-			});
-			if (p_closestNodeId != null) {			
-				gData.nodesSector[p_section][p_closestNodeId].sons.push(node);
-			}
+	// Now, add a node
+	const freeL = isSolid(p_x-1, p_y) ? 0 : 1;
+	const freeR = isSolid(p_x+1, p_y) ? 0 : 1;
+	const freeU = isSolid(p_x, p_y-1) ? 0 : 1;
+	const freeD = isSolid(p_x, p_y+1) ? 0 : 1;
+	const cross = freeL + freeR + freeU + freeD >= 3;
+	if (c != NO_KEY || cross) {
+		nodeId = gData.nodesSector[p_section].length;
+		gData.nodesSector[p_section].push({ // Where nodes are defined
+			idFather : p_closestNodeId,
+			distFSM : p_dist,
+			idSons : [],
+			idKey : c,
+			guardedByDoors : p_reqdDoorsList.slice(),
+			isCrossRoads : cross,
+			guardsDoors : [],
+			guardsKeys : [],
+			guardsDistance : 0
+		});
+		if (p_closestNodeId != null) {			
+			gData.nodesSector[p_section][p_closestNodeId].idSons.push(nodeId);
+		}
+		if (c != NO_KEY) {			
+			gData.keys[c].nodeIndexInSection = nodeId;
 		}
 	}
 	
-	makeSearchesAux(p_x-1, p_y, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), node);
-	makeSearchesAux(p_x+1, p_y, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), node);
-	makeSearchesAux(p_x, p_y-1, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), node);
-	makeSearchesAux(p_x, p_y+1, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), node);
+	makeSearchesAux(p_x-1, p_y, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), nodeId);
+	makeSearchesAux(p_x+1, p_y, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), nodeId);
+	makeSearchesAux(p_x, p_y-1, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), nodeId);
+	makeSearchesAux(p_x, p_y+1, p_section, p_dist+1, p_reqdKeysList.slice(), p_reqdDoorsList.slice(), nodeId);
 }
 
 // A key is useless if it isn't in a dead-end (due to tree structure) AND it is not required by a door (other than the ones you need to pick up to open)
@@ -445,6 +570,12 @@ function purgeUselessKeys() {
 		}
 		if (gData.keys[i].useful) {
 			gData.usefulKeyIDs.push(i);
+		} else {
+			gData.keys[i] = {
+				usefulKeys : false,
+				x : gData.keys[i].y,
+				y : gData.keys[i].y
+			}
 		}
 	}
 }
@@ -462,16 +593,39 @@ function distanceSectionMarkers(p_sectionA, p_sectionB) {
 	return 2;
 }
 
-function distanceWithinSection(p_section, p_nodeA, p_nodeB) {
-	if (p_nodeA > p_nodeB) {
-		return distanceWithinSection(p_section, p_nodeB, p_nodeA);
+function distanceWithinSection(p_section, p_idNodeA, p_idNodeB) {
+	if (p_idNodeA > p_idNodeB) {
+		return distanceWithinSection(p_section, p_idNodeB, p_idNodeA);
 	}
-	if (p_nodeB == p_nodeA) {
+	if (p_idNodeB == p_idNodeA) {
 		return 0;
 	}
-	const fatherIndex = gData.nodesSector[p_section][p_nodeB].father;
-	return gData.nodesSector[p_section][p_nodeB].distFSM-gData.nodesSector[p_section][fatherIndex].distFSM + distanceWithinSection(p_section, p_nodeA, fatherIndex);
+	const fatherIndex = gData.nodesSector[p_section][p_idNodeB].idFather;
+	return gData.nodesSector[p_section][p_idNodeB].distFSM-gData.nodesSector[p_section][fatherIndex].distFSM + distanceWithinSection(p_section, p_idNodeA, fatherIndex);
 	
+}
+
+function findParametersGuarded(p_iSect, p_node) {
+	var i, j;
+	if (p_node.idKey != NO_KEY) {
+		p_node.guardsKeys = [p_node.idKey];
+	}
+	p_node.idSons.forEach(idSon => {	
+		var nodeSon = gData.nodesSector[p_iSect][idSon];
+		findParametersGuarded(p_iSect, nodeSon);
+		nodeSon.guardsDoors.forEach(idDoor => {
+			shiftIntoListUniqueNumbers(p_node.guardsDoors, idDoor);
+		});
+		nodeSon.guardsKeys.forEach(idKey => {
+			shiftIntoListUniqueNumbers(p_node.guardsKeys, idKey);
+		});
+		for (i = nodeSon.guardedByDoors.length-1 ; i >= p_node.guardedByDoors.length ; i--) {
+			shiftIntoListUniqueNumbers(p_node.guardsDoors, nodeSon.guardedByDoors[i]); 		
+			// It assumes that the doors required to reach each node (so, opposite of guarded doors) increase by the right as we go deeper.
+		} // Any door that must be crossed to reach the son but not the father (if the node contains a door - it's a crossroads with one -, the father already has it. )
+		
+	
+	});
 }
 
 // ----------------
@@ -479,7 +633,7 @@ function distanceWithinSection(p_section, p_nodeA, p_nodeB) {
 
 var gAnswer = {}
 const NUMBER_SEEDS = 100;
-const NUMBER_KEYS = 50;
+const NUMBER_KEYS = 5;
 
 function conclusion_18_1() {
 	initKeys();
@@ -495,7 +649,7 @@ function conclusion_18_1() {
 	console.log(new Date());
 	findAnswer(NUMBER_KEYS); // Ok, first we'll try to take 5 keys, then we'll raise this number !
 	console.log(new Date());
-	return gAnswer;
+	return gData;
 } // Correct answer = 3962. Correct collect order = 5,22,0,12,3,17,19,25,4,2,10,14,16,1,13,24,20
 
 function seed() {
@@ -638,6 +792,50 @@ function autoCheckKeysAndDistance(p_arrayKeys) {
 	}
 	return p_arrayKeys.length + " " + answer;
 }
+
+
+
+// New algorithm : 
+/*
+conclusion :
+for each (potential final key) :
+	find_best_this_finalkey(final key)
+
+find_best_this_finalkey(final key) :
+	gData.finalKeyId = final key
+	startFromNode(node start)
+	
+startFromNode(node I)
+	for each (key I not taken yet + accessible)
+		find least deep node (ldn) "on the path to key I where all keys to take are accessible AND not final"
+		if (key I) is the first of (list of keys to take from ldn)			 
+			(climb back until previous crossroad - increase distance)
+			(loot all keys to the other path(s) of the crossroad if possible and not done yet - increase distance)
+			(do so until ldn - ignoring nodes which are not in the correct sections)
+			goFromNodeForKey(ldn) // Increase distance
+			takeAllKeys(ldn) // Start from node ldn, take all keys, come back to node ldn
+			startFromNode(ldn) // Recursive call !!!
+			if (one key left to take) 
+				(Just take the final key and conclude)
+			(Don't forget to restore distance and restore keys)
+		otherwise, if (key I) is not the first of list, don't do anything. It's already treated elsewhere !
+
+// Find the 1st node starting from section marker (well, including marker actually) that contains only takeable / not final keys
+nodeThatCanGetAllKeys(node, targetedKey) {
+	for all (doors guarded by this node) {
+		if (door open) || (door can be opened by a key here)
+		return node
+	}
+	find (node among sons that contains key - some for loop is enough)
+	
+	nodeThatCanGetAllKeys(node_further(targetedKey), targetedKey)
+}
+
+
+*/
+
+
+
 
 // -----------------------------
 

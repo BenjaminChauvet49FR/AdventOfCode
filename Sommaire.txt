@@ -1,3 +1,6 @@
+2019 : 
+18 => mythique problème des clés dans le labyrinthe
+
 2021 :
 2 : sous-marin montant ou descendant
 8 => coder chiffres avec 7 signaux de 'a' à 'g'
@@ -28,3 +31,8 @@
 16 => écoulement maximal dans un réseau + aide de l'éléphant (établissement d'un graphe + recherche par arbre + estimation temps restant)
 17 => Eboulement à la Tetris (partie 2 = truc périodique)
 18 => Propagation en 3 dimensions
+19 => fabrication de géodes, robots avec minerai, argile et obsidienne à la Minecraft (solution avec des arbres)
+20 : mix de liste
+21 => processing d'opérations avec ordre à retrouver
+22x : déplacement sur une carte bi-dimensionnelle puis patron de cube
+23 => dispersion d'elfes (optimisable)
