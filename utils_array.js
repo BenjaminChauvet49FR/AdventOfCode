@@ -102,3 +102,9 @@ function shiftIntoListUniqueNumbers(p_sortedList, p_element) {
 	}
 	return -1;
 }
+
+function shiftIntoListUniqueNumbersTimes(p_sortedListToFill, p_listElts) { // Elements of p_listElts don't have to be unique or sorted
+	p_listElts.forEach(newElt => {				
+		shiftIntoListUniqueNumbers(p_sortedListToFill, newElt) // Skip all future keys in the node since they are treated the same way
+	})	
+}
