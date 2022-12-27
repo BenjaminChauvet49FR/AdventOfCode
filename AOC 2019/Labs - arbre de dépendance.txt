@@ -1,0 +1,9 @@
+1) Etablir l'arbre de dépendance des clés (en se basant uniquement sur "une clé a dépend de b uniquement si B bloque a".
+2) Etablir une chaîne "longue" (la plus en profondeur, ou plus réaliste la plus en distance) du début à la fin (ça doit bien être possible) : c'est la chaîne critique.
+3) Considérer que si il nous reste N clés à prendre sur la chaîne critique et on ne pourra pas battre la meilleure distance, on peut arrêter la recherche ici pour cette branche.
+
+Exemple de chaîne critique :
+Lab. github : a, g, i, n, k, j, t, q, b, v, f
+Lab. perso : a, z, k, q, n, u
+Lab. paternel : v, a/f, y, m, c, h, o
+

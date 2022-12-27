@@ -250,7 +250,7 @@ const rawDataGithub = [
 "#################################################################################"
 ];
 
-const rawData = rawDataPersonal;
+const rawData = rawDataClaude;
 const X_LENGTH = rawData[0].length;
 const Y_LENGTH = rawData.length;
 
@@ -343,6 +343,7 @@ function initKeys() {
 			id : i,
 			requiresKeys : [],
 			requiresDoors : [],
+			requiredByKeys : [],
 			x : -1,
 			y : -1,
 			distFSM : -1, // FSM = from start marker
@@ -350,7 +351,8 @@ function initKeys() {
 			requiredForAnyKey : false,
 			useful : false,
 			closestDistances : [],
-			nodeIndexInSector : -1
+			nodeIndexInSector : -1,
+			minimalDistanceToGoal : -1
 		});
 	}
 	var x, y;
@@ -468,7 +470,7 @@ function initKeys() {
 			}
 		}
 	}
-	
+		
 	// Also check which keys may be final. 
 	gData.potentiallyFinalKeyIDs = [];
 	gData.usefulKeyIDs.forEach(idKey => {
@@ -477,6 +479,8 @@ function initKeys() {
 		}
 	});
 	
+	// For each key, calculate the "minimal number of steps left" once that one is taken, simply by looking at the dependencies.
+	buildTreeAndDistancesRequiredByKeys();	
 }
 
 function makeSearches(p_xStart, p_yStart, p_idSector) {
@@ -606,6 +610,42 @@ function purgeUselessKeys() {
 			}
 		}
 	}
+}
+
+function buildTreeAndDistancesRequiredByKeys() {
+	var keyId;
+	for (var i = 0 ; i < gData.usefulKeyIDs.length ; i++) {		
+		keyId = gData.usefulKeyIDs[i];
+		gData.keys[keyId].requiresDoors.forEach(idDoor => {
+			gData.keys[idDoor].requiredByKeys.push(keyId);
+		});
+		gData.keys[keyId].requiresKeys.forEach(idDoor => {
+			if (gData.keys[idDoor].useful) {				
+				gData.keys[idDoor].requiredByKeys.push(keyId);
+			}
+		});
+	}
+	for (var i = 0 ; i < gData.usefulKeyIDs.length ; i++) {		
+		keyId = gData.usefulKeyIDs[i];		
+		calculateMinimalDistanceToGoal(keyId); 
+	}
+}
+
+function calculateMinimalDistanceToGoal(p_idKey) {
+	var key = gData.keys[p_idKey];
+	var idReq;
+	var val;
+	var key2;
+	if (key.minimalDistanceToGoal == -1) {
+		key.minimalDistanceToGoal = 0;
+		key.requiredByKeys.forEach(idReq => {
+			val = distancesBetweenKeys[idReq][p_idKey] + calculateMinimalDistanceToGoal(idReq);
+			if (val > key.minimalDistanceToGoal) {
+				key.minimalDistanceToGoal = val;
+			}
+		});
+	} 
+	return key.minimalDistanceToGoal;
 }
 
 function distanceSectorMarkers(p_idSectorA, p_idSectorB) {
@@ -816,7 +856,10 @@ var DEBUGINCR = 0;
 // Precondition : all keys guarded by p_startingNode are collected OR p_startingNode is the root.
 function startFromNode(p_startingNode) {
 	// Case of excessive distance + case of the final key
-	if (gAnswer.distance >= gAnswer.bestDistance) {
+	/*if (gAnswer.distance >= gAnswer.bestDistance) {
+		return;
+	}*/
+	if (!p_startingNode.isStartingNode && (gAnswer.distance + gData.keys[p_startingNode.idKey].minimalDistanceToGoal >= gAnswer.bestDistance)) {
 		return;
 	}
 	if (gAnswer.keysLeftToTake == 1) {
@@ -873,7 +916,7 @@ function startFromNode(p_startingNode) {
 // Returns the shallowest node that either : 1) contains the key 2) contains only unguarded keys.
 function firstNodeThatCanGetAllKeysWithTargetOrTargetKey(p_targetKey) {
 	// Starting from the root
-	var i = 0;
+	/*var i = 0;
 	var answer = rootNodeInSector(p_targetKey.idSector); 
 	while (!canGetAllKeysThatNode(answer) && answer.idKey != p_targetKey.id) {
 		var answer2;
@@ -885,7 +928,8 @@ function firstNodeThatCanGetAllKeysWithTargetOrTargetKey(p_targetKey) {
 			}
 		}
 	}	
-	return {desiredNode : answer, onlyThisKey : (answer.idKey == p_targetKey.id) && !canGetAllKeysThatNode(answer)};
+	return {desiredNode : answer, onlyThisKey : (answer.idKey == p_targetKey.id) && !canGetAllKeysThatNode(answer)};*/
+	return {desiredNode : getNodeFromKey(p_targetKey.id), onlyThisKey : true};
 }
 
 
@@ -979,6 +1023,83 @@ function canGetAllKeysThatNode(p_node) {
 	}
 	return true;
 }
+
+// ---
+
+// SEEDING TIME !
+function seed() {
+	initOnePathData();
+	var randomIndex = -1;
+	var previousIndex = -1;
+	while (gAnswer.keysLeftToTake > 0) {
+		do {
+			randomIndex = randomNumber(gAnswer.minRandomInt, gAnswer.maxRandomInt);
+		} while (!correctIndex(randomIndex));
+		if (previousIndex == -1) {
+			gAnswer.distance += gData.keys[randomIndex].distFSM;
+		} else {
+			gAnswer.distance += distancesBetweenKeys[randomIndex][previousIndex];
+		}
+		gAnswer.currentChain.push(randomIndex);
+		gAnswer.keyTakenYet[randomIndex] = true;
+		previousIndex = randomIndex;
+		gAnswer.keysLeftToTake--;
+	}
+	updateAnswerIfBest();
+}
+
+function initGlobalAnswerData() {
+	gAnswer.min = X_LENGTH*Y_LENGTH*26;		
+	gAnswer.bestChain = [];
+	gAnswer.seededBestChain = [];
+}
+
+function initOnePathData() {
+	gAnswer.distance = 2; // No matter which key we take first, we will go to a section marker.
+	gAnswer.currentChain = [];
+	gAnswer.keysLeftToTake = 0;
+	gAnswer.keyTakenYet = [];
+	for (var i = 0 ; i < gAnswer.keysNumber ; i++) {
+		gAnswer.keyTakenYet.push(!gData.keys[i].useful);
+		if (gData.keys[i].useful) {
+			gAnswer.keysLeftToTake++;
+		}
+	}
+	gAnswer.minRandomInt = 0;
+	gAnswer.maxRandomInt = gAnswer.keysNumber-1;
+}
+
+function correctIndex(p_randInd) {
+	var answer = gData.keys[p_randInd].useful && !gAnswer.keyTakenYet[p_randInd];
+	if (!answer) { // If the key will not be good anymore (useless or already taken)		
+		if (p_randInd == gAnswer.minRandomInt) {
+			gAnswer.minRandomInt++;
+		} else if (p_randInd == gAnswer.maxRandomInt) {
+			gAnswer.maxRandomInt--;
+		}
+	} else { // The key is still useful and to be taken, but can it be reached yet ?
+		var i;
+		for (i = 0 ; i < gData.keys[p_randInd].requiresDoors.length ; i++) {
+			if (!gAnswer.keyTakenYet[gData.keys[p_randInd].requiresDoors[i]]) {
+				return false;
+			}
+		}
+		for (i = 0 ; i < gData.keys[p_randInd].requiresKeys.length ; i++) {
+			if (!gAnswer.keyTakenYet[gData.keys[p_randInd].requiresKeys[i]]) {
+				return false;
+			}
+		}
+	}
+	return answer;
+}
+
+function updateAnswerIfBest() {
+	if (gAnswer.distance < gAnswer.min) {
+		gAnswer.min = gAnswer.distance;
+		gAnswer.bestChain = gAnswer.currentChain.slice();
+	}
+}
+
 
 //---
 // Checking methods
