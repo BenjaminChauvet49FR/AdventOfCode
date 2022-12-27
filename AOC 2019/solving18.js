@@ -257,7 +257,8 @@ const Y_LENGTH = rawData.length;
 const field = stringArray_to_charDoubleEntryArray(rawData);
 var gData = {
 	keys : [],
-	nodesSector : [[],[],[],[],[],[],[],[],[],[],[],[]],
+	nodesSector : [[],[],[],[],[],[],[],[]],
+	distanceWithinSector : [],
 	checkerPaths : new CheckCollectionDoubleEntry(X_LENGTH, Y_LENGTH),
 	usefulKeyIDs : [],
 	potentiallyFinalKeyIDs : [] 
@@ -273,14 +274,14 @@ const ADDED_WALL = '+';
 const EMPTY = '.';
 const NO_KEY = -1;
 const SECTOR_MARK = '1'; // Not really useful, except for code clarty.
-const LEFT_UP_1 = 1;
-const LEFT_UP_2 = 2;
-const RIGHT_UP_1 = 3;
-const RIGHT_UP_2 = 4;
-const LEFT_DOWN_1 = 5;
-const LEFT_DOWN_2 = 6;
-const RIGHT_DOWN_1 = 7;
-const RIGHT_DOWN_2 = 8;
+const LEFT_UP_1 = 0;
+const LEFT_UP_2 = 1;
+const RIGHT_UP_1 = 2;
+const RIGHT_UP_2 = 3;
+const LEFT_DOWN_1 = 4;
+const LEFT_DOWN_2 = 5;
+const RIGHT_DOWN_1 = 6;
+const RIGHT_DOWN_2 = 7;
 
 function doorValue(p_x, p_y) {
 	const c = charToASCIIRelativePosition(field[p_y][p_x], 'A');
@@ -382,13 +383,36 @@ function initKeys() {
 	var dist;
 	distancesBetweenKeys = generateDoubleEntryArray(gData.keys.length, gData.keys.length, -1);
 	
-	// Now, let's make distances ! (only between useful keys)
+	// Now, let's make distances between 1-nodes of the same sector 2-keys ! (anything useless is removed)
+	var iSect;
+	var nodesInsectI, commonNode;
+	var iNodeA, iNodeB;
+	for (iSect = 0 ; iSect < gData.nodesSector.length ; iSect++) {
+		nodesInsectI = gData.nodesSector[iSect];
+		gData.distanceWithinSector.push([]);
+		for (iNodeA = 0 ; iNodeA < nodesInsectI.length ; iNodeA++) {
+			gData.distanceWithinSector[iSect].push([]);
+			for (iNodeB = 0 ; iNodeB < iNodeA ; iNodeB++) {				
+				gData.distanceWithinSector[iSect][iNodeA].push(-1);
+			}
+		}
+		for (iNodeA = 0 ; iNodeA < nodesInsectI.length ; iNodeA++) {
+			for (iNodeB = 0 ; iNodeB < iNodeA ; iNodeB++) {
+				commonNode = gData.nodesSector[iSect][commonIdNode(iSect, iNodeA, iNodeB)];
+				dist = gData.nodesSector[iSect][iNodeA].distFSM + gData.nodesSector[iSect][iNodeB].distFSM - commonNode.distFSM*2;
+				gData.distanceWithinSector[iSect][iNodeA][iNodeB] = dist;
+				gData.distanceWithinSector[iSect][iNodeB][iNodeA] = dist;
+			} // No purge here.
+		}					
+	}
+	
+	
 	for (i = 0 ; i < gData.keys.length ; i++) {
 		if (gData.keys[i].useful) {
 			for (j = i+1 ; j < gData.keys.length ; j++) {
 				if (gData.keys[j].useful) {
 					if (gData.keys[i].idSector == gData.keys[j].idSector) {
-						dist = distanceWithinSector(gData.keys[i].idSector, gData.keys[i].nodeIndexInSector, gData.keys[j].nodeIndexInSector);
+						dist = gData.distanceWithinSector[gData.keys[i].idSector][gData.keys[i].nodeIndexInSector][gData.keys[j].nodeIndexInSector];
 					} else {
 						dist = gData.keys[i].distFSM + gData.keys[j].distFSM + distanceSectorMarkers(gData.keys[i].idSector,gData.keys[j].idSector);
 					}
@@ -412,9 +436,9 @@ function initKeys() {
 		}
 	}
 	
+		var iNode, iNodeFather;
+
 	// Now, purge "nodes of useless keys".
-	var nodesInsectI, node;
-	var iSect, iNode, iNodeFather;
 	for (iSect = 0 ; iSect < gData.nodesSector.length ; iSect++) {
 		nodesInsectI = gData.nodesSector[iSect]; // insect = "in sector..." lol, to avoid confusion with nodesSector.
 		for (iNode = 0 ; iNode < nodesInsectI.length ; iNode++) {
@@ -585,8 +609,8 @@ function purgeUselessKeys() {
 }
 
 function distanceSectorMarkers(p_idSectorA, p_idSectorB) {
-	const partA = Math.floor((p_idSectorA-1)/2);
-	const partB = Math.floor((p_idSectorB-1)/2);
+	const partA = Math.floor(p_idSectorA/2);
+	const partB = Math.floor(p_idSectorB/2);
 	// So partA and partB = 0 (NW), 1(NE), 2 (SW) or 3 (SE)
 	if (partA == partB) {
 		return 0;
@@ -595,17 +619,6 @@ function distanceSectorMarkers(p_idSectorA, p_idSectorB) {
 		return 4;
 	}
 	return 2;
-}
-
-function distanceWithinSector(p_idSector, p_idNodeA, p_idNodeB) {
-	if (p_idNodeA > p_idNodeB) {
-		return distanceWithinSector(p_idSector, p_idNodeB, p_idNodeA);
-	}
-	if (p_idNodeB == p_idNodeA) {
-		return 0;
-	}
-	const fatherIndex = gData.nodesSector[p_idSector][p_idNodeB].idFather;
-	return gData.nodesSector[p_idSector][p_idNodeB].distFSM-gData.nodesSector[p_idSector][fatherIndex].distFSM + distanceWithinSector(p_idSector, p_idNodeA, fatherIndex);
 }
 
 function findParametersGuarded(p_idSector, p_node) {
@@ -794,8 +807,7 @@ function distanceBetweenNodes(p_nodeA, p_nodeB) {
 	if (p_nodeA.idSector != p_nodeB.idSector) {
 		return p_nodeA.distFSM + p_nodeB.distFSM + distanceSectorMarkers(p_nodeA.idSector, p_nodeB.idSector);
 	} else {
-		var commonNode = gData.nodesSector[p_nodeA.idSector][commonIdNode(p_nodeA.idSector, p_nodeA.idInSector, p_nodeB.idInSector)];
-		return (p_nodeA.distFSM + p_nodeB.distFSM - commonNode.distFSM*2); 
+		return gData.distanceWithinSector[p_nodeA.idSector][p_nodeA.idInSector][p_nodeB.idInSector]; 
 	}
 }
 
@@ -901,11 +913,11 @@ function goToNodeCollectingKeysAlongTheWay(p_startingNode, p_targetNode) {
 		}
 		else {
 			// We MAY go from a father node to a child node if we ask first to go to a key on a non-autocollect node, then to another one below it.
-			var commonNode = gData.nodesSector[p_startingNode.idSector][commonIdNode(p_startingNode.idSector, p_startingNode.idInSector, p_targetNode.idInSector)];
-			gAnswer.distance += (p_targetNode.distFSM + p_startingNode.distFSM - commonNode.distFSM*2);  // TODO : collect keys here
+			// TODO collect keys here !
+			gAnswer.distance += gData.distanceWithinSector[p_startingNode.idSector][p_startingNode.idInSector][p_targetNode.idInSector];
 		}
 	}
-} // PRESQUE ! 3958.
+} 
 
 // Collects all the keys along the way in a given node.
 // Increases the distance + returns a list of any newly collected key.
