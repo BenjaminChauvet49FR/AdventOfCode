@@ -1,8 +1,68 @@
-var logParams = {
-	shouldLog : true
-}
+var rawDataExample = ["on x=-5..47,y=-31..22,z=-19..33                          ",
+"on x=-44..5,y=-27..21,z=-14..35                          ",
+"on x=-49..-1,y=-11..42,z=-10..38                         ",
+"on x=-20..34,y=-40..6,z=-44..1                           ",
+"off x=26..39,y=40..50,z=-2..11                           ",
+"on x=-41..5,y=-41..6,z=-36..8                            ",
+"off x=-43..-33,y=-45..-28,z=7..25                        ",
+"on x=-33..15,y=-32..19,z=-34..11                         ",
+"off x=35..47,y=-46..-34,z=-11..5                         ",
+"on x=-14..36,y=-6..44,z=-16..29                          ",
+"on x=-57795..-6158,y=29564..72030,z=20435..90618         ",
+"on x=36731..105352,y=-21140..28532,z=16094..90401        ",
+"on x=30999..107136,y=-53464..15513,z=8553..71215         ",
+"on x=13528..83982,y=-99403..-27377,z=-24141..23996       ",
+"on x=-72682..-12347,y=18159..111354,z=7391..80950        ",
+"on x=-1060..80757,y=-65301..-20884,z=-103788..-16709     ",
+"on x=-83015..-9461,y=-72160..-8347,z=-81239..-26856      ",
+"on x=-52752..22273,y=-49450..9096,z=54442..119054        ",
+"on x=-29982..40483,y=-108474..-28371,z=-24328..38471     ",
+"on x=-4958..62750,y=40422..118853,z=-7672..65583         ",
+"on x=55694..108686,y=-43367..46958,z=-26781..48729       ",
+"on x=-98497..-18186,y=-63569..3412,z=1232..88485         ",
+"on x=-726..56291,y=-62629..13224,z=18033..85226          ",
+"on x=-110886..-34664,y=-81338..-8658,z=8914..63723       ",
+"on x=-55829..24974,y=-16897..54165,z=-121762..-28058     ",
+"on x=-65152..-11147,y=22489..91432,z=-58782..1780        ",
+"on x=-120100..-32970,y=-46592..27473,z=-11695..61039     ",
+"on x=-18631..37533,y=-124565..-50804,z=-35667..28308     ",
+"on x=-57817..18248,y=49321..117703,z=5745..55881         ",
+"on x=14781..98692,y=-1341..70827,z=15753..70151          ",
+"on x=-34419..55919,y=-19626..40991,z=39015..114138       ",
+"on x=-60785..11593,y=-56135..2999,z=-95368..-26915       ",
+"on x=-32178..58085,y=17647..101866,z=-91405..-8878       ",
+"on x=-53655..12091,y=50097..105568,z=-75335..-4862       ",
+"on x=-111166..-40997,y=-71714..2688,z=5609..50954        ",
+"on x=-16602..70118,y=-98693..-44401,z=5197..76897        ",
+"on x=16383..101554,y=4615..83635,z=-44907..18747         ",
+"off x=-95822..-15171,y=-19987..48940,z=10804..104439     ",
+"on x=-89813..-14614,y=16069..88491,z=-3297..45228        ",
+"on x=41075..99376,y=-20427..49978,z=-52012..13762        ",
+"on x=-21330..50085,y=-17944..62733,z=-112280..-30197     ",
+"on x=-16478..35915,y=36008..118594,z=-7885..47086        ",
+"off x=-98156..-27851,y=-49952..43171,z=-99005..-8456     ",
+"off x=2032..69770,y=-71013..4824,z=7471..94418           ",
+"on x=43670..120875,y=-42068..12382,z=-24787..38892       ",
+"off x=37514..111226,y=-45862..25743,z=-16714..54663      ",
+"off x=25699..97951,y=-30668..59918,z=-15349..69697       ",
+"off x=-44271..17935,y=-9516..60759,z=49131..112598       ",
+"on x=-61695..-5813,y=40978..94975,z=8655..80240          ",
+"off x=-101086..-9439,y=-7088..67543,z=33935..83858       ",
+"off x=18020..114017,y=-48931..32606,z=21474..89843       ",
+"off x=-77139..10506,y=-89994..-18797,z=-80..59318        ",
+"off x=8476..79288,y=-75520..11602,z=-96624..-24783       ",
+"on x=-47488..-1262,y=24338..100707,z=16292..72967        ",
+"off x=-84341..13987,y=2429..92914,z=-90671..-1318        ",
+"off x=-37810..49457,y=-71013..-7894,z=-105357..-13188    ",
+"off x=-27365..46395,y=31009..98017,z=15428..76570        ",
+"off x=-70369..-16548,y=22648..78696,z=-1892..86821       ",
+"on x=-53470..21291,y=-120233..-33476,z=-44150..38147     ",
+"off x=-93533..-4276,y=-16170..68771,z=-104985..-24507    "
+]
+// Expected = 2758514936282235
+// Found    = 2669828114445475
 
-var rawData =
+var rawDataOfficial =
 ["on x=-9..45,y=-15..37,z=-2..46",
 "on x=-48..2,y=-11..37,z=3..48",
 "on x=-47..4,y=-47..-3,z=-12..34",
@@ -424,6 +484,13 @@ var rawData =
 "off x=30271..50936,y=-87052..-56522,z=3300..32145",
 "on x=55833..75804,y=18495..43321,z=-27127..-11497"];
 
+var logParams = { // MANAGE INPUT HERE
+	shouldLog : false
+}
+const rawData = rawDataOfficial;
+const FLOOR_SIZE = 10000;
+const NUMBER_FLOORS = 30; 
+
 function conclusion_22_1() {
 	var x1, x2, y1, y2, z1, z2;
 	var x, y, z;
@@ -477,7 +544,7 @@ function conclusion_22_1() {
 var bigBoxSteps = [];
 var data = [];
 function conclusion_22_2() {	
-	return conclusion_22_2_aux(20, 20, 20, true);
+	return conclusion_22_2_aux(NUMBER_FLOORS, NUMBER_FLOORS, NUMBER_FLOORS, true);
 }
 
 function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer = false : calculate only bigBoxSteps;
@@ -502,21 +569,21 @@ function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer
 			z1 : parseInt(tokens[10],10),
 			z2 : parseInt(tokens[12],10)
 		});
-		/*xMin = Math.min(xMin,data[i].x1);
+		xMin = Math.min(xMin,data[i].x1);
 		yMin = Math.min(yMin,data[i].y1);
 		zMin = Math.min(zMin,data[i].z1);
 		xMax = Math.max(xMax,data[i].x2);
 		yMax = Math.max(yMax,data[i].y2);
-		zMax = Math.max(zMax,data[i].z2);*/
+		zMax = Math.max(zMax,data[i].z2);
 	} 
 	// For the sake of simplicity, I'll consider bounds to be -100000 and 99999. Thank you for the analysis anyway !
 	// and boxes to be 10k side from -100k..-90001, 
 
-	for (x = 0 ; x < 20 ; x++) {
+	for (x = 0 ; x < p_xL ; x++) {
 		bigBoxSteps.push([]);
-		for (y = 0 ; y < 20 ; y++) {
+		for (y = 0 ; y < p_yL ; y++) {
 			bigBoxSteps[x].push([]);
-			for (z = 0 ; z < 20 ; z++) {
+			for (z = 0 ; z < p_zL ; z++) {
 				bigBoxSteps[x][y].push([]);
 			}
 		}
@@ -536,7 +603,7 @@ function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer
 			for (y = ys1 ; y <= ys2 ; y++) {
 				inner = innerX && (y > ys1 && y < ys2);
 				for (z = zs1 ; z <= zs2 ; z++) {
-					if (inner && (z > ys1 && z < ys2)) {
+					if (inner && (z > zs1 && z < zs2)) { // Why did I compare with ys1 and ys2 ?
 						if (data[i].activate) {
 							bigBoxSteps[x][y][z] = [i];
 						} else {
@@ -549,6 +616,10 @@ function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer
 			}
 		}
 	}
+	/*"on x=43326..72010,y=20000..41816,z=51160..69275",
+	SImplified ranges : 14..17, 12..14, 15..16
+	*/
+	
 	// bigbox[7][11][1] (=) [-30K..-20K1][10K..20K-1][-90K..-80K1] 
 	// "on x=-49858..-27145,y=-8313..12257,z=-80733..-65761",
 	// "off x=-62738..-27200,y=9928..29860,z=-82061..-55735",
@@ -562,7 +633,7 @@ function conclusion_22_2_aux(p_xL, p_yL, p_zL, p_gimmeAnswer) { // p_gimmeAnswer
 				for (z = 0 ; z < p_zL ; z++) {
 					cubesHere = numberOfCubesWithin(data, bigBoxSteps[x][y][z], getFloor(x), getFloor(x+1)-1, 
 					getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);
-					if (cubesHere > 0) {
+					if (cubesHere > 0 && logParams.shouldLog) {
 						console.log(x + "," + y + "," +z + " : " + cubesHere);
 					}
 					answer += cubesHere;
@@ -589,28 +660,15 @@ Total : 272508111270
 	return numberOfCubesWithin(data, bigBoxSteps[x][y][z], getFloor(x), getFloor(x+1)-1, 
 				getFloor(y), getFloor(y+1)-1, getFloor(z), getFloor(z+1)-1);*/
 				
-				// 1 250 237 228 954 471 is NOT the right answer !
-}
+				// 1 250 237 228 954 471 (or 1250237228954471) is NOT the right answer ! 1257350313518866 is. 
+} 
 
 function getSimplifiedRange(p_number) {
-	return Math.floor(p_number/10000)+10;
+	return Math.floor(p_number/FLOOR_SIZE)+NUMBER_FLOORS/2;
 }
 
 function getFloor(p_simplifiedRange) {
-	return 10000*(p_simplifiedRange-10);
-}
-
-function logSteps(p_x, p_y, p_z) {
-	if (bigBoxSteps.length == 0) {
-		conclusion_22_2_aux();
-	}
-	console.log("Slice " + getFloor(p_x) + "-" + (getFloor(p_x+1)-1) + "  " +
-				getFloor(p_y)+ "-" + (getFloor(p_y+1)-1) + "  " + getFloor(p_z) + "-" + (getFloor(p_z+1)-1));
-	for (var i = 0 ; i < bigBoxSteps[p_x][p_y][p_z].length ; i++) {
-		console.log(rawData[bigBoxSteps[p_x][p_y][p_z][i]]);
-	}
-	console.log("Result for this slice : " + numberOfCubesWithin(data, bigBoxSteps[p_x][p_y][p_z], getFloor(p_x), getFloor(p_x+1)-1, 
-				getFloor(p_y), getFloor(p_y+1)-1, getFloor(p_z), getFloor(p_z+1)-1))
+	return FLOOR_SIZE*(p_simplifiedRange-NUMBER_FLOORS/2);
 }
 
 // min and max coors are contained in the cube. 
@@ -643,6 +701,9 @@ function numberOfCubesWithin(p_allSteps, p_ourSteps, p_xMin, p_xMax, p_yMin, p_y
 			shiftIntoListUniqueNumbers(zFloors, step.z2+1);
 		}		
 	}
+	xFloors.push(p_xMax+1);
+	yFloors.push(p_yMax+1);
+	zFloors.push(p_zMax+1);
 	var lightCubes = [];
 	for (x = 0 ; x < xFloors.length ; x++) {
 		lightCubes.push([]);
@@ -667,9 +728,6 @@ function numberOfCubesWithin(p_allSteps, p_ourSteps, p_xMin, p_xMax, p_yMin, p_y
 		}
 	}
 	var answer = 0;
-	xFloors.push(p_xMax+1);
-	yFloors.push(p_yMax+1);
-	zFloors.push(p_zMax+1);
 	for (x = 0 ; x < xFloors.length-1 ; x++) {
 		for (y = 0 ; y < yFloors.length-1 ; y++) {
 			for (z = 0 ; z < zFloors.length-1 ; z++) {
