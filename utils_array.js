@@ -59,7 +59,7 @@ function shiftGreatestNumbers(p_number, p_array) {
 function generateArray(p_xLength, p_value) {
 	var answer = [];
 	for (var x = 0 ; x < p_xLength ; x++) {
-		answer.push(value);
+		answer.push(p_value);
 	}
 	return answer;
 }

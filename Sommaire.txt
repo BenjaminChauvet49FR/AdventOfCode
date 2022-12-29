@@ -1,16 +1,51 @@
 2019 : 
 18 => mythique problème des clés dans le labyrinthe
 
+2020 :
+1 : Somme de nombres valant 2020
+2 : Mots de passe
+3 : Descente diagonale
+4 XXXXXXXXXXXXXXX : données manquantes
+5 XXXXXXXXXXXXXXX : trouver le siège (plus ou moins)
+6 XXXXXXXXXXXXXXX : groupe de personnes répondant à des questions
+7 XXXXXXXXXXXXXXX : emboîtement de sacs
+8 XXXXXXXXXXXXXXX : Chaîne d'instructions et risque de boucle infinie
+9 : Somme de 2 nombres parmi les 25 précédents
+10 => Chaînes d'adaptateurs (sauts de 1 ou de 3)
+11 XXXXXXXXXXXXXXX : Sièges libres ou occupés (8 voisins)
+12 : Déplacement par étapes
+13 : Passages des bus toutes les x minutes
+14 XXXXXXXXXXXXXXX : Ecriture et écrasement de bits
+15 XXXXXXXXXXXXXXX : Nombres sortis les uns à la suite des autres
+16 XXXXXXXXXXXXXXX : Tickets mystère (nombres dans les intervalles, ou pas)
+17 XXXXXXXXXXXXXXX : Le jeu de la vie
+18 XXXXXXXXXXXXXXX : Opérations de la gauche vers la droite
+19 XXXXXXXXXXXXXXX : Expressions "régulières"
+20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
+21 XXXXXXXXXXXXXXX : Allergènes
+22 => Jouons à la bataille ! (pile de cartes numérotées)
+23 XXXXXXXXXXXXXXX : Bonneteau
+24 => tuiles hexagonales retournées + jeu de la vie hexagonal
+25 : clé secrète et décryptage
+
 2021 :
+1 : étape plus profonde que la précédente
 2 : sous-marin montant ou descendant
+3 => histoire de bits
 8 => coder chiffres avec 7 signaux de 'a' à 'g'
 9 => recherche de bassins (découpage en régions astucieux)
 10 x : chaînes ouvrantes/fermantes "{[(<"
 11 => flashes (checker utilisable)
+12 => Réseau de salles grandes (visitables plusieurs fois) et petites (visite unique, ou presque)
+13 : Calque à plier
+14 => extension de polymerisation (chaîne de caractère avec caractères insérés)
 15 => recherche de risque minimal (plus court chemin)
 16 => décodage, pacekts et subpackets
+17 : lancer de sonde
+21 : dé déterministe + univers triplés
 22 x => pavés droits, de dimensions -100K à 100K
 23 x => déplacements d'items
+25 : Déplacements bas-droite
 
 2022 :
 1 : comptage de calories
