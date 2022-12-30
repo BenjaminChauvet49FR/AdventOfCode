@@ -1,127 +1,255 @@
-const startingData = [[1,0],[2,3],[3,0],[2,1]]; // rightmost = outside
-var dynamicData = [startingData[0].slice(), startingData[1].slice(), startingData[2].slice(), startingData[3].slice()]; 
-var hallway = [4,4,4,4,4,4,4,4,4,4,4];
-var blocked = [1,1,0,1,0,1,0,1,0,1,1];
+const startingDataLevel1 = [[1,0],[2,3],[3,0],[2,1]]; // rightmost = outside
+const startingDataLevel2 = [[1,3,3,0],[2,1,2,3],[3,0,1,0],[2,2,0,1]]; // rightmost = outside
 const weights = [1, 10, 100, 1000];
-var events = [];
-var spaceOfMyRoom = [2,4,6,8]; // 0 is in front of space 2 of corridor, 1 is in front of space 4...
+const spaceOfMyRoom = [2,4,6,8]; // 0 is in front of space 2 of corridor, 1 is in front of space 4...
+const placeToBe = [1,1,0,1,0,1,0,1,0,1,1];
+var startingData;
+
+
+const EMPTY = -1;
+
+function initAll() {
+	gAnswer.nbKinds = startingData.length;
+	gAnswer.maxDepth = startingData[0].length;
+	
+	
+	gAnswer.alreadyInPlace = [0, 0, 0, 0];
+	toMoveIn = 0;
+	var i, j, toStock;
+	for (i = 0 ; i < gAnswer.nbKinds ; i++) {
+		j = 0;
+		while (startingData[i][j] == i) {
+			j++;
+		}
+		gAnswer.alreadyInPlace[i] = j;
+		toStock = gAnswer.maxDepth-j;
+		toMoveIn += (toStock*(toStock+1)/2)*(weights[i]); // Coming to your house.
+	}
+	console.log("Energy to enter boxes = " + toMoveIn);
+	var elt;
+	var toMoveOut = 0;
+	for (i = 0 ; i < gAnswer.nbKinds ; i++) {
+		for (j = gAnswer.alreadyInPlace[i] ; j < gAnswer.maxDepth ; j++) {
+			elt = startingData[i][j];
+			toMoveOut += (startingData[i].length-j)*weights[elt]; 
+		}
+	}
+	console.log("Energy to leave boxes = " + toMoveOut);	
+	
+	// For the final answer
+	gAnswer.minimalAnyway = toMoveIn + toMoveOut;
+	gAnswer.bestScore = generateArray(gAnswer.nbKinds, 999);
+	gAnswer.bestChain = [];
+}
+
+function initOneGo() {
+	gAnswer.dynamicData = [];
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		gAnswer.dynamicData.push(startingData[i].slice());
+	}
+	gAnswer.inPlace = gAnswer.alreadyInPlace.slice();
+	gAnswer.currentScore = generateArray(gAnswer.nbKinds, 0);
+	gAnswer.inChain = [];
+	gAnswer.hallway = generateArray(placeToBe.length, EMPTY);
+	gAnswer.positionsOccupiedInHallway = [];
+}
+
+const gAnswer = {
+	nbKinds : -1,
+	maxDepth : -1,
+	dynamicData : [],
+	currentChain : [],
+	currentScore : [],
+	bestScore : [],
+	bestChain : [],
+	minimalAnyway : -1,
+	data : [],
+	inPlace : [],
+	alreadyInPlace : [],
+	positionsOccupiedInHallway : []
+}
 
 function conclusion_23_1() {
-	var bestScore = 99999;
-	
-	var answer = moveToHallway(2, 0); // Move A at left
-	answer += moveToHallway(3, 3); // Move B left to b stack
-	answer += moveToHallway(3, 9); // Move C to the right
-	answer += moveDirectly(2);
-	answer += moveDirectly(1); // Enter both Ds
-	answer += leaveHallway(9);
-	answer += moveDirectly(1); // Enter both Cs
-	answer += leaveHallway(3); // Enter a B
-	answer += moveToHallway(0, 1); // Move A at left
-	answer += moveDirectly(0); // Enter the other B
-	answer += leaveHallway(1);
-	answer += leaveHallway(0);  // Enter both As
-	return answer; // Best combination, worth 13455
+	return conclusion_23_aux(startingDataLevel1);
 }
 
-function isEmptyHallway(p_space) {
-	return (hallway[p_space] == 4)
+function conclusion_23_2() {
+	return conclusion_23_aux(startingDataLevel2);	
 }
 
-function emptySpaceHallway(p_space) {
-	hallway[p_space] = 4;
-}
-
-// Space with p_start not empty !
-// Possible move = required energy
-// Impossible move = 0.
-function leaveHallway(p_room) {
-	const item = hallway[p_room];
-	const roomGoal = spaceOfMyRoom[item];
-	var answer;
-	if (p_room > roomGoal) {
-		if (!allEmptyBetween(roomGoal, p_room)) {
-			console.log("NO !");
-			return 0;
-		}
-		dynamicData[item].push(item);
-		answer = (p_room - roomGoal + 3 - dynamicData[item].length)*weights[item];
-	} else {
-		if (!allEmptyBetween(roomGoal, p_room)) {
-			console.log("NO !");
-			return 0;
-		}
-		dynamicData[item].push(item);
-		answer = (roomGoal - p_room + 3 - dynamicData[item].length)*weights[item];
+function conclusion_23_aux(p_startingData) {
+	startingData = p_startingData
+	initAll();
+	initOneGo();
+	go();
+	var answer = gAnswer.minimalAnyway;
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		answer += gAnswer.bestScore[i]*weights[i];
 	}
-	console.log("Item " + item + " leaves room " + p_room + " weight " + answer);
-	emptySpaceHallway(p_room);
 	return answer;
 }
 
-// Checks if all stacks strictly between are empty (the ones in between must be okay).
-function allEmptyBetween(p_lowerRoom, p_higherRoom) {
-	for (var i = p_lowerRoom+1 ; i < p_higherRoom ; i++) {
-		if (!isEmptyHallway(i)) {
+function go() {
+	if (currentScoreWorse()) {
+		return;
+	}
+	var eltToMove, xDest;
+	var backupList = [];
+	var xElt;
+	// Put elements in the hallway to their place as much as possible
+	//gAnswer.positionsOccupiedInHallway.forEach(xElt => {
+	var atLeastOne;
+	do {
+		atLeastOne = false;
+		for (xElt = 0 ; xElt < gAnswer.hallway.length ; xElt++) {
+			eltToMove = gAnswer.hallway[xElt];
+			if (eltToMove == EMPTY) {
+				continue;
+			}
+			xDest = spaceOfMyRoom[eltToMove];
+			shouldEnter = (gAnswer.dynamicData[eltToMove].length == gAnswer.inPlace[eltToMove]);
+			if (shouldEnter) {
+				if (xElt > xDest) {				
+					xCurrent = xElt-1;			
+					while (xCurrent > xDest && gAnswer.hallway[xCurrent] == EMPTY) {
+						xCurrent--;
+					}
+				} else {				
+					xCurrent = xElt+1;
+					while (xCurrent < xDest && gAnswer.hallway[xCurrent] == EMPTY) {
+						xCurrent++;
+					}
+				}
+				shouldEnter = (xCurrent == xDest);
+			}
+			if (shouldEnter) {
+				gAnswer.hallway[xElt] = EMPTY;
+				gAnswer.dynamicData[eltToMove].push(eltToMove);
+				gAnswer.inPlace[eltToMove]++;
+				backupList.push({elt : eltToMove, formerPosition : xElt});
+				atLeastOne = true;
+			}
+		}
+	} while (atLeastOne);
+	
+	if (endOfRoad()) {
+		if (currentScoreBetter()) {
+			gAnswer.bestScore = gAnswer.currentScore.slice();
+			gAnswer.bestChain = gAnswer.currentChain.slice();			
+		}
+		var eltOut;
+		backupList.forEach(eltOut => { // Beware ! C/P.
+			gAnswer.dynamicData[eltOut.elt].pop();
+			gAnswer.inPlace[eltOut.elt]--;
+			gAnswer.hallway[eltOut.formerPosition] = eltOut.elt;
+		});
+		return;
+	}
+		
+	//});
+	
+	var bye, formerScore;
+	// Now, recursion starts !
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		if (gAnswer.inPlace[i] < gAnswer.dynamicData[i].length) {
+			eltToMove = gAnswer.dynamicData[i].pop();
+			[-1, +1].forEach(deltaX => {				
+				xElt = spaceOfMyRoom[i]+deltaX;
+				bye = false;
+				while (!bye && xElt >= 0 && xElt < placeToBe.length && gAnswer.hallway[xElt] == EMPTY) {
+					if (placeToBe[xElt] == 0) {
+						xElt += deltaX;
+						continue;
+					}
+					gAnswer.hallway[xElt] = eltToMove;
+					gAnswer.currentChain.push(eltToMove+">"+xElt);
+					//gAnswer.positionsOccupiedInHallway.push(xElt);
+					formerScore = gAnswer.currentScore[eltToMove];
+					gAnswer.currentScore[eltToMove] += Math.abs(xElt - spaceOfMyRoom[i]) + Math.abs(xElt - spaceOfMyRoom[eltToMove]);
+					//console.log("Trying. Now : " + stateToString());
+					if (currentScoreWorse()) {
+						gAnswer.currentScore[eltToMove] = formerScore;
+						bye = true;
+					} else {
+						go();
+					}
+					gAnswer.hallway[xElt] = EMPTY;
+					gAnswer.currentChain.pop();
+					//gAnswer.positionsOccupiedInHallway.pop();
+					gAnswer.currentScore[eltToMove] = formerScore;
+					xElt += deltaX;
+					//console.log("Leaving. Now : " + stateToString() + " (" + eltToMove + " out of stack "+ i+")" );
+				}
+			});
+			gAnswer.dynamicData[i].push(eltToMove);
+		}
+	}
+	
+	// Return elements that had been freed
+	var eltOut;
+	backupList.forEach(eltOut => {
+		gAnswer.dynamicData[eltOut.elt].pop();
+		gAnswer.inPlace[eltOut.elt]--;
+		gAnswer.hallway[eltOut.formerPosition] = eltOut.elt;
+	});
+}
+
+function currentScoreBetter() {
+	for (var i = gAnswer.nbKinds-1 ; i >= 0 ; i--) {
+		if (gAnswer.currentScore[i] > gAnswer.bestScore[i]) {
 			return false;
 		}
-	}	
+		if (gAnswer.currentScore[i] < gAnswer.bestScore[i]) {
+			return true;
+		}
+	}
 	return true;
 }
 
-// Last element of dynamicData[p_stack] ; must not be empty !
-// Possible move = required energy
-// Impossible move = 0
-function moveToHallway(p_stack, p_destination) {
-	const item = dynamicData[p_stack].pop();
-	var answer = 2 - dynamicData[p_stack].length;
-	const roomStartH = spaceOfMyRoom[p_stack];
-	if (roomStartH < p_destination) {
-		if (!allEmptyBetween(roomStartH, p_destination)) {
-			dynamicData[p_stack].push(item);
-			console.log("NO !");
-			return 0;
+function currentScoreWorse() {
+	for (var i = gAnswer.nbKinds-1 ; i >= 0 ; i--) {
+		if (gAnswer.currentScore[i] > gAnswer.bestScore[i]) {
+			return true;
 		}
-		answer += p_destination - roomStartH;
-	} else {
-		if (!allEmptyBetween(p_destination, roomStartH)) {
-			dynamicData[p_stack].push(item);
-			console.log("NO !");
-			return 0;
+		if (gAnswer.currentScore[i] < gAnswer.bestScore[i]) {
+			return false;
 		}
-		answer += roomStartH - p_destination;
 	}
-	hallway[p_destination] = item;
-	answer *= weights[item];
-	console.log("Item " + item + " moves from stack " + p_stack + " to room " + p_destination + " weight " + answer);
-	return answer;
+	return true;
 }
 
-// Last element of dynamicData[p_stackStart] ; its destination must be able to take 1 place without having to move again.
-function moveDirectly(p_stackStart) {
-	const item = dynamicData[p_stackStart].pop();
-	var answer = 2 - dynamicData[p_stackStart].length;
-	const roomStartH = spaceOfMyRoom[p_stackStart];
-	const roomGoalH = spaceOfMyRoom[item];
-	if (roomStartH < roomGoalH) {
-		if (!allEmptyBetween(roomStartH, roomGoalH)) {
-			dynamicData[p_stackStart].push(item);
-			console.log("NO !");
-			return 0;
+function endOfRoad() {
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		if (gAnswer.inPlace[i] < gAnswer.maxDepth) {
+			return false;
 		}
-		answer += roomGoalH - roomStartH;
-	} else {
-		if (!allEmptyBetween(roomGoalH, roomStartH)) {
-			dynamicData[p_stackStart].push(item);
-			console.log("NO !");
-			return 0;
-		}
-		answer += roomStartH - roomGoalH;
+		
 	}
-	dynamicData[item].push(item);
-	answer += 3 - dynamicData[item].length;
-	answer *= weights[item];
-	console.log("Item " + item + " moves from stack " + p_stackStart + " to stack " + item + " weight " + answer);
-	return answer;
+	return true;
+}
 
+function stateToString() {
+	var answer = "";
+	for (var i = 0 ; i < gAnswer.hallway.length ; i++) {
+		if (placeToBe[i] == 0) {
+			answer += "_";
+		} else if (gAnswer.hallway[i] == EMPTY) {
+			answer += "-";
+		} else {
+			answer += gAnswer.hallway[i];
+		}
+	} 
+	
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		answer += " | "
+		gAnswer.dynamicData[i].forEach(elt => {
+			answer += elt;
+		});
+	}
+	answer += " (energy" 
+	for (var i = 0 ; i < gAnswer.nbKinds ; i++) {
+		answer += " " + gAnswer.currentScore[i];
+	}
+	answer += ")";
+	return answer;
 }
