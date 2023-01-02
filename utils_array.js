@@ -64,6 +64,13 @@ function generateArray(p_xLength, p_value) {
 	return answer;
 }
 
+function generateArrangedArray(p_xLength, p_function) {
+	var answer = [];
+	for (var x = 0 ; x < p_xLength ; x++) {
+		answer.push(p_function(x));
+	}
+	return answer;
+}
 
 function generateDoubleEntryArray(p_xLength, p_yLength, p_value) {
 	var answer = [];

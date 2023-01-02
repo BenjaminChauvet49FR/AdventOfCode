@@ -1014,7 +1014,6 @@ function conclusion_3_1() {
 		}
 	}
 	var gamma = 0;
-	const limit = 2**BITS_PER_NUMBER-1;
 	for (j = 0 ; j < BITS_PER_NUMBER ; j++) {
 		gamma *= 2;
 		gamma += (binary[j] > rawData.length/2) ? 1 : 0;
@@ -1025,6 +1024,63 @@ function conclusion_3_1() {
 
 
 function conclusion_3_2() {
+	var idsO2 = generateArrangedArray(rawData.length, function(i) {return i});
+	var indexO2, count1s;
+	indexO2 = 0;
+	while (idsO2.length > 1) {
+		count1s = 0;
+		idsO2.forEach(id => {
+			if (rawData[id][indexO2] == '1') {
+				count1s++;
+			}
+		})
+		if (count1s >= idsO2.length/2) {
+			idsO2 = saveIDs(idsO2, indexO2, '1');
+		} else {
+			idsO2 = saveIDs(idsO2, indexO2, '0');			
+		}
+		indexO2++;
+	}
 	
+	var idsCO2 = generateArrangedArray(rawData.length, function(i) {return i});
+	var indexCO2, count1s;
+	indexCO2 = 0;
+	while (idsCO2.length > 1) {
+		count1s = 0;
+		idsCO2.forEach(id => {
+			if (rawData[id][indexCO2] == '1') {
+				count1s++;
+			}
+		})
+		if (count1s < idsCO2.length/2) {
+			idsCO2 = saveIDs(idsCO2, indexCO2, '1');
+		} else {
+			idsCO2 = saveIDs(idsCO2, indexCO2, '0');			
+		}
+		indexCO2++;
+	}
 	
+	return countBinary(idsO2[0])* countBinary(idsCO2[0]); // No jokes, right ? We have only 1 of each, before reaching the max index !
+	// Correct answer = 4481199
+}
+
+// Save IDs of the lines that have this bit at this position.
+function saveIDs(p_array, p_index, p_bit) {
+	var answer = [];
+	p_array.forEach(id => {
+		if (rawData[id][p_index] == p_bit) {
+			answer.push(id);
+		}
+	});
+	return answer;
+}
+
+function countBinary(p_id) {
+	var binaryString = rawData[p_id];
+	var answer = 0;
+	for (j = 0 ; j < BITS_PER_NUMBER ; j++) {
+		answer *= 2;
+		answer += (binaryString[j] == '1') ? 1 : 0;
+	}
+	return answer;
 }

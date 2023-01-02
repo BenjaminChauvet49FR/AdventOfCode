@@ -1003,7 +1003,7 @@ function getNumber(p_string) {
 	return parseInt(p_string.split(" ")[1], 10);
 }
 
-function conclusion2_1() {
+function conclusion_2_1() {
 	var y = 0;
 	var x = 0;
 	for (var i = 0 ; i < rawData.length ; i++) {
@@ -1020,4 +1020,25 @@ function conclusion2_1() {
 		}
 	}
 	console.log(x + " " + y + " " + x*y);
+}
+
+function conclusion_2_2() {
+	var y = 0;
+	var x = 0;
+	var dy = 0;
+	for (var i = 0 ; i < rawData.length ; i++) {
+		switch (rawData[i].charAt(0)) {
+			case 'u' : 
+				dy -= getNumber(rawData[i]);
+			break;
+			case 'f' :
+				x += getNumber(rawData[i]);
+				y += dy*getNumber(rawData[i]);
+			break;
+			case 'd' : 
+				dy += getNumber(rawData[i]);			
+			break;
+		}
+	}
+	console.log(x + " " + y + " " + x*y); // Correct answer = 2007 668080 1340836560
 }

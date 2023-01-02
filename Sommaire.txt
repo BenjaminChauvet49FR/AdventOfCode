@@ -32,6 +32,10 @@
 1 : étape plus profonde que la précédente
 2 : sous-marin montant ou descendant
 3 => histoire de bits
+4 => Grilles de bingo - identifier la 1ère et la dernière gagnante
+5 : intersection de lignes
+6 => population de poissons avec horloge (reproduction : retour à 6 et création à 8) 
+7 : alignement des crabes consommant le moins d'énergie
 8 => coder chiffres avec 7 signaux de 'a' à 'g'
 9 => recherche de bassins (découpage en régions astucieux)
 10 x : chaînes ouvrantes/fermantes "{[(<"
@@ -42,7 +46,7 @@
 15 => recherche de risque minimal (plus court chemin)
 16 => décodage, pacekts et subpackets
 17 : lancer de sonde
-21 : dé déterministe + univers triplés
+21 => dé déterministe + univers triplés
 22 x => pavés droits, de dimensions -100K à 100K
 23 => rangement de A B C D consommant de l'énergie, mouvements limités
 25 : Déplacements bas-droite
