@@ -46,6 +46,9 @@
 15 => recherche de risque minimal (plus court chemin)
 16 => décodage, pacekts et subpackets
 17 : lancer de sonde
+18 => nombres emboîtés
+19 => scanners désorientés (positions x,y,z)
+20 => pixels d'une image + compte binaire sur fenêtre 3x3 autour de chaque pixel (utilise le système de tableaux présent/futur)
 21 => dé déterministe + univers triplés
 22 x => pavés droits, de dimensions -100K à 100K
 23 => rangement de A B C D consommant de l'énergie, mouvements limités

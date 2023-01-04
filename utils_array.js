@@ -84,6 +84,18 @@ function generateDoubleEntryArray(p_xLength, p_yLength, p_value) {
 	return answer;
 }
 
+function generateArrangedDoubleEntryArray(p_xLength, p_yLength, p_function) {
+	var answer = [];
+	var x, y;
+	for (y = 0 ; y < p_yLength ; y++) {
+		answer.push([]);
+		for (x = 0 ; x < p_xLength ; x++) {
+			answer[y].push(p_function(x, y));
+		}
+	}
+	return answer;
+}
+
 // Inserts an element into an array (or list, whatever) according to p_function, immediately before the first element for which the function is true. 
 // If it is never true, inserts it at the end.
 // https://stackabuse.com/javascript-how-to-insert-elements-into-a-specific-index-of-an-array/
