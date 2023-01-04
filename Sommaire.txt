@@ -5,7 +5,7 @@
 1 : Somme de nombres valant 2020
 2 : Mots de passe
 3 : Descente diagonale
-4 XXXXXXXXXXXXXXX : données manquantes
+4 : données manquantes sur ticket d'embarquement
 5 XXXXXXXXXXXXXXX : trouver le siège (plus ou moins)
 6 XXXXXXXXXXXXXXX : groupe de personnes répondant à des questions
 7 XXXXXXXXXXXXXXX : emboîtement de sacs
@@ -20,7 +20,7 @@
 16 XXXXXXXXXXXXXXX : Tickets mystère (nombres dans les intervalles, ou pas)
 17 XXXXXXXXXXXXXXX : Le jeu de la vie
 18 XXXXXXXXXXXXXXX : Opérations de la gauche vers la droite
-19 XXXXXXXXXXXXXXX : Expressions "régulières"
+19 => Expressions régulières, ou pas
 20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
 21 XXXXXXXXXXXXXXX : Allergènes
 22 => Jouons à la bataille ! (pile de cartes numérotées)

@@ -3,6 +3,12 @@ const rawData1 =
 
 const minutes = 1000052;
 
+const dataOffset = [
+23,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,37,-1,-1,-1,-1,-1,863,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,19,13,-1,-1,-1,17,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,29,-1,571,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,41
+];
+
+
+
 function conclusion_13_1() {
 	var waitTime = 0;
 	var i = 0;
@@ -21,17 +27,26 @@ function conclusion_13_1() {
 	// Correct answer = 119
 }
 
-// ----------
-
-/*const rawData2 = "23,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,37,x,x,x,x,x,863,x,x,x,x,x,x,x,x,x,x,x,19,13,x,x,x,17,x,x,x,x,x,x,x,x,x,x,x,29,x,571,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,41"
-
-const data = {
-	var tokens = rawData2.split(",");
-	var values = [];
-	var offsets = [];
-	for (var i = 0 ; i < tokens.length ; i++) {
-		if (i != "x") {
-			
+function conclusion_13_2() {
+	var offsetForced = 0;
+	var modForced = 1;
+	var departure;
+	var departureAligned;
+	for (var i = 0 ; i < dataOffset.length ; i++) {
+		departure = dataOffset[i];
+		if (departure != -1) {
+			departureAligned = departure-i;
+			while(departureAligned < 0) {
+				departureAligned += departure;
+			}
+			while ((offsetForced % departure) != (departureAligned % departure)) {				
+				offsetForced += modForced;
+			}
+			modForced *= departure;
+			console.log(modForced + " " + offsetForced);
 		}
 	}
-}*/ // TO UN-DISCARD
+	return departure;
+} // Correct answer = 1106724616194525
+
+// ----------
