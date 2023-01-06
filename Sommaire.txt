@@ -17,12 +17,12 @@
 13 : Passages des bus toutes les x minutes
 14 XXXXXXXXXXXXXXX : Ecriture et écrasement de bits
 15 XXXXXXXXXXXXXXX : Nombres sortis les uns à la suite des autres
-16 XXXXXXXXXXXXXXX : Tickets mystère (nombres dans les intervalles, ou pas)
+16 : Tickets mystère (nombres dans les intervalles, ou pas) + associations mystères
 17 XXXXXXXXXXXXXXX : Le jeu de la vie
 18 => Changement de priorité d'opérations (plus et fois)
 19 => Expressions régulières, ou pas
 20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
-21 XXXXXXXXXXXXXXX : Allergènes
+21 XXXXXXXXXXXXXXX : Allergènes + associations mystères
 22 => Jouons à la bataille ! (pile de cartes numérotées)
 23 => Bonneteau
 24 => tuiles hexagonales retournées + jeu de la vie hexagonal

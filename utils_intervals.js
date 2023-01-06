@@ -43,3 +43,15 @@ function sortAndUnionPRIVATE(p_intervalListToSort) {
 function intervalDiscreteLength(p_interval) {
 	return p_interval[1]-p_interval[0]+1;
 }
+
+// Could be optimized, but anyway...
+function intervalsContain(p_intervalList, p_value) {
+	for (var i = 0 ; i < p_intervalList.length ; i++) {
+		if (p_value >= p_intervalList[i][0] && p_value <= p_intervalList[i][1]) {
+			return true;
+		}
+		if (i == p_intervalList.length-1 || (p_value > p_intervalList[i][1] && p_value < p_intervalList[i+1][0])) {
+			return false;
+		}
+	}
+}
