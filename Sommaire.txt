@@ -12,19 +12,19 @@
 8 XXXXXXXXXXXXXXX : Chaîne d'instructions et risque de boucle infinie
 9 : Somme de 2 nombres parmi les 25 précédents
 10 => Chaînes d'adaptateurs (sauts de 1 ou de 3)
-11 XXXXXXXXXXXXXXX : Sièges libres ou occupés (8 voisins)
+11 : Sièges libres ou occupés, pas le jeu de la vie mais presque (8 voisins)
 12 : Déplacement par étapes
 13 : Passages des bus toutes les x minutes
 14 XXXXXXXXXXXXXXX : Ecriture et écrasement de bits
 15 XXXXXXXXXXXXXXX : Nombres sortis les uns à la suite des autres
 16 XXXXXXXXXXXXXXX : Tickets mystère (nombres dans les intervalles, ou pas)
 17 XXXXXXXXXXXXXXX : Le jeu de la vie
-18 XXXXXXXXXXXXXXX : Opérations de la gauche vers la droite
+18 => Changement de priorité d'opérations (plus et fois)
 19 => Expressions régulières, ou pas
 20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
 21 XXXXXXXXXXXXXXX : Allergènes
 22 => Jouons à la bataille ! (pile de cartes numérotées)
-23 XXXXXXXXXXXXXXX : Bonneteau
+23 => Bonneteau
 24 => tuiles hexagonales retournées + jeu de la vie hexagonal
 25 : clé secrète et décryptage
 

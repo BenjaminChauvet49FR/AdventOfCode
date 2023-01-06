@@ -145,3 +145,33 @@ function conclusion_10_1() {
 	}
 	return (gap3+1)*gap1; // Not 1608 (missed the last gap) or 1675. // Compared with data[i+1]-data[i] ...
 }
+
+
+function conclusion_10_2() {
+	var max = 0;
+	for (var i = 0 ; i < data.length ; i++) {
+		max = Math.max(data[i], max);
+	}
+	var adaptatorExist = generateArray(max+1, false); // Which of these values from 0 (excluded) to the max adapter adaptatorExist among the adapters ?
+	for (var i = 0 ; i <= max ; i++) {
+		adaptatorExist[data[i]] = true;
+	}
+	var reachIMinus1 = 0;
+	var reachIMinus2 = 0;
+	var reachIMinus3 = 0;
+	var reachI = 0;
+	for (var i = 1 ; i <= max ; i++) {
+		reachIMinus3 = reachIMinus2;
+		reachIMinus2 = reachIMinus1;
+		reachIMinus1 = reachI; // Values previously outdated !
+		if (!adaptatorExist[i]) {
+			reachI = 0;
+		} else {			
+			reachI = reachIMinus1 + reachIMinus2 + reachIMinus3; 
+			if (i <= 3) { // The adaptator exists and we are below 3.
+				reachI++;
+			}
+		}
+	}
+	return reachI;
+} // Correct answer = 12401793332096 (existing examples = great, it allowed me to submit my first answer as the correct one)
