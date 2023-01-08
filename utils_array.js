@@ -64,6 +64,16 @@ function generateArray(p_xLength, p_value) {
 	return answer;
 }
 
+// Generates array of integers with included bounds. 
+// Warning : don't make the mistake of forgetting that [0, 1, ..., length] is (length+1) values.
+function generateArrayFromToIncluded(p_xMin, p_xMax) {
+	var answer = [];
+	for (var x = p_xMin ; x <= p_xMax ; x++) {
+		answer.push(x);
+	}
+	return answer;
+}
+
 function generateArrangedArray(p_xLength, p_function) {
 	var answer = [];
 	for (var x = 0 ; x < p_xLength ; x++) {

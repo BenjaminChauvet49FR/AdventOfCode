@@ -1,0 +1,201 @@
+
+
+Data too big. Make sure solving19data.js is included !
+solving19.js:151 0 orientated X_POS matches with 3 orientated X_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 0 matches Z_NEG of 3
+solving19.js:151 0 orientated X_POS matches with 7 orientated X_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 0 matches Y_NEG of 7
+solving19.js:151 0 orientated X_POS matches with 32 orientated Y_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 0 matches Y_POS of 32
+solving19.js:151 0 orientated X_POS matches with 35 orientated X_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:275 No alignment for axe 2, sorry !
+solving19.js:151 1 orientated X_POS matches with 22 orientated X_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 1 matches Y_POS of 22
+solving19.js:151 1 orientated X_POS matches with 27 orientated Z_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 1 matches Y_NEG of 27
+solving19.js:151 1 orientated X_POS matches with 35 orientated Z_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 1 matches Y_NEG of 35
+solving19.js:151 2 orientated X_POS matches with 36 orientated Y_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 2 matches Y_NEG of 36
+solving19.js:151 4 orientated X_POS matches with 7 orientated Z_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 4 matches Z_POS of 7
+solving19.js:151 5 orientated X_POS matches with 6 orientated X_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 5 matches Z_POS of 6
+solving19.js:151 5 orientated X_POS matches with 11 orientated Y_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 5 matches Z_NEG of 11
+solving19.js:151 5 orientated X_POS matches with 18 orientated X_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 5 matches Z_POS of 18
+solving19.js:151 7 orientated X_POS matches with 23 orientated X_NEG
+solving19.js:275 No alignment for axe 2, sorry !
+solving19.js:151 8 orientated X_POS matches with 17 orientated X_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 8 matches Z_NEG of 17
+solving19.js:151 8 orientated X_POS matches with 19 orientated Z_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 8 matches Z_POS of 19
+solving19.js:151 8 orientated X_POS matches with 21 orientated Y_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 8 matches Y_POS of 21
+solving19.js:151 9 orientated X_POS matches with 10 orientated X_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 9 matches Z_POS of 10
+solving19.js:151 9 orientated X_POS matches with 16 orientated Y_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 9 matches Z_NEG of 16
+solving19.js:151 9 orientated X_POS matches with 30 orientated Z_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 9 matches Z_NEG of 30
+solving19.js:151 12 orientated X_POS matches with 14 orientated Y_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 12 matches Z_NEG of 14
+solving19.js:151 12 orientated X_POS matches with 15 orientated Y_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 12 matches Z_POS of 15
+solving19.js:151 13 orientated X_POS matches with 26 orientated X_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 13 matches Y_NEG of 26
+solving19.js:151 20 orientated X_POS matches with 33 orientated X_POS
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 20 matches Z_POS of 33
+solving19.js:151 24 orientated X_POS matches with 37 orientated Y_NEG
+solving19.js:250 Also, after realignment of X positives, now Y positive of 24 matches Y_POS of 37
+solving19.js:151 28 orientated X_POS matches with 34 orientated Y_POS
+solving19.js:250 Also, after realignment of X positives, now Y positive of 28 matches Y_NEG of 34
+solving19.js:151 29 orientated X_POS matches with 31 orientated X_NEG
+solving19.js:194 WARNING ! Number of common points != 12
+solving19.js:250 Also, after realignment of X positives, now Y positive of 29 matches Z_NEG of 31
+
+
+Analyse
+
+0 3 7 32 35
+1 22 27 35
+2 36
+4 7
+5 6 11 18
+7 23
+8 17 19 21
+9 10 16 30
+12 14 15
+13 26
+20 33
+24 37 
+28 34
+29 31
+
+Création de liens
+
+0 3 7 32 35 1 22 27 4 23
+2 36
+5 6 11 18
+8 17 19 21
+9 10 16 30
+12 14 15
+13 26
+20 33
+24 37 
+28 34
+29 31
+(seul le 25 manque)
+
+
+
+=============
+
+Nouvel espoir : (bon !!!)
+
+0 
+3 7 32 23
+ 4 6 36 17
+ 19 28 5 12
+ 35 37 2 29 
+ 8 34 22 25 
+ 30 11 18 14 
+ 15 1 24 31 
+ 21 26 9 27 
+ 20 13 16 10 
+ 33
+
+
+Data too big. Make sure solving19data.js is included !
+solving19.js:148 0 orientated X_POS matches with 3 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 0 matches Z_NEG of 3
+solving19.js:148 0 orientated X_POS matches with 7 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 0 matches Y_NEG of 7
+solving19.js:148 0 orientated X_POS matches with 32 orientated Y_POS
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:247 Also, after realignment of X positives, now Y positive of 0 matches Y_POS of 32
+solving19.js:148 0 orientated X_POS matches with 35 orientated X_POS
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:272 No alignment for axe 2, sorry !
+solving19.js:148 3 orientated X_POS matches with 23 orientated Z_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 3 matches Y_POS of 23
+solving19.js:148 7 orientated X_POS matches with 4 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 7 matches Z_NEG of 4
+solving19.js:148 7 orientated X_POS matches with 6 orientated Y_POS
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:247 Also, after realignment of X positives, now Y positive of 7 matches Z_NEG of 6
+solving19.js:148 7 orientated X_POS matches with 36 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 7 matches Y_NEG of 36
+solving19.js:148 32 orientated X_POS matches with 17 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 32 matches Z_POS of 17
+solving19.js:148 32 orientated X_POS matches with 19 orientated Y_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 32 matches Y_NEG of 19
+solving19.js:148 32 orientated X_POS matches with 28 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 32 matches Y_POS of 28
+solving19.js:148 6 orientated X_POS matches with 5 orientated Z_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 6 matches Y_NEG of 5
+solving19.js:148 6 orientated X_POS matches with 12 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 6 matches Z_POS of 12
+solving19.js:148 6 orientated X_POS matches with 35 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 6 matches Z_NEG of 35
+solving19.js:148 6 orientated X_POS matches with 37 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 6 matches Z_POS of 37
+solving19.js:148 36 orientated X_POS matches with 2 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 36 matches Y_NEG of 2
+solving19.js:148 36 orientated X_POS matches with 29 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 36 matches Y_NEG of 29
+solving19.js:148 17 orientated X_POS matches with 8 orientated Z_NEG
+solving19.js:191 WARNING ! Number of common points != 12
+
+
+solving19.js:247 Also, after realignment of X positives, now Y positive of 17 matches Y_POS of 8
+solving19.js:148 17 orientated X_POS matches with 34 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 17 matches Y_POS of 34
+solving19.js:148 19 orientated X_POS matches with 22 orientated Z_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 19 matches Z_POS of 22
+solving19.js:148 19 orientated X_POS matches with 25 orientated Y_NEG
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:247 Also, after realignment of X positives, now Y positive of 19 matches Z_POS of 25
+solving19.js:148 28 orientated X_POS matches with 30 orientated Y_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 28 matches Z_POS of 30
+solving19.js:148 5 orientated X_POS matches with 11 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 5 matches Z_POS of 11
+solving19.js:148 5 orientated X_POS matches with 18 orientated Y_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 5 matches Z_POS of 18
+solving19.js:148 12 orientated X_POS matches with 14 orientated Y_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 12 matches Y_POS of 14
+solving19.js:148 12 orientated X_POS matches with 15 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 12 matches Y_NEG of 15
+solving19.js:148 35 orientated X_POS matches with 1 orientated Z_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 35 matches Z_POS of 1
+solving19.js:148 37 orientated X_POS matches with 24 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 37 matches Z_POS of 24
+solving19.js:148 29 orientated X_POS matches with 31 orientated X_NEG
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:247 Also, after realignment of X positives, now Y positive of 29 matches Z_POS of 31
+solving19.js:148 8 orientated X_POS matches with 21 orientated Z_NEG
+solving19.js:191 WARNING ! Number of common points != 12
+solving19.js:247 Also, after realignment of X positives, now Y positive of 8 matches Z_NEG of 21
+solving19.js:148 34 orientated X_POS matches with 26 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 34 matches Z_POS of 26
+solving19.js:148 30 orientated X_POS matches with 9 orientated Z_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 30 matches Z_NEG of 9
+solving19.js:148 1 orientated X_POS matches with 27 orientated X_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 1 matches Z_NEG of 27
+solving19.js:148 21 orientated X_POS matches with 20 orientated Z_POS
+solving19.js:247 Also, after realignment of X positives, now Y positive of 21 matches Y_NEG of 20
+solving19.js:148 26 orientated X_POS matches with 13 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 26 matches Z_NEG of 13
+solving19.js:148 26 orientated X_POS matches with 16 orientated X_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 26 matches Y_POS of 16
+solving19.js:148 9 orientated X_POS matches with 10 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 9 matches Y_POS of 10
+solving19.js:148 20 orientated X_POS matches with 33 orientated Y_NEG
+solving19.js:247 Also, after realignment of X positives, now Y positive of 20 matches Z_NEG of 33
