@@ -52,6 +52,7 @@
 21 => dé déterministe + univers triplés
 22 x => pavés droits, de dimensions -100K à 100K
 23 => rangement de A B C D consommant de l'énergie, mouvements limités
+24 : programme mathématique à lire
 25 : Déplacements bas-droite
 
 2022 :
