@@ -10,15 +10,15 @@
 6 XXXXXXXXXXXXXXX : groupe de personnes répondant à des questions
 7 XXXXXXXXXXXXXXX : emboîtement de sacs
 8 XXXXXXXXXXXXXXX : Chaîne d'instructions et risque de boucle infinie
-9 : Somme de 2 nombres parmi les 25 précédents
+9 => Somme de 2 nombres parmi les 25 précédents
 10 => Chaînes d'adaptateurs (sauts de 1 ou de 3)
 11 : Sièges libres ou occupés, pas le jeu de la vie mais presque (8 voisins)
 12 : Déplacement par étapes
 13 : Passages des bus toutes les x minutes
-14 XXXXXXXXXXXXXXX : Ecriture et écrasement de bits
-15 XXXXXXXXXXXXXXX : Nombres sortis les uns à la suite des autres
+14 => Ecriture et écrasement de bits (Binaire + combinaisons de puissances de 2 ajoutés ou pas)
+15 : Nombres sortis les uns à la suite des autres ; jeu de mémoire
 16 : Tickets mystère (nombres dans les intervalles, ou pas) + associations mystères
-17 XXXXXXXXXXXXXXX : Le jeu de la vie
+17 : Le jeu de la vie tridimensionnel
 18 => Changement de priorité d'opérations (plus et fois)
 19 => Expressions régulières, ou pas
 20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
