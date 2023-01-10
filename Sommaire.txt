@@ -21,8 +21,8 @@
 17 : Le jeu de la vie tridimensionnel
 18 => Changement de priorité d'opérations (plus et fois)
 19 => Expressions régulières, ou pas
-20 XXXXXXXXXXXXXXX : Puzzle à pièces carrées
-21 XXXXXXXXXXXXXXX : Allergènes + associations mystères
+20 => Puzzle à pièces carrées
+21 => Allergènes + associations mystères
 22 => Jouons à la bataille ! (pile de cartes numérotées)
 23 => Bonneteau
 24 => tuiles hexagonales retournées + jeu de la vie hexagonal
