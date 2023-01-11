@@ -45,6 +45,7 @@ function makeAMove() {
 }
 
 function conclusion_23_1() {
+	//init(389125467); // Example
 	init(368195742); // Official
 	for (var i = 0 ; i < 100 ; i++) {
 		makeAMove();
@@ -53,22 +54,6 @@ function conclusion_23_1() {
 		}
 	}
 	return gData;
-	/*
-		WE DID IT !
-		~14h20 : decided to use an array of indexOf
-		~14h43 : decided to back pedal, because the find wasn't the slowest actually.
-		~15h : launched the 10-million loop program after a few experiments.
-		~17h20 : 10-million loop program ended, here are the data :
-		712484 270203
-		gData.indexOf(712484)
-		152945
-		gData.slice(152944,152953)
-		(9) [1, 712484, 270203, 382821, 143362, 790299, 203242, 207115, 549184]
-		712484*270203
-		192515314252
-		This last value is the correct answer !!!
-	*/
-	
 }
 
 // ---
@@ -76,13 +61,19 @@ function conclusion_23_1() {
 function init2(p_number) {
 	var value = p_number;
 	gData = [];
+	gIndexOf = [-1]; // Items start being counted at 1
 	while(value > 0) {
 		gData.push(value % 10);
 		value = Math.floor(value / 10);
+		gIndexOf.push(-1);
 	}
 	gData.reverse();
+	for (var i = 0 ; i < gData.length ; i++) {
+		gIndexOf[gData[i]] = i;
+	}
 	for (var i = gData.length+1 ; i <= CUPS ; i++) {
 		gData.push(i);
+		gIndexOf.push(i);
 	}
 	gData.push(-1); // To have extra room where to put the "artificial cups" (that are like in the beginning)
 	gData.push(-1);
@@ -110,12 +101,15 @@ function makeAMove2() {
 	// If gCurrentIndex too high : add 3 artificial cups
 	var indexTooHigh = (gCurrentIndex >= CUPS-3);
 	if (indexTooHigh) {
-		gData[CUPS] = gData[0];
+		affect(CUPS, gData[0]);
+		affect(CUPS+1, gData[1]);
+		affect(CUPS+2, gData[2]);
+/*		gData[CUPS] = gData[0];
 		gData[CUPS+1] = gData[1];
 		gData[CUPS+2] = gData[2];
 		gData[0] = -1;
 		gData[1] = -1;
-		gData[2] = -1; // To not jam the "indexOf"
+		gData[2] = -1; // To not jam the "indexOf"*/
 	}
 	const currentCup = gData[gCurrentIndex];
 	// Pick the 3 cups after (may be artificial cups)
@@ -127,31 +121,44 @@ function makeAMove2() {
 	}
 	// Shift the cups to be moved to the right place &
 	// Set the cups set aside at the right place
-	var indexDest = gData.indexOf(destCup);
+	//var indexDest = gData.indexOf(destCup);
+	var indexDest = gIndexOf[destCup];
 	if (indexDest > gCurrentIndex) {		
 		for (var i = gCurrentIndex+1 ; i <= indexDest-3 ; i++) {
-			gData[i] = gData[i+3];
+			affect(i, gData[i+3]);
+			//gData[i] = gData[i+3];
 		}
-		gData[indexDest-2] = setAside[0];
+		affect(indexDest-2, setAside[0]);
+		affect(indexDest-1, setAside[1]);
+		affect(indexDest, setAside[2]);
+		/*gData[indexDest-2] = setAside[0];
 		gData[indexDest-1] = setAside[1];
-		gData[indexDest] = setAside[2];
+		gData[indexDest] = setAside[2];*/
 	} else {
 		for (var i = gCurrentIndex+3 ; i >= indexDest+4 ; i--) {
-			gData[i] = gData[i-3];
+			affect(i, gData[i-3]);
+			//gData[i] = gData[i-3];
 		}
-		gData[indexDest+1] = setAside[0];
+		affect(indexDest+1, setAside[0]);
+		affect(indexDest+2, setAside[1]);
+		affect(indexDest+3, setAside[2]);
+		/*gData[indexDest+1] = setAside[0];
 		gData[indexDest+2] = setAside[1];
-		gData[indexDest+3] = setAside[2];		
+		gData[indexDest+3] = setAside[2];*/		
 	}
 	// Restore the 1st cups if needed
 	if (indexTooHigh) {
-		gData[0] = gData[CUPS];
+		/*gData[0] = gData[CUPS];
 		gData[1] = gData[CUPS+1];
-		gData[2] = gData[CUPS+2];
+		gData[2] = gData[CUPS+2];*/
+		affect(0, gData[CUPS]);
+		affect(1, gData[CUPS+1]);
+		affect(2, gData[CUPS+2]);
 	}
 	
-	// currentCup++ (not too high)
-	gCurrentIndex = (gData.indexOf(currentCup) + 1) % (CUPS)
+	// change currentCup 
+	//gCurrentIndex = (gData.indexOf(currentCup) + 1) % (CUPS)
+	gCurrentIndex = (gIndexOf[currentCup] + 1)%CUPS;
 	
 	if (gLog) {		
 		console.log(gData);
@@ -180,6 +187,11 @@ function makeAMove2() {
 	}*/
 }
 
+function affect(p_pos, p_value) {
+	gData[p_pos] = p_value;
+	gIndexOf[p_value] = p_pos;
+}
+
 const gLog = false;
 const CUPS = 1000000;
 const NB_TURNS = 10000000;
@@ -187,13 +199,20 @@ const NB_TURNS = 10000000;
 //const NB_TURNS = 100;
 
 function conclusion_23_2() {
-	//init2(389125467); // Example - correct answer = 67384529
-	init2(368195742); // Official - correct answer = 95648732
+	init2(389125467); // Example
+	//init2(368195742); // Official
 	for (var i = 0 ; i < NB_TURNS ; i++) {
 		makeAMove2();
 	}
 	var index = gData.indexOf(1);
 	console.log(gData[index+1] + " " + gData[index+2]);
 	
+	return gData;
+}
+
+function makeMoves(p_numberMoves) {
+	for (var i = 0 ; i < p_numberMoves ; i++) {
+		makeAMove2();
+	}
 	return gData;
 }

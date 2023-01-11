@@ -78,6 +78,8 @@ function conclusion_17_1() {
 		}
 		gData.futureIndex = 1-gData.futureIndex;
 		gData.currentIndex = 1-gData.currentIndex;
+		log3DArray(gData.cubes[gData.currentIndex]);
+		console.log("=========");
 	}
 	var count = 0;
 	for (h = 0 ; h < gData.landHeight ; h++) {
