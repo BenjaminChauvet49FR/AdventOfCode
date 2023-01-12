@@ -122,6 +122,14 @@ function conclusion_22_1() {
 // Part 2 - recursive ! 
 // We assume deck 1 and deck 2 were already sliced.
 
+const safetyArray = [6,24,120,720,5040]
+function getSafety(p_totalCards) {
+	if (p_totalCards >= 8) {
+		return 10000;
+	}
+	return safetyArray[p_totalCards-3];
+}
+
 function makeAGame(p_deck1, p_deck2, p_totalCards) {
 	var deck1 = p_deck1;
 	var deck2 = p_deck2;
@@ -136,21 +144,28 @@ function makeAGame(p_deck1, p_deck2, p_totalCards) {
 	var totalCards;
 	var numberAttempts = 0;
 	var emergencyMode = false;
+	const limitSafety = getSafety(p_totalCards);
 	while (!hasLost(deck1) && !hasLost(deck2)) {
 		if (emergencyMode && !addNewConfig(treeOfSeenConfigs, deck1, deck2)) {
 			newConfig = false;
 			break;
 		} 
 		numberAttempts++;
-		if (numberAttempts == 1000) {
+		if (numberAttempts == limitSafety) {
+			if (!emergencyMode) {
+				addNewConfig(treeOfSeenConfigs, deck1, deck2);
+			}
 			emergencyMode = true;
 		}
 		val1 = drawFirstCard(deck1);
 		val2 = drawFirstCard(deck2);
 		if (val1 <= numberCardsRemaining(deck1) && val2 <= numberCardsRemaining(deck2)) {
-			subDeck1 = copyDeck(deck1, p_totalCards-2);
-			subDeck2 = copyDeck(deck2, p_totalCards-2);
-			resultSubGame = makeAGame(subDeck1, subDeck2, p_totalCards-2);
+			/*if (!emergencyMode) {
+				addNewConfig(treeOfSeenConfigs, deckWith(deck1, val1, p_totalCards), deckWith(deck2, val2, p_totalCards));				
+			}*/
+			subDeck1 = copyDeck(deck1, val1, val1+val2); // No, you mustn't use all the decks every time !
+			subDeck2 = copyDeck(deck2, val2, val1+val2);
+			resultSubGame = makeAGame(subDeck1, subDeck2, val1+val2);
 			emergencyMode = true;
 		} else {
 			resultSubGame = val1 > val2;
@@ -191,17 +206,17 @@ function drawFirstCard(p_deck) {
 }
 
 function numberCardsRemaining(p_deck) {
-	if (p_deck.deadIndex > p_deck.firstIndex) {
+	if (p_deck.deadIndex >= p_deck.firstIndex) {
 		return p_deck.deadIndex - p_deck.firstIndex;
 	} else {
 		return p_deck.cards.length + p_deck.deadIndex - p_deck.firstIndex;
 	}
 }
 
-function copyDeck(p_deck, p_totalCardNumbers) {
+function copyDeck(p_deck, p_cardNumbers, p_totalCardNumbers) {
 	var answer = {
 		firstIndex : 0,
-		deadIndex : numberCardsRemaining(p_deck),
+		deadIndex : p_cardNumbers,
 		cards : []
 	}
 	var index = p_deck.firstIndex;
@@ -239,6 +254,7 @@ function addNewConfig(p_treeOfConfigs, p_deck1, p_deck2) {
 		newBranch = tryToInsert(newBranch.subtree, p_deck1.cards[i]);
 		i = nextIndex(i, p_deck1);
 	}
+	newBranch = tryToInsert(newBranch.subtree, -1); // Line added last !
 	i = p_deck2.firstIndex;
 	while (i != p_deck2.deadIndex) {
 		newBranch = tryToInsert(newBranch.subtree, p_deck2.cards[i]);
@@ -252,6 +268,17 @@ function nextIndex(p_i, p_deck) {
 		return 0;
 	}
 	return p_i+1;
+}
+
+// Return a deck with this card in front of it
+function deckWith(p_deck, p_card, p_totalCardNumbers) {
+	var deck = copyDeck(p_deck, (p_deck.deadIndex-p_deck.firstIndex+1+p_totalCardNumbers) % p_totalCardNumbers, p_totalCardNumbers);
+	deck.firstIndex--;
+	if (deck.firstIndex == -1) {
+		deck.firstIndex = deck.cards.length-1;
+	}
+	deck.cards[deck.firstIndex] = p_card;
+	return deck;
 }
 
 // Tries to insert an array in a subtree (imbricated arrays)
@@ -271,6 +298,7 @@ function tryToInsert(p_subtree, p_eltToAdd) {
 		actuallyNew : true,
 		subtree : p_subtree.branches[p_subtree.branches.length-1]
 	}
+	return true;
 }
 
 function conclusion_22_2() {
@@ -288,4 +316,4 @@ function conclusion_22_2() {
 		coef--;
 	} while (i != winningDeck.deadIndex) ; // No classic while loop, we need to count each once !
 	return answer;
-}
+} // Correct answer = 34173
