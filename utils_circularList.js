@@ -15,6 +15,24 @@ c.toArray();
 c.shiftBackward();
 c.shiftBackward();
 c.toArray();
+
+// Second test : 
+c = new CircularDoublyLinkedList(1);
+c.append(3);
+c.append(5);
+c.append(6);
+c.append(8);
+c.toArray();
+
+d = c;
+
+d.shiftForward();
+d.toArray();
+c.toArray();
+d.deleteHead();
+d.toArray();
+c.toArray();
+
 */
 
 class Node {
@@ -168,6 +186,38 @@ class CircularDoublyLinkedList {
     targetIdx.prev = newNode
     this.length++
   }
+  
+  // Very specific function that inserts one or more values (from "previous" to "next") right after the first occurence of a node. 
+  // doesn't shift beginning/end
+  insertAfterFirstValues(p_searchedValue, p_toInsertValues) {
+	  let currentNode = this.head;
+	  let counter = 0;
+	  while (counter != this.length && currentNode.value != p_searchedValue) {
+		currentNode = currentNode.next;
+		counter++;
+	  }
+	  if (counter == this.length-1) {
+		p_toInsertValues.forEach(value => {
+			this.append(value);
+		}); 
+		return true; // Warning : a boolean should be added to know if we want to conserve the leftmost/the rightmost item. Here, the right most item is conserved.
+	  } else if (counter != this.length) {
+		var value;
+		for (var i = p_toInsertValues.length-1 ; i >= 0 ; i--) {
+			value = p_toInsertValues[i];
+			const newNode = new Node(value);
+			const afterCurrentNode = currentNode.next;
+			currentNode.next = newNode;
+			newNode.prev = currentNode;
+			newNode.next = afterCurrentNode;
+			afterCurrentNode.prev = newNode;
+			this.length++;
+		}
+		return true;
+	  }
+	  return false;
+  }
+  
   
   // remove from beginning:
   deleteHead() {
@@ -341,110 +391,13 @@ class CircularDoublyLinkedList {
     }
 
 	// I added these !
-	shiftForward() {
+	shiftForward() { // 1 2 3 4 => 2 3 4 1
 		this.head = this.head.next;
 		this.tail = this.head.prev;
 	}
 	
-	shiftBackward() {
+	shiftBackward() { // 1 2 3 4 => 4 1 2 3
 		this.tail = this.tail.prev;
 		this.head = this.tail.next;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ABORTED !
-
-/*// MAJOR HYPOTHESE : the size of the circular list is always 2 or more !
-// WARNING : not keeping track of the number of elements in the node.
-// (yes, it's quite flawed)
-
-function createCircularList(p_data, p_data2) {
-	var answer = {
-		next : null,
-		val : p_data,
-		previous : null
-	}
-	var answer2 = {
-		next : answer,
-		val : p_data2,
-		previous : answer
-	}
-	answer.previous = answer2;
-	answer.next = answer2;
-	return answer;
-}
-
-function circularAddAfter(p_node, p_data) {
-	const newNode = {
-		next : p_node.next,
-		val : p_data
-	}
-	p_node.next = newNode;
-	p_node.next.previous = p_node;
-	return p_node;
-}
-
-function circularAddBefore(p_node, p_data) {
-	const newNode = {
-		previous : p_node.previous,
-		val : p_data,
-	}
-	p_node.previous = newNode;
-	p_node.previous.next = p_node;
-	return p_node;	
-}
-
-function getBefore(p_node) {
-	return p_node.previous;
-}
-
-function getAfter(p_node) {
-	return p_node.next;
-}
-
-function removeAndGetBefore(p_node) {
-	p_node.previous.next = p_node.next;
-	p_node.next.previous = p_node.previous;
-	return p_node.previous;
-}
-
-function printFrom(p_node, p_length) {
-	console.log(
-		printFrom_aux(p_node, p_length, "").substring(1)
-	);
-}
-
-function printFrom_aux(p_node, p_length, p_chain) {
-	if (p_length > 0) {
-		return printFrom_aux(p_node.next, p_length-1, p_chain+","+p_node.val);
-	}
-	return p_chain;
-}
-
- test :
-c = createCircularList(1,2); // 1 2
-printFrom(c, 8); // round and round...
-c = circularAddBefore(c, 3); // 1 2 3
-c = circularAddBefore(c, 4); // 1 2 3 4
-printFrom(c, 4);
-c = circularAddAfter(c, 5); // 1 5 2 3 4
-printFrom(c, 5);
-c = getAfter(c); // 5 2 3 4 1
-c = getAfter(c); // 2 3 4 1 5
-circularAddAfter(c, 6); // 2 6 3 4 1 5
-c = getBefore(c); // 5 2 6 3 4 1
-c = removeAndGetBefore(c); // 1 2 6 3 4
-*/

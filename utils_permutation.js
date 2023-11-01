@@ -5,7 +5,7 @@ function PermutFinder(p_n) {
 	this.number = p_n;
 	this.arrayPossibles = generateDoubleEntryArray(p_n, p_n, true);
 	this.arrayImage = generateArray(p_n, -1);
-	this.arrayBack = generateArray(p_n, -1);
+	this.arrayAntecedent = generateArray(p_n, -1);
 	this.trueLeftInRow = generateArray(p_n, p_n);
 	this.trueLeftInColumn = generateArray(p_n, p_n);
 	this.notFoundImagesLeft = p_n;
@@ -19,11 +19,11 @@ PermutFinder.prototype.ban = function(p_y, p_x) { // y = entry to permutate ; x 
 		this.trueLeftInRow[p_y]--;
 		if (this.trueLeftInColumn[p_x] == 0) {
 			this.corrupted = true;
-		} else if (this.trueLeftInColumn[p_x] == 1 && this.arrayBack[p_x] == -1) {
+		} else if (this.trueLeftInColumn[p_x] == 1 && this.arrayAntecedent[p_x] == -1) {
 			for (var y = 0 ; y < this.number ; y++) {
 				if (this.arrayPossibles[y][p_x]) {
 					this.arrayImage[y] = p_x;
-					this.arrayBack[p_x] = y;
+					this.arrayAntecedent[p_x] = y;
 					this.notFoundImagesLeft--;
 					for (var x = 0 ; x < this.number ; x++) {
 						if (x != p_x) {
@@ -40,7 +40,7 @@ PermutFinder.prototype.ban = function(p_y, p_x) { // y = entry to permutate ; x 
 			for (var x = 0 ; x < this.number ; x++) {
 				if (this.arrayPossibles[p_y][x]) {
 					this.arrayImage[p_y] = x;
-					this.arrayBack[x] = p_y;
+					this.arrayAntecedent[x] = p_y;
 					this.notFoundImagesLeft--;
 					for (var y = 0 ; y < this.number ; y++) {
 						if (y != p_y) {
@@ -63,6 +63,10 @@ PermutFinder.prototype.failure = function() {
 
 PermutFinder.prototype.getImage = function(p_x) {
 	return this.arrayImage[p_x];
+}
+
+PermutFinder.prototype.getAntecedent = function(p_x) {
+	return this.arrayAntecedent[p_x];
 }
 // Note : nothing to get the "back" yet.
 

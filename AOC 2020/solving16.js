@@ -264,6 +264,21 @@ const rawDataNearby = [
 
 const gData = {};
 
+function initMysteriousFields() {
+	gData.mysteriousFields = [];
+	var tokens, tokens2;
+	var min, max;
+	for (var i = 0 ; i < rawDataFields.length ; i++) {
+		gData.mysteriousFields.push([]);
+		tokens = rawDataFields[i].split(": ")[1].split(" ");
+		tokens2 = tokens[0].split("-");
+		gData.mysteriousFields[i].push( [parseInt(tokens2[0]), parseInt(tokens2[1])]);
+		tokens2 = tokens[2].split("-");
+		gData.mysteriousFields[i].push( [parseInt(tokens2[0]), parseInt(tokens2[1])]);
+	}
+	gData.nbFields = rawDataFields.length;
+}
+
 function init() {
 	gData.validIntervals = [];
 	var tokens, tokens2;
@@ -312,99 +327,38 @@ function analyseTicket(p_ticket) {
 	gData.validTickets.push(p_ticket);
 }
 
-function initMysteriousFieldsAndMatrix() {
-	gData.mysteriousFields = [];
-	var tokens, tokens2;
-	var min, max;
-	for (var i = 0 ; i < rawDataFields.length ; i++) {
-		gData.mysteriousFields.push([]);
-		tokens = rawDataFields[i].split(": ")[1].split(" ");
-		tokens2 = tokens[0].split("-");
-		gData.mysteriousFields[i].push( [parseInt(tokens2[0]), parseInt(tokens2[1])]);
-		tokens2 = tokens[2].split("-");
-		gData.mysteriousFields[i].push( [parseInt(tokens2[0]), parseInt(tokens2[1])]);
-	}
-	gData.nbFields = rawDataFields.length;
-	gData.possibleAssociation = generateDoubleEntryArray(gData.nbFields, gData.nbFields, true);
-	//x : field of tickets (on the side tickets)
-	//y : real field (in mysteriousFields)
-	gData.remainingPossibleRealForATicket = generateArray(gData.nbFields, gData.nbFields);
-	gData.remainingPossibleTicketsForAReal = generateArray(gData.nbFields, gData.nbFields);
-}
-
-function discardPossibility(p_ticketField, p_realField) {
-	if (gData.possibleAssociation[p_realField][p_ticketField]) {
-		gData.possibleAssociation[p_realField][p_ticketField] = false;
-		gData.remainingPossibleTicketsForAReal[p_realField]--;
-		gData.remainingPossibleRealForATicket[p_ticketField]--;
-	}
-}
-
+var permutationFinder;
 
 // TODO : generalize this, this can be taken again later (like in the 2020-21 allergen problem !)
 function makeAssociations() {
 	var ir, it; // Fields real / on tickets
+	permutationFinder = new PermutFinder(gData.nbFields);
 	gData.validTickets.forEach(validTicket => {		
 		for (ir = 0 ; ir < gData.nbFields ; ir++) {
 			for (it = 0 ; it < gData.nbFields ; it++) {
 				if (!intervalsContain(gData.mysteriousFields[ir], validTicket[it])) {
-					discardPossibility(it, ir);
+					permutationFinder.ban(it, ir);
+				}
+				if (permutationFinder.success()) {
+					return;
 				}
 			}
 		}
 	});
 }
 
-function deduceAssociations() {
-	var triesLeft = gData.nbFields;
-	gData.associations = [];
-	var ir, it, iir, iit;
-	while (gData.associations.length < gData.nbFields && triesLeft > 0) {
-		for (ir = 0 ; ir < gData.nbFields ; ir++) {
-			if (gData.remainingPossibleTicketsForAReal[ir] == 1) {
-				it = 0;
-				while (!gData.possibleAssociation[ir][it]) {
-					it++;
-				} // THIS ticket is associed to THIS real because THIS real cannot be associated to other tickets. 
-				for (iir = 0 ; iir < gData.nbFields ; iir++) {
-					discardPossibility(it, iir);
-				}
-				gData.associations.push({real : ir, ticket : it});
-				discardPossibility(ir, it); // To symbolically get rid of 'ir' and 'it'.
-			}
-		}
-		for (it = 0 ; it < gData.nbFields ; it++) {
-			if (gData.remainingPossibleRealForATicket[it] == 1) {
-				ir = 0;
-				while (!gData.possibleAssociation[ir][it]) {
-					ir++;
-				} // Same reasoning as above (copy-paste, or creepy pasta ?)
-				for (iit = 0 ; iit < gData.nbFields ; iit++) {
-					discardPossibility(iit, ir);
-				}
-				gData.associations.push({real : ir, ticket : it});
-				discardPossibility(ir, it);
-			}
-		}		
-		triesLeft--;
-	}
-}
-
 function conclusion_16_2() {
 	init();
+	initMysteriousFields();
 	findValidTickets();
-	initMysteriousFieldsAndMatrix();
 	makeAssociations();
-	deduceAssociations();
 	return victoryLap();
 }
 
 function victoryLap() {
 	var answer = 1;
-	gData.associations.forEach(asso => { // The desired fields are the ones from 0 to 5
-		if (asso.real <= 5) {
-			answer *= rawDataMine[asso.ticket];
-		}
-	});
+	for (var i = 0 ; i <= 5 ; i++) { // The desired fields are the ones that have an image from 0 to 5
+		answer *= rawDataMine[permutationFinder.getAntecedent(i)];		
+	}
 	return answer; // Correct answer = 953713095011;
 }

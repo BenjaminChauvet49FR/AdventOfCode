@@ -172,6 +172,7 @@ function declareSafeIngredients() {
 	}
 }
 
+// Create the list of all meals that have as many "dangerous ingredients" as mentioned allergens, so no one is missing.
 function createCriticalList() {
 	gData2.mealsForAnalysis = [];
 	var iMeal, iIIM; // IIM = ingredient in meal
@@ -195,32 +196,12 @@ function createCriticalList() {
 	}
 }
 
-/*function analyseCriticalList() {
-	gData2.listCriticalIngredients = [];
-	gData2.listCriticalAllergens = []; // Same indexes = correspondings ! 
-	gData2.mealsForAnalysis.forEach(meal => {
-		if (meal.dangerousIngredients.length == 1) {
-			var indexAllergen = gData2.listCriticalAllergens.indexOf(meal.allergens[0]);
-			if (indexAllergen == INDEX_NOT_FOUND) {
-				gData2.listCriticalAllergens.push(meal.allergens[0]);
-				gData2.listCriticalIngredients.push(meal.dangerousIngredients[0]);
-			} else {
-				if (gData2.listCriticalIngredients[indexAllergen] != meal.dangerousIngredients[0]) {
-					console.log("ALERTE ! DESACCORD SUR L'ALLERGENE " + indexAllergen + " QUI SERAIT CONTENU PAR LES INGREDIENTS " + gData2.listCriticalIngredients[indexAllergen] + " ET " + meal.dangerousIngredients[0] + " (mis en défaut par repas n° " + meal.iMeal + ")");
-				}
-			}
-			
-		}
-	});
-} */ // No, too bad, it was supposed to work with a method that wrongfully found many ingredients were matched to one allergen... although it was inconsistent since it was always ingredient n°9, which was always the 1st put when creating the "critical list".
-
 function conclusion_21_2() {
 	init();
 	declareSafeIngredients();
 	// First, find all meals where the number of unsafe ingredients is equal to the number of mentioned allergens.
 	// Then, make a human analysis to know what matches what. (there are only 8 allergens after all)
 	createCriticalList();
-	//analyseCriticalList();
 	analyzeData();
 	
 	/* At least ! Here's what I got :
