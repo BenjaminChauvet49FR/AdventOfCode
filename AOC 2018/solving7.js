@@ -133,3 +133,31 @@ function conclusion_7_1() {
 	}
 	return answer;
 }
+
+function conclusion_7_2() {
+	var makeMeFirst = generateArrangedArray(26, function(e) {return []});
+	// For each letter (A = 0, B = 1...) give all the previously needed tasks
+	for (var i = 0 ; i < rawData.length ; i++) {
+		makeMeFirst[charToASCIIRelativePosition(rawData[i][1], 'A')].push(charToASCIIRelativePosition(rawData[i][0], 'A'));
+	}
+	
+	
+	var timeItWillTake = generateArray(26, 0);
+	function calculateTimeItWillTake(p_i) {
+		if (timeItWillTake[p_i] == 0) {
+			var answer = 0;
+			makeMeFirst[p_i].forEach(iPrev => {
+				answer = Math.max(answer, calculateTimeItWillTake(iPrev));
+			});
+			timeItWillTake[p_i] = answer + p_i + 61;
+		}
+		return timeItWillTake[p_i];
+	}
+	
+	for (var i = 0 ; i <= 25 ; i++) {
+		calculateTimeItWillTake(i);
+	}
+	
+	return timeItWillTake;
+} // By finding the heaviest chain of mandatory tasks that cannot be parallelized, I saw that the answer was 898. Had it been below 383 or slightly above, I'd have been in trouble !
+// (why 383 ? because the sum of all task durations (SUM(61:86)) is 1911, and it must be split in 5, so, an average of 382.2 minutes per worker.
