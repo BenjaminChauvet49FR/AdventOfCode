@@ -298,7 +298,6 @@ function tryToInsert(p_subtree, p_eltToAdd) {
 		actuallyNew : true,
 		subtree : p_subtree.branches[p_subtree.branches.length-1]
 	}
-	return true;
 }
 
 function conclusion_22_2() {
