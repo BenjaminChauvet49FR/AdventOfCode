@@ -68,6 +68,10 @@ CheckCollectionDoubleEntryGeneric.prototype.clean = function() {
 	this.list = [];
 }
 
+CheckCollectionDoubleEntryGeneric.prototype.get = function(p_x, p_y) { 
+	return this.array[p_y][p_x];
+}
+
 function CheckCollectionDoubleEntry(p_xLength, p_yLength) {
 	CheckCollectionDoubleEntryGeneric.call(this, p_xLength, p_yLength, false);
 }
@@ -77,10 +81,7 @@ CheckCollectionDoubleEntry.prototype.constructor = CheckCollectionDoubleEntry;
 CheckCollectionDoubleEntry.prototype.add = function(p_x, p_y) {
 	return this.addGeneric(p_x, p_y, true);
 }
-
-CheckCollectionDoubleEntry.prototype.get = function(p_x, p_y) { 
-	return this.array[p_y][p_x];
-}
+// Also use "get".
 
 // Considers that one space that has been added should be removed before general clean.
 CheckCollectionDoubleEntryGeneric.prototype.cleanOne = function(p_x, p_y) {
