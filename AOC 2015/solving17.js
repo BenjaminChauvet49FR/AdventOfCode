@@ -29,11 +29,13 @@ function numberCombinations(p_remain, p_startIndex) {
 	}
 }
 
+// ----------
 function conclusion_17_2() {
 	init();
 	// 1) Find a combination with the minimal number of steps
 	// 2) Redo conclusion 1 but with limiting the number of steps to that number
-	
+	const min = numberContainersMin(150, 0, 0).number;
+	return numberCombinationsWithMinRecipients(150, 0, 0, min);
 	
 }
 
@@ -44,12 +46,24 @@ function numberContainersMin(p_remain, p_startIndex, p_number) {
 	} else if (p_startIndex == rawData.length || p_remain < 0 || p_remain > remain[p_startIndex]) { 
 		return {possible : false};
 	} else {
-		const c1 = numberCombinations(p_remain-rawDataSorted[p_startIndex], p_startIndex+1, p_number+1);
-		const c2 = numberCombinations(p_remain, p_startIndex+1, p_number);
-		const m = (c1.possible ? (c2.possible ? Math.min(c1.number, c2.number), c1.number) : (c2.possible ? c2.number, 0));
+		const c1 = numberContainersMin(p_remain-rawDataSorted[p_startIndex], p_startIndex+1, p_number+1);
+		const c2 = numberContainersMin(p_remain, p_startIndex+1, p_number);
+		const m = c1.possible ? (c2.possible ? Math.min(c1.number, c2.number) : c1.number) : (c2.possible ? c2.number : 0);
 		return {
 			possible : c1.possible || c2.possible,
-			number : m;
+			number : m
 		}
 	}	
+}
+
+function numberCombinationsWithMinRecipients(p_remain, p_startIndex, p_numberConsumed, p_limit) {
+	if (p_remain == 0) { // Must be put before the test of p_startIndex
+		return 1;
+	} else if (p_numberConsumed == p_limit) {
+		return 0;
+	} else if (p_startIndex == rawData.length || p_remain < 0 || p_remain > remain[p_startIndex]) { 
+		return 0;
+	} else {
+		return numberCombinationsWithMinRecipients(p_remain-rawDataSorted[p_startIndex], p_startIndex+1, p_numberConsumed+1, p_limit) + numberCombinationsWithMinRecipients(p_remain, p_startIndex+1, p_numberConsumed, p_limit);
+	}
 }
