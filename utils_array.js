@@ -137,3 +137,17 @@ function shiftIntoListUniqueNumbersTimes(p_sortedListToFill, p_listElts) { // El
 		shiftIntoListUniqueNumbers(p_sortedListToFill, newElt) // Skip all future keys in the node since they are treated the same way
 	})	
 }
+
+// Tries to insert an element in a list without repetition and without ordering of elements. 
+// Primitive types involved as == is used !
+// Returns the index if found, the index of the positioned element otherwise;
+// [1, 3, 6, 5] 2 : list becomes [1,3,6,5,2], returns 4.
+function getIndexInListWithAdd(p_list, p_elt) {
+	for (var i = 0 ; i < p_list.length ; i++) {
+		if (p_list[i] == p_elt) {
+			return i;
+		}
+	}
+	p_list.push(p_elt);
+	return p_list.length-1;
+}
