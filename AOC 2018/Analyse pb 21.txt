@@ -1,0 +1,90 @@
+const rawData = [
+"seti 123 0 5", [- 1 - - - 123]
+"bani 5 456 5", [- 2 - - - 72]
+"eqri 5 72 5", [- 3 - - - 1]
+"addr 5 1 1", [- 5 - - - 1]
+"seti 0 0 1", 
+"seti 0 3 5", [- 6 - - - 0] 
+"bori 5 65536 4", [- 7 - - 65536 0]
+"seti 13284195 4 5", [- 8 - - 65536 13284195]
+"bani 4 255 3", [- 9 - - 65536 13284195] 
+"addr 5 3 5", [- 10 - 0 65536 13284195] 
+"bani 5 16777215 5", [- 11 - 0 65536 13284195]
+"muli 5 65899 5", [- 12 - 0 65536 875415166305]
+"bani 5 16777215 5", [- 13 - 0 65536 13589857]
+"gtir 256 4 3", [- 14 - 0 65536 13589857]
+"addr 3 1 1", [- 15 - 0 65536 13589857]
+"addi 1 1 1", [- 17 - 0 65536 13589857]
+"seti 27 1 1",                                 
+"seti 0 5 3", [- 18 - 0 65536 13589857]
+"addi 3 1 2", [- 19 1 0 65536 13589857] [- 19 2 1 65536 13589857]
+"muli 2 256 2", [- 20 256 0 65536 13589857] [- 20 512 1 65536 13589857] 
+"gtrr 2 4 2", [- 21 0 0 65536 13589857] [- 21 0 1 65536 13589857] 
+"addr 2 1 1", [- 22 0 0 65536 13589857] [- 22 0 1 65536 13589857] 
+"addi 1 1 1", [- 24 0 0 65536 13589857] [- 23 0 1 65536 13589857]
+"seti 25 2 1", 														(ff) [- 26 1 256 65536 13589857]
+"addi 3 1 3", [- 25 0 1 65536 13589857] [- 25 0 2 65536 13589857]
+"seti 17 1 1", [- 18 0 1 65536 13589857] [- 17 0 1 65536 13589857] 
+"setr 3 7 4", (ff) [- 27 1 256 256 13589857]
+"seti 7 3 1", (ff) [- 8 1 256 256 13589857]
+"eqrr 5 0 3", (ff) [x 29 1 (x == 13589857) 65536 13589857]
+"addr 3 1 1", [x (30/31) 1 (x == 13589857) 65536 13589857]
+"seti 5 3 1"]; [x 6 1 0 65536 13589857]
+
+So : 
+First, execute instructions on lines 2 to 31 exactly once. x = 1 after this. (# operations = 
+
+
+The answer might be 16777215 ? But no ! It isn't ! (too high)
+
+Instruction line 13, confused bani and bori so the last 16777215 should be 13284195 ?
+(No, still too high)
+(Plus it's wrong ! Actually, the & leads to 13589857... still too high)
+
+Big mistake : "bani 4 255 3" with 65536 should have led to 0, not 255
+(only had an incidence on next 3 instructions)
+
+Biggest mistake : I went back to the instruction line 18 that I skipped once after "seti 17 1 1" wneh I should have gone to instruction line 20
+
+
+So, let's take it back again :
+After some time, instruction gtrr "2 4 2" will store 1 in 2. 
+
+
+
+Part 1 : I eventually got fed up and decided to put a conditional breakpoint that would stop right before the EQRR Instruction.
+Register content = [0,29,1,0,1,7224964]
+Later, after step 202014 : [0,29,1,0,111,11476504]
+
+const rawData = [
+"seti 123 0 5", [- 1 - - - 123]
+"bani 5 456 5", [- 2 - - - 72]
+"eqri 5 72 5", [- 3 - - - 1]
+"addr 5 1 1", [- 5 - - - 1]
+"seti 0 0 1", 
+"seti 0 3 5", [- 6 - - - X] 
+"bori 5 65536 4", [- 7 - - 65536|X X]
+"seti 13284195 4 5", [- 8 - - 65536|X 13284195]
+"bani 4 255 3", [- 9 - 255|X 65536|X 13284195] 
+"addr 5 3 5", [- 10 - 255|X 65536|X 13284195+255|X] 
+"bani 5 16777215 5", [- 11 - 255|X 65536 Y]
+"muli 5 65899 5", [- 12 - 0 255|X Y*65899]
+"bani 5 16777215 5", [- 13 - 0 255|X (Y*65899)&16777215]
+"gtir 256 4 3", [- 14 - ...]
+"addr 3 1 1", 
+"addi 1 1 1", 
+"seti 27 1 1", 
+"seti 0 5 3",  
+"addi 3 1 2",  
+"muli 2 256 2",
+"gtrr 2 4 2",  
+"addr 2 1 1",  
+"addi 1 1 1",  
+"seti 25 2 1", 
+"addi 3 1 3",  
+"seti 17 1 1", 
+"setr 3 7 4",  
+"seti 7 3 1",  
+"eqrr 5 0 3",  
+"addr 3 1 1",  
+"seti 5 3 1"]; 
