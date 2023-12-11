@@ -10,6 +10,10 @@ function standardComparison(a, b, p_functionArray) {
       return 0;
 }
 
+function sortAscendingNumeric(p_array) {
+	p_array.sort(function(a, b) {return a-b});
+}
+
 function sortAscending(p_array, p_functionArray) {
 	p_array.sort(function(a, b) {return standardComparison(a, b, p_functionArray) });
 }

@@ -44,33 +44,8 @@ function binaryToStringTransposition(p_binary) {
 	return answer;
 }
 
-
-// Hexadecimal/binary conversion !!!
-
-function hexadecimalToBinary(p_string) {
-	var answer = [];
-	var val, charac;
-	for (var i = 0 ; i < p_string.length ; i++) {
-		charac = p_string[i];
-		if (charac >= 'A' && charac <= 'F') {
-			val = charToASCIIRelativePosition(charac, 'A')+10;
-		} else {
-			val = charToASCIIRelativePosition(charac,'0');
-		}
-		hexadecimalToBinaryAddDigits(answer, val);
-	}
-	return answer;
-}
-
-function hexadecimalToBinaryAddDigits(p_binaryArray, p_value) {
-	var bit = p_value >= 8;
-	p_binaryArray.push(bit);
-	if (bit) { p_value -= 8 };
-	bit = p_value >= 4;
-	p_binaryArray.push(bit);
-	if (bit) { p_value -= 4 };
-	bit = p_value >= 2;
-	p_binaryArray.push(bit);
-	if (bit) { p_value -= 2 };
-	p_binaryArray.push(p_value == 1);
+const UTILS_CHAR_INVALID = -1;
+function digit(p_char) {
+	const d = charToASCIIRelativePosition(p_char, '0');
+	return (d >= 0 && d <= 9 ? d : UTILS_CHAR_INVALID);
 }
