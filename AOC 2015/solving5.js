@@ -1033,3 +1033,36 @@ function conclusion_5_1() {
 	});
 	return answer;
 }
+
+function conclusion_5_2() {
+	var answer = 0;
+	rawData.forEach(str => {
+		if (isNice2(str)) {
+			answer++;
+		}
+	});
+	return answer;
+}
+
+function isNice2(p_s) {
+	var i = p_s.length;
+	for (i = 2 ; i < p_s.length ; i++) {
+		if (p_s.charAt(i) == p_s.charAt(i-2)) {
+			break;
+		}
+	}
+	if (i == p_s.length) {
+		return false;
+	}
+	// Take advantage of small length of p_s
+	var j;
+	for (i = 0 ; i < p_s.length-2 ; i++) {
+		for (j = i+2 ; j < p_s.length-1 ; j++) {
+			if (p_s.charAt(i) == p_s.charAt(j) && p_s.charAt(i+1) == p_s.charAt(j+1)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
