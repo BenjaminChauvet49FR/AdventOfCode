@@ -211,7 +211,7 @@ function performMove(p_charIndex) {
 			newSpacesCurious.push({x : coors.x, y : coors.y});
 		});						
 	}
-	if (found) { // 551551 Point d'arrêt ici avec gData.fullPassedRounds == 23 et p_charIndex == 2 (le gobelin est coincé par ses partenaires...
+	if (found) { // I once put a breakpoint here gData.fullPassedRounds == 23 et p_charIndex == 2 (goblin stuck by their partners)
 		// Eventually move the character in the direction that allows to reach the (xh, yh) space (target) first
 		const dir = gNewSpaceFinder.get(xh, yh);
 		const xDest = x + DELTA_READING_ORDER_X[dir];

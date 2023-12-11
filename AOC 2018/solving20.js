@@ -61,7 +61,7 @@ function initRooms() {
 	gData.xStart = 5;
 	gData.yStart = 5;*/
 	gData.xLength = 750;
-	gData.yLength = 750;// 551551 May be not enough
+	gData.yLength = 750;// Warning : size assumption ! May be not enough (it eventually was)
 	gData.xStart = 375;
 	gData.yStart = 375;
 	gData.xMin = gData.xStart; 

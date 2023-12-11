@@ -1,0 +1,5 @@
+Nuit sam. 2023-12-09 à 10 : trouvé les réponses au problème 23 (octaèdres) (un peu de cooperation des données)
+Nuit dim. 2023-12-10 à 11 : trouvé la logique du problème 12 (les pots) (facile) et 19 (machine avec le registre 1 qui vaut 0) (analyse poussée, mais ça a marché)
+PLUS QUE **
+
+Pour les pots, les 3 jeux de données que j'ai essayés ont donné des pots qui se barraient d'une unité à chaque fois vers la droite après 300 générations.

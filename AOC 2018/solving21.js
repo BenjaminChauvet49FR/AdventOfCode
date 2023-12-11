@@ -154,7 +154,6 @@ function conclusion_21_aux(p_maxSteps, p_minValue, p_maxValue) {
 
 // Inserts a value into a binary tree that contains a value at each node
 // The tree is assumed to contain at least one node
-// 551551
 DEFAULT_NODE_VALUE = -1;
 function insertInBinaryTree(p_tree, p_value) {
 	if (p_tree.value == DEFAULT_NODE_VALUE) {
