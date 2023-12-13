@@ -102,7 +102,7 @@ function conclusion_21_1() {
 	return conclusion_21_aux(550000000, 0, 0); // If it doesn't work (or it is too long) I swap for another technical.
 }
 
-function conclusion_21_2() {
+function conclusion_21_2_noob() {
 	//START_REGISTERS = [0,29,1,0,111,11476504]
 	//START_REGISTERS = [0, 28, 1, 0, 233, 16244699]
 	START_REGISTERS = [0,28,1,0,87,8225691]
@@ -134,14 +134,14 @@ function conclusion_21_aux(p_maxSteps, p_minValue, p_maxValue) {
 			inst = registers[INSTPOINTER];
 			steps++;
 			if (ope == OPCODES.EQRR) {
-				if (registers[5] == 16244699) {
+				//if (registers[5] == 16244699) {
 					console.log(registers)
-				}
-				if (!insertInBinaryTree(tree, registers[5])) {
+				// }
+				/*if (!insertInBinaryTree(tree, registers[5])) {
 					found = true;
 				} else {
 					lastValueThatCausesToHalt = registers[5];
-				}
+				}*/
 			}
 		}
 		valueBit0++;
@@ -180,4 +180,30 @@ function defaultNode() {
 	return {
 		value : DEFAULT_NODE_VALUE
 	}
+}
+
+// I feel like a chad !
+function conclusion_21_2() {
+	var answer = 0;
+	var xx, yy, zz;
+	var found = false;
+	var lastValueThatCausesToHalt;
+	var tree = defaultNode();	
+//	for (var i = 0 ; i < 10 ; i++) {
+	while (!found) {
+		answer = answer | 65536;
+		zz = answer % 256;
+		answer >>= 8;
+		yy = answer % 256;
+		answer >>= 8;
+		xx = answer;
+		answer = (((((((  (13284195+zz)  *65899)%16777216)+yy )*65899)%16777216)+xx )*65899)%16777216
+		//console.log(answer);
+		if (!insertInBinaryTree(tree, answer)) {
+			found = true;
+		} else {
+			lastValueThatCausesToHalt = answer;
+		}
+	}
+	return lastValueThatCausesToHalt;
 }

@@ -3,3 +3,5 @@ Nuit dim. 2023-12-10 à 11 : trouvé la logique du problème 12 (les pots) (faci
 PLUS QUE **
 
 Pour les pots, les 3 jeux de données que j'ai essayés ont donné des pots qui se barraient d'une unité à chaque fois vers la droite après 300 générations.
+
+Nuit lun. 2023-12-11 à 12 : résolu le dernier problème ! (le 21) (machine où on cherche la dernière valeur qui fait sortir du programme)
