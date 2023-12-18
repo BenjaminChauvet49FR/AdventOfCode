@@ -129,7 +129,7 @@ function conclusion_15_1() {
 		});
 	}
 	return minimalDistancesArray[yLength-1][xLength-1];
-}
+} // Correct answer = 472
 
 
 function conclusion_15_2() {
@@ -153,7 +153,7 @@ function conclusion_15_2() {
 		});
 	}
 	return minimalDistancesArray[5*yLength-1][5*xLength-1];
-}
+}// Correct answer = 2851
 
 function realRisk(p_x, p_y) {
 	var xOrigin = p_x-Math.floor(p_x/xLength)*xLength;

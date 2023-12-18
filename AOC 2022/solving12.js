@@ -140,4 +140,4 @@ function conclusion_12_2() {// Going down the hill ! Start at the end !
 		});
 	}
 	return foundASpotA;
-}
+} // Correct answer = 375
