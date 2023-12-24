@@ -1,0 +1,22 @@
+Discriminator : 
+ax+by=e
+cx+dy=f
+...
+acx+bcy=ce
+acx+ady=af
+=>
+y(bc-ad) = ce-af
+y = (ce-af)/(bc-ad)
+dax+bdy=de
+bcx+bdy=bf
+x = (de-bf)/(da-bc)
+y = (af-ce)/(da-bc)
+=>
+a(de-bf)-b(ce-af) = e(ad-bc) ?
+ade-bce, OK
+c(de-bf)-d(ce-af) = f(ad-bc) ?
+-bcf+fad, OK
+
+If (ad-bc) == 0, either all or nothing depending on a,b,c,d,e,f :
+y(bc-ad) = ce-af : we need ce = af
+x(bc-ad) = bf-de : we need bf = de

@@ -57,3 +57,45 @@ function primeDecompositionFinder_aux(p_number, p_prime, p_ip, p_list) {
 		return (primeDecompositionFinder_aux(p_number, newPrime, p_ip+1, p_list));
 	}
 }
+
+
+function gcd(p_a, p_b) {
+	if (p_a < 0) {
+		return gcd(-p_a, p_b);
+	}
+	if (p_b < 0) {
+		return gcd(p_a, -p_b);
+	}
+	if (p_a < p_b) {
+		return gcd(p_b, p_a);
+	}
+	return gcd_aux(p_a, p_b);
+}
+function gcd_aux(p_a, p_b) {
+	if (p_b == 0) {
+		return p_a;
+	}
+	return gcd_aux(p_b, p_a % p_b);
+}
+
+function gcd_all(p_list) {
+	var answer = p_list[0];
+	for (var i = 1 ; i < p_list.length ; i++) {
+		answer = gcd(answer, p_list[i]);
+	}
+	return answer;
+}
+
+// Warning : we assume there is no zero and only positive integers among the arguments !
+function lcm(p_a, p_b) {
+	return p_a*p_b/gcd(p_a, p_b);
+}
+
+// Returns lcm of all elements in the non-empty list. Same constraints as above !
+function lcm_all(p_list) {
+	var answer = p_list[0];
+	for (var i = 1 ; i < p_list.length ; i++) {
+		answer = lcm(answer, p_list[i]);
+	}
+	return answer;
+}
