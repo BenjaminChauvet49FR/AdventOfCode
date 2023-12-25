@@ -19,6 +19,10 @@ CheckCollectionGeneric.prototype.addGeneric = function(p_arg, p_value) {
 	return false;
 }
 
+CheckCollectionGeneric.prototype.getGeneric = function(p_arg) { // TODO improve this to have a real object thing.
+	return this.array[p_arg];
+}
+
 CheckCollectionGeneric.prototype.clean = function() {
 	this.list.forEach(i => {
 		this.array[i] = this.defaultValue;
