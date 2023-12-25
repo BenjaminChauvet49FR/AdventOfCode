@@ -221,9 +221,9 @@ function exploreAround(p_xTo, p_yTo, p_directionTo, p_numberOfTimesWeGetTo) {
 }
 
 function addToExplore(p_x, p_y, p_dir, p_nbOfTimes, p_distance) { 
-		gShortest[p_y][p_x][p_dir][p_nbOfTimes-1] = p_distance;
-		var itemToSort = {x : p_x, y : p_y, dir : p_dir, nOfT : p_nbOfTimes}
-		shiftIntoList(gCoorsToAA, itemToSort, function(foo, elt) {return gShortest[elt.y][elt.x][elt.dir][elt.nOfT-1] > p_distance}); 
+	gShortest[p_y][p_x][p_dir][p_nbOfTimes-1] = p_distance;
+	var itemToSort = {x : p_x, y : p_y, dir : p_dir, nOfT : p_nbOfTimes}
+	shiftIntoList(gCoorsToAA, itemToSort, function(elt) {return -gShortest[elt.y][elt.x][elt.dir][elt.nOfT-1]}); 
 }
 
 // ---------------------
@@ -240,7 +240,6 @@ function conclusion_17_2() {
 	initP2();
 	addToExploreP2(1, 0, DIRECTION.RIGHT, 1, gField[0][1]);
 	addToExploreP2(0, 1, DIRECTION.DOWN, 1, gField[1][0]); 
-	var coors;
 	while (gCoorsToAA.length > 0) { 
 		coors = gCoorsToAA.pop();
 		//console.log(gShortest[coors.y][coors.x][coors.dir][coors.nOfT-1]);
@@ -275,6 +274,5 @@ function exploreAroundP2(p_xTo, p_yTo, p_directionTo, p_numberOfTimesWeGetTo) {
 function addToExploreP2(p_x, p_y, p_dir, p_nbOfTimes, p_distance) { 
 	gShortest[p_y][p_x][p_dir][p_nbOfTimes-1] = p_distance;
 	var itemToSort = {x : p_x, y : p_y, dir : p_dir, nOfT : p_nbOfTimes}
-	shiftIntoList(gCoorsToAA, itemToSort, function(foo, elt) {return gShortest[elt.y][elt.x][elt.dir][elt.nOfT-1] > p_distance});
+	shiftIntoList(gCoorsToAA, itemToSort, function(elt) {return -gShortest[elt.y][elt.x][elt.dir][elt.nOfT-1]});
 } 
-// TODO : needs to be optimized with a chained list because it obviously can't be that slow !

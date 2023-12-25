@@ -1,17 +1,20 @@
-// Inserts an element into an array (or list, whatever) according to p_function, immediately before the first element for which the function is false. 
-// If it is never false, inserts it at the end.
-// PREREQUISTED : function(element, already) must be true for all "already" elts of the array before a gap and false after that gap. (Gap that may be at very beginning or very end)
-
 // https://stackabuse.com/javascript-how-to-insert-elements-into-a-specific-index-of-an-array/
-// Example : array = [1, 3, 5, 7]; shiftIntoList(array, 4, function(element, already) { return element > already}); // array = [1, 3, 4, 5, 7]
-// Another example : array = [9, 7, 5, 2]; shiftIntoList(array, 4, function(element, already) { return element < already}); // array = [9, 7, 5, 4, 2]
-function shiftIntoList(p_sortedList, p_element, p_function) {
-	var i = 0;
-	while (i < p_sortedList.length && p_function(p_element, p_sortedList[i])) {
-		i++;
-	}
-	p_sortedList.splice(i, 0, p_element);
-} // TODO may be optimized with min/max (cf. all three problems that use it)
+
+// function f(x) {return x}; var l = []; shiftIntoList(l, 3, f); shiftIntoList(l, 8, f); shiftIntoList(l, 9, f); shiftIntoList(l, 4, f); shiftIntoList(l, 3, f); shiftIntoList(l, 8, f); shiftIntoList(l, 7, f); 
+// Insert into an ASCENDING list an element according to a function
+function shiftIntoList(p_ascendingList, p_element, p_function) {
+	var iMin = 0;
+	var iMax = p_ascendingList.length;
+	while (iMin < iMax) {
+		var iMed = Math.floor((iMin+iMax)/2);
+		if (p_function(p_element) > p_function(p_ascendingList[iMed])) {
+			iMin = iMed+1;
+		} else {
+			iMax = iMed;
+		}
+	} // 1 3 5 7 9 (4) ? (0-4) (4 < 5) ; (0-2) (3 < 4) (1-2) 
+	p_ascendingList.splice(iMin, 0, p_element);
+}
 
 // Inserts numbers in ascending order, but without repetition. Returns the index of the new element if a new number was actually inserted, or -1 otherwise.
 function shiftIntoListUniqueNumbers(p_sortedList, p_element) {

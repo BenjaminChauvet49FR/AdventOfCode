@@ -1,6 +1,6 @@
 "use strict";
 
-var rawData =
+var rawData = 
 [
 "1762397661132951281872118191829951912248172478339632549455181981251788927258534119468168714528621114",
 "8319319112748383315492426133271137584941117782129986515332716159745294224193293175158161499293222148",
@@ -102,13 +102,25 @@ var rawData =
 "4851719158713681489832158231939414111984561313913178292865317239795299169256621724995929214446597981",
 "2895141151816231324862721919961491572329591628247151846125129115212222764271248124311117311343989181",
 "8573312112116444197131192178856685531315797232771662865695122611599151931945191918296911647973257553"
-]
+];
 
-const data = digitPseudoArray_to_digitArray(rawData);
-const xLength = data[0].length;
-const yLength = data.length;
+const gData = digitPseudoArray_to_digitArray(rawData);
 
 function conclusion_15_1() {
+	return conclusion_15_aux(false);
+}
+
+function conclusion_15_2() {
+	return conclusion_15_aux(true);
+}
+
+var gXOL, gYOL; // Original lengths
+
+function conclusion_15_aux(p_isPart2) {
+	gXOL = gData[0].length;
+	gYOL = gData.length;
+	var xLength = gXOL * (p_isPart2 ? 5 : 1);
+	var yLength = gYOL * (p_isPart2 ? 5 : 1);
 	var smallestCoors, x, y, xx, yy, dirTo;
 	var notFound, coors;
 	var minimalDistancesArray = generateDoubleEntryArray(xLength, yLength, -1);
@@ -123,117 +135,24 @@ function conclusion_15_1() {
 			yy = coors.y;
 			xx = coors.x;
 			if (minimalDistancesArray[yy][xx] == -1) {
-				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + data[yy][xx];
-				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
+				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + danger(xx, yy, p_isPart2);
+				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors) {return -minimalDistancesArray[p_newCoors.y][p_newCoors.x]} );
 			}
 		});
 	}
 	return minimalDistancesArray[yLength-1][xLength-1];
-} // Correct answer = 472
+} // Correct answer = 472 / 2851
 
-
-function conclusion_15_2() {
-	var smallestCoors, x, y, xx, yy, dirTo;
-	var notFound, coors;
-	var minimalDistancesArray = generateDoubleEntryArray(xLength*5, yLength*5, -1);
-	minimalDistancesArray[0][0] = 0;
-	var distanceIfTakenCoors = 0;
-	var spacesWithSmallestDistanceFoundDecreasing = [{x : 0, y : 0}];
-	while (spacesWithSmallestDistanceFoundDecreasing.length > 0) {
-		coors = spacesWithSmallestDistanceFoundDecreasing.pop();
-		x = coors.x;
-		y = coors.y;
-		existingNeighborsCoors(x, y, xLength*5, yLength*5).forEach(coors => {
-			yy = coors.y;
-			xx = coors.x;
-			if (minimalDistancesArray[yy][xx] == -1) {
-				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + realRisk(xx, yy);
-				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
-			}
-		});
-	}
-	return minimalDistancesArray[5*yLength-1][5*xLength-1];
-}// Correct answer = 2851
-
-function realRisk(p_x, p_y) {
-	var xOrigin = p_x-Math.floor(p_x/xLength)*xLength;
-	var yOrigin = p_y-Math.floor(p_y/yLength)*yLength;
-	var answer = data[yOrigin][xOrigin] + Math.floor(p_x/xLength) + Math.floor(p_y/yLength);
-	while (answer >= 10) {
-		answer -= 9;
-	}
-	return answer;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-	// Total failure !
-	/*if (data[0][1] > spacesToGoOrdered[0].distanceIfTaken) {
-		spacesToGoOrdered.splice(0, 0, {x : 1, y : 0, dirTo : DIRECTION.RIGHT, distanceIfTaken : data[0][1]});
-	} else {
-		spacesToGoOrdered.splice(1, 0, {x : 1, y : 0, dirTo : DIRECTION.RIGHT, distanceIfTaken : data[0][1]});		
-	}*/
-	/*while (spacesToGoOrdered.length > 0) {
-		smallestCoors = spacesToGoOrdered.pop();
-		x = smallestCoors.x;
-		y = smallestCoors.y;
-		dirTo = smallestCoors.dirTo;
-		xx = x + DeltaX[dirTo];
-		yy = y + DeltaY[dirTo];
-		if (minimalDistancesArray[yy][xx] == -1) {
-			minimalDistancesArray[yy][xx] = smallestCoors.distanceIfTaken;
-			existingNeighborsCoors(xx, yy, xLength, yLength).forEach(coors => {
-				distanceIfTakenCoors = smallestCoors.distanceIfTaken + data[coors.y][coors.x];
-				i = 0;
-				while (spacesToGoOrdered[i].distanceIfTaken < distanceIfTakenCoors) {
-					distanceIfTaken = true;
-				}
-				
-			});
+function danger(p_x, p_y, p_isPart2) {
+	if (p_isPart2) {		
+		var xOrigin = p_x%gXOL;
+		var yOrigin = p_y%gYOL;
+		var answer = gData[yOrigin][xOrigin] + Math.floor(p_x/gXOL) + Math.floor(p_y/gYOL);
+		while (answer >= 10) {
+			answer -= 9;
 		}
-		
-		
+		return answer;
+	} else {
+		return gData[p_y][p_x];
 	}
-	// https://stackabuse.com/javascript-how-to-insert-elements-into-a-specific-index-of-an-array/ // First 0/1 : Insert before position 0/1 ; second 0 : delete 0 element
-	
-	
-										{x : 1, y : 0, dirTo : DIRECTION.RIGHT, distanceIfTaken : data[0][1]}];
-	var i;
-	// 1) First, 0,0 space down : some dist. 0,0 space right : some dist.
-	// Rank them.
-	// Go to the smallest direction. Repeat with "not already" taken.
-	while (spacesWithUnexploredNeighbors.length > 0) {
-		smallestCoors = spacesWithUnexploredNeighbors.pop();
-		x = smallestCoors.x;
-		y = smallestCoors.y;
-		console.log(x + "," + y + ", dist. " + minimalDistancesArray[y][x]);
-		existingNeighborsCoors(x, y, xLength, yLength).forEach(coors => {
-			xx = coors.x;
-			yy = coors.y;
-			if (data[yy][xx] == -1) {
-				minimalDistancesArray[yy][xx] = data[yy][xx] + minimalDistancesArray[y][x];
-				// Add xx, yy to its place. Leftmost = biggest distance.
-				i = 0;
-				notFound = true;
-				while (i < spacesWithUnexploredNeighbors.length && notFound) {
-					coors = spacesWithUnexploredNeighbors[i];	
-					if (minimalDistancesArray[coors.y][coors.x] < minimalDistancesArray[yy][xx]) {
-						notFound = i;
-					} else {
-						i++;
-					}
-				}
-				// Elements before i = distances bigger. Elements at & after i = distances lower.
-				splice(data, i, 0, {x : xx, y : yy});
-			}
-		});
-	}		*/
+}

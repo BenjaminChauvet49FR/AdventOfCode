@@ -42,9 +42,9 @@ const rawData = [
 "abccccaaaaaaaaccccccccccccccccaaccccaacaaaaaaaaaaaaaaccaaaaccccaaacccccccccccccccccccccccccccccccccccccccccaaaaaa"
 ];
 
-const Y_START = 20;
+const gYSTART = 20;
 const Y_END = 20;
-const X_START = 0;
+const gXSTART = 0;
 const X_END = 88;
 
 /*const rawData = [
@@ -54,9 +54,9 @@ const X_END = 88;
 "acctuvwj",
 "abdefghi"
 ];
-const Y_START = 0;
+const gYSTART = 0;
 const Y_END = 2;
-const X_START = 0;
+const gXSTART = 0;
 const X_END = 5;*/
 
 
@@ -79,9 +79,9 @@ function conclusion_12_1() {
 	var smallestCoors, x, y, xx, yy, dirTo;
 	var notFound, coors;
 	var minimalDistancesArray = generateDoubleEntryArray(xLength, yLength, -1);
-	minimalDistancesArray[Y_START][X_START] = 0;
+	minimalDistancesArray[gYSTART][gXSTART] = 0;
 	var distanceIfTakenCoors = 0;
-	var spacesWithSmallestDistanceFoundDecreasing = [{x : X_START, y : Y_START}];
+	var spacesWithSmallestDistanceFoundDecreasing = [{x : gXSTART, y : gYSTART}];
 	while (spacesWithSmallestDistanceFoundDecreasing.length > 0) {
 		coors = spacesWithSmallestDistanceFoundDecreasing.pop();
 		x = coors.x;
@@ -91,7 +91,7 @@ function conclusion_12_1() {
 			xx = coors.x;
 			if (minimalDistancesArray[yy][xx] == -1 && isAccessibleDestFromStart(xx, yy, x, y)) {
 				minimalDistancesArray[yy][xx] = minimalDistancesArray[y][x] + 1;
-				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
+				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors) {return -minimalDistancesArray[yy][xx]} );
 			}
 		});
 	}
@@ -135,7 +135,7 @@ function conclusion_12_2() {// Going down the hill ! Start at the end !
 				if (foundASpotA == null && gotchaA(xx, yy)) {
 					foundASpotA = {x : xx, y : yy, dist : minimalDistancesArray[yy][xx]};
 				}
-				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors, p_formerCoors) {return minimalDistancesArray[yy][xx] < minimalDistancesArray[p_formerCoors.y][p_formerCoors.x]} );
+				shiftIntoList(spacesWithSmallestDistanceFoundDecreasing, {x : xx, y : yy}, function(p_newCoors) {return -minimalDistancesArray[yy][xx]} );
 			}
 		});
 	}
