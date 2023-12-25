@@ -107,6 +107,7 @@ function generateArrangedDoubleEntryArray(p_xLength, p_yLength, p_function) {
 }
 
 // TODO (or not ?) : reuse this very simple method everywhere...
+// It generates the array [p_min, p_min+1, p_min+2, ..., p_max-1, p_max]
 function generateNumericArray(p_min, p_max) {
 	var answer = [];
 	for (var i = p_min ; i <= p_max ; i++) {
