@@ -2,7 +2,7 @@ const rawData5 = [3,225,1,225,6,6,1100,1,238,225,104,0,1101,69,55,225,1001,144,7
 
 function conclusion_5_1() {
 	var reader = new newIntCodeReader([1]);
-	var data = rawData5.slice();
+	var data = makeIntCodeBigInt(rawData5);
 	var mustHalt = false;
 	while (!reader.end) {
 		readIntCodeStep(data, reader);
@@ -19,7 +19,7 @@ function conclusion_5_1() {
 
 function conclusion_5_2() {
 	var reader = new newIntCodeReader([5]);
-	var data = rawData5.slice();
+	var data = makeIntCodeBigInt(rawData5);
 	var rCode = INTCODE_OK;
 	while (!reader.end && (rCode == INTCODE_OK)) {
 		rCode = readIntCodeStep(data, reader);

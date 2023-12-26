@@ -18,12 +18,12 @@ function tryCombination(p_list) {
 	var itinerant = 0;
 	var reader;
 	for (var i = 0 ; i <= 4 ; i++) {
-		data = rawData7.slice();
 		reader = newIntCodeReader([p_list[i], itinerant]);
+		data = makeIntCodeBigInt(rawData7);
 		readIntCodeProgram(data, reader);
 		itinerant = reader.output;
 	}
-	return itinerant;
+	return Number(itinerant);
 }
 
 
@@ -80,8 +80,8 @@ function tryCombinationP2(p_list) {
 	var reader;
 	var finalTravelling = 0;
 	for (var i = 0 ; i < 5 ; i++) {
-		datas.push(rawData7.slice());
 		readers.push(newIntCodeReader([p_list[i]]));
+		datas.push(makeIntCodeBigInt(rawData7));
 	}	
 	while (stillRunningAmps > 0) {
 		reader = readers[iAmp];
@@ -107,6 +107,6 @@ function tryCombinationP2(p_list) {
 			iAmp = 0;
 		}
 	}
-	return finalTravelling;
+	return Number(finalTravelling);
 }
 
