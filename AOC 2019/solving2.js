@@ -3,7 +3,9 @@ const rawData = [
 ]
 
 function conclusion_2_1() {
-	return readIntCode(rawData);
+	data = rawData.slice();
+	readIntCode(data);
+	return data[0];
 }
 
 function conclusion_2_2() {
@@ -13,7 +15,7 @@ function conclusion_2_2() {
 			data = rawData.slice();
 			data[1] = i;
 			data[2] = j;
-			if (readIntCode(data) == 19690720) {
+			if (readIntCode(data) == INTCODE_OK && data[0] == 19690720) {
 				return 100*i+j;
 			}
 		}
