@@ -3,19 +3,19 @@ const rawData2 = [
 ]
 
 function conclusion_2_1() {
-	data = makeIntCodeBigInt(rawData2);
-	readIntCodeProgram(data);
-	return data[0];
+	reader = newIntCodeReader(rawData2);
+	readIntCodeProgram(reader);
+	return reader.program[0];
 }
 
 function conclusion_2_2() {
-	var data = makeIntCodeBigInt(rawData2);
+	var reader;
 	for (var i = 0 ; i <= 99 ; i++) {
 		for (var j = 0 ; j <= 99 ; j++) {
-			data = makeIntCodeBigInt(rawData2);
-			data[1] = BigInt(i);
-			data[2] = BigInt(j);
-			if (readIntCodeProgram(data) == INTCODE_OK && data[0] == 19690720) {
+			reader = newIntCodeReader(rawData2);
+			reader.program[1] = BigInt(i); // Inputs are used instead in later problems :)
+			reader.program[2] = BigInt(j);
+			if (readIntCodeProgram(reader) == INTCODE_OK && reader.program[0] == 19690720) {
 				return 100*i+j;
 			}
 		}
