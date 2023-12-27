@@ -4,6 +4,9 @@ const INTCODE_WAITING_FOR_INPUT = -3;
 const INTCODE_WRONG_MEMORY_ACCESS = -4;
 const INTCODE_OK = 0;
 
+// --------------
+// First : functions usables by outside. Then, private ones.
+
 function newIntCodeReader(p_program, p_input) {
 	var answer = {};
 	answer.pointer = 0n;
@@ -113,6 +116,46 @@ function readIntCodeStep(p_reader) {
 	return INTCODE_OK;
 }
 
+function readIntCodeProgram(p_reader, p_stopFunction) {
+	if (!p_reader) {
+		p_reader = newIntCodeReader();
+	}
+	while (true) {
+		if (p_stopFunction && p_stopFunction(p_reader)) {
+			return INTCODE_USER_STOP;
+		}
+		if (readIntCodeStep(p_reader) < 0) {
+			return INTCODE_WRONG_MEMORY_ACCESS;
+		}
+		if (p_reader.end) {
+			return INTCODE_OK;
+		}
+	}
+}
+
+function alterIntcodeProgram(p_reader, p_address, p_value) {
+	if (typeof(p_value) == "bigint") {				
+		writeIntCode(p_reader, p_address, p_value);
+	} else {
+		writeIntCode(p_reader, p_address, BigInt(p_value));
+	}
+}
+
+// Runs the program until it halts or ends and then returns the arrays of all outputs generated in order. 
+// It is assumed not to be already pending or stopped !
+function runAndOutputIntcodeProgram(p_reader) {
+	var outputs = [];
+	while (!p_reader.end && !p_reader.pending) {
+		readIntCodeStep(p_reader);
+		if (p_reader.emitsOutput) {
+			outputs.push(Number(p_reader.output));
+		}	
+	}
+	return outputs;
+}
+
+//--------------------------
+
 function getIntCodeParameters(p_opcode, p_nbParams, p_reader, p_writeInsteadOfRead) {
 	var number = p_opcode/100n;
 	var ri = p_reader.pointer;
@@ -146,24 +189,6 @@ function getIntCodeParameters(p_opcode, p_nbParams, p_reader, p_writeInsteadOfRe
 		}
 	}
 	return answer;
-}
-
-// Warning : alters data in entrance
-function readIntCodeProgram(p_reader, p_stopFunction) {
-	if (!p_reader) {
-		p_reader = newIntCodeReader();
-	}
-	while (true) {
-		if (p_stopFunction && p_stopFunction(p_reader)) {
-			return INTCODE_USER_STOP;
-		}
-		if (readIntCodeStep(p_reader) < 0) {
-			return INTCODE_WRONG_MEMORY_ACCESS;
-		}
-		if (p_reader.end) {
-			return INTCODE_OK;
-		}
-	}
 }
 
 function writeIntCode(p_reader, p_address, p_value) {

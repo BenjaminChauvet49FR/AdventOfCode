@@ -13,8 +13,8 @@ function conclusion_2_2() {
 	for (var i = 0 ; i <= 99 ; i++) {
 		for (var j = 0 ; j <= 99 ; j++) {
 			reader = newIntCodeReader(rawData2);
-			reader.program[1] = BigInt(i); // Inputs are used instead in later problems :)
-			reader.program[2] = BigInt(j);
+			alterIntcodeProgram(reader, 1, i);
+			alterIntcodeProgram(reader, 2, j);
 			if (readIntCodeProgram(reader) == INTCODE_OK && reader.program[0] == 19690720) {
 				return 100*i+j;
 			}

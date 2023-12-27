@@ -17,10 +17,11 @@ function tryCombination(p_list) {
 	var data;
 	var itinerant = 0;
 	var reader;
+	var outputs;
 	for (var i = 0 ; i <= 4 ; i++) {
 		reader = newIntCodeReader(rawData7, [p_list[i], itinerant]);
-		readIntCodeProgram(reader);
-		itinerant = reader.output;
+		outputs = runAndOutputIntcodeProgram(reader);
+		itinerant = outputs[0];
 	}
 	return Number(itinerant);
 }
@@ -80,20 +81,22 @@ function tryCombinationP2(p_list) {
 	for (var i = 0 ; i < 5 ; i++) {
 		readers.push( newIntCodeReader(rawData7, [p_list[i]]) );
 	}	
+	var output;
 	while (stillRunningAmps > 0) {
 		reader = readers[iAmp];
 		provideInput(reader, travelling);
 		do {
-			rCode = readIntCodeStep(reader);
+			/*rCode = readIntCodeStep(reader);
 			if (rCode < 0) {
 				console.log("Something wrong happened : " + rCode);
 				return rCode;
 			}
 			if (reader.emitsOutput) {
 				travelling = reader.output;
-				if (iAmp == 4) {
-					finalTravelling = travelling;
-				}
+			}*/ // So it won't bug anymore ... ?
+			output = runAndOutputIntcodeProgram(reader);			
+			if (output.length > 0) {
+				travelling = output[0];
 			}
 			if (reader.end) {
 				stillRunningAmps--;
@@ -101,6 +104,7 @@ function tryCombinationP2(p_list) {
 		} while (!reader.pending && !reader.end); 
 		iAmp++;
 		if (iAmp == 5) {
+			finalTravelling = travelling;
 			iAmp = 0;
 		}
 	}
