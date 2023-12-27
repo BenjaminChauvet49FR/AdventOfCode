@@ -151,7 +151,7 @@ function conclusion_14_2() {
 		if (previousIter == -1) {			
 			previousIter = addNewConfig(treeOfSeenConfigs, i, field);
 			if (previousIter != -1) {
-				var periodDuration = i-previousIter; // Everything went better than expected ! "previousIter" = 417, i = 445.
+				var periodDuration = i-previousIter;
 				while(periodDuration < 100) {
 					periodDuration *=2; // 7 is too few
 				}
