@@ -56,28 +56,10 @@ function initData() {
 const CLOSED = 0;
 const OPEN = 1;
 function initRooms() {
-	/*gData.xLength = 10;
-	gData.yLength = 10;
-	gData.xStart = 5;
-	gData.yStart = 5;*/
-	gData.xLength = 750;
-	gData.yLength = 750;// Warning : size assumption ! May be not enough (it eventually was)
-	gData.xStart = 375;
-	gData.yStart = 375;
-	gData.xMin = gData.xStart; 
-	gData.xMax = gData.xStart;
-	gData.yMin = gData.yStart;
-	gData.yMax = gData.yStart;
-	gData.rooms = generateArrangedDoubleEntryArray(gData.xLength, gData.yLength, function(x, y) {return {wallR : CLOSED, wallD : CLOSED}} );
+	gData.xStart = 0;
+	gData.yStart = 0;
+	gData.rooms = new ExpandableArray(300, 300, 5, 5, gData.xStart, gData.yStart, null, function(){return {wallR : CLOSED, wallD : CLOSED}});
 	runPaths(0, 0, 0);
-	
-	gData.rooms2 = [];
-	for (var y = 0 ; y <= gData.yMax - gData.yMin ; y++) {
-		gData.rooms2.push([]);
-		for (var x = 0 ; x <= gData.xMax - gData.xMin ; x++) {
-			gData.rooms2[y].push(gData.rooms[y+gData.yMin][x+gData.xMin]);
-		}
-	}	
 }
 
 function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
@@ -87,7 +69,7 @@ function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
 	for (var i = 0 ; i < gData.paths[p_indexStart].length ; i++) {
 		switch(gData.paths[p_indexStart].charAt(i)) {
 			case 'E' :
-				gData.rooms[dy+gData.yStart][dx+gData.xStart].wallR = OPEN;
+				gData.rooms.getSafe(dx+gData.xStart, dy+gData.yStart).wallR = OPEN;
 				dx++;
 				/*if (dx+gData.xStart == gData.xLength-1) {
 					gData.xLength += 10;
@@ -97,10 +79,9 @@ function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
 						}
 					}
 				}*/ // I will go straight
-				if (dx+gData.xStart > gData.xMax) { gData.xMax++;}
 				break;
 			case 'S' : 
-				gData.rooms[dy+gData.yStart][dx+gData.xStart].wallD = OPEN;
+				gData.rooms.getSafe(dx+gData.xStart, dy+gData.yStart).wallD = OPEN;
 				dy++;
 				/*if (dy+gData.yStart == gData.yLength-1) {
 					gData.yLength += 10;
@@ -110,10 +91,9 @@ function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
 						);
 					}
 				}*/
-				if (dy+gData.yStart > gData.yMax) { gData.yMax++;}
 				break;
 			case 'W' : 
-				gData.rooms[dy+gData.yStart][dx+gData.xStart-1].wallR = OPEN;
+				gData.rooms.getSafe(dx+gData.xStart-1, dy+gData.yStart).wallR = OPEN;
 				dx--;
 				/*if (dx+gData.xStart == gData.xLength-2) {
 					gData.xLength += 10;
@@ -131,12 +111,10 @@ function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
 						}
 					}
 				}*/ // TODO : NOT TESTED
-				if (dx+gData.xStart < gData.xMin) { gData.xMin--;}
 				break;
 			case 'N' : 
-				gData.rooms[dy+gData.yStart-1][dx+gData.xStart].wallD = OPEN;
+				gData.rooms.getSafe(dx+gData.xStart, dy+gData.yStart-1).wallD = OPEN;
 				dy--;
-				if (dy+gData.yStart < gData.yMin) { gData.yMin--;}
 				break;
 		}
 	}
@@ -153,12 +131,12 @@ function runPaths(p_indexStart, p_deltaXStart, p_deltaYStart) {
 
 function consoleLogPaths() {
 	var string, wR, wD;
-	for (var y = 0 ; y < gData.rooms2.length ; y++) {
+	for (var y = gData.rooms.yMin ; y <= gData.rooms.yMax ; y++) {
 		string1 = "";
 		string2 = "";
-		for (var x = 0 ; x < gData.rooms2[y].length ; x++) {
-			wR = gData.rooms2[y][x].wallR;
-			wD = gData.rooms2[y][x].wallD;
+		for (var x = gData.rooms.xMin ; x <= gData.rooms.xMax ; x++) {
+			wR = gData.rooms.getSafe(x, y).wallR;
+			wD = gData.rooms.getSafe(x, y).wallD;
 			if (wR == CLOSED && wD == CLOSED) {
 				string1 += ".X";
 				string2 += "XX";
@@ -182,58 +160,24 @@ function consoleLogPaths() {
 }
 
 function conclusion_20_1() {
-	initData();
-	initRooms();
-//	consoleLogPaths();
-	cc = new CheckCollectionDoubleEntry(gData.xLength, gData.yLength);
-	ccTotal = new CheckCollectionDoubleEntry(gData.xLength, gData.yLength);
-	cc.add(gData.xStart, gData.yStart); // So we NEVER visit a room twice
-	var distance = -1;
-	var x, y, newList;
-	while (cc.list.length > 0) {
-		newList = [];
-		cc.list.forEach(coors => {
-			x = coors.x;
-			y = coors.y;
-			if (ccTotal.add(x, y)) {				
-				if (gData.rooms[y][x-1].wallR == OPEN) {    // With the former grid we are always in bounds, so no need to check
-					newList.push({x : x-1, y : y});
-				}
-				if (gData.rooms[y-1][x].wallD == OPEN) {
-					newList.push({x : x, y : y-1});
-				}
-				if (gData.rooms[y][x].wallR == OPEN) {
-					newList.push({x : x+1, y : y});
-				}
-				if (gData.rooms[y][x].wallD == OPEN) {
-					newList.push({x : x, y : y+1});
-				}
-			}
-
-		});
-		cc.clean();
-		newList.forEach(coors => {
-			cc.add(coors.x, coors.y);
-		});
-		if (newList.length > 0) { // Max distance is one more room from the start (must be equal at 0 after 1st room explored, hence its start at -1)		
-			distance++;
-		}
-	}
-	return distance;
-}
-
-
+	return conclusion_20_aux(false);
+} // 4360
 
 function conclusion_20_2() {
+	return conclusion_20_aux(true);	
+} // 8509
+
+function conclusion_20_aux(p_isPart2) {
 	initData();
 	initRooms();
-//	consoleLogPaths();
-	cc = new CheckCollectionDoubleEntry(gData.xLength, gData.yLength);
-	ccTotal = new CheckCollectionDoubleEntry(gData.xLength, gData.yLength);
+	consoleLogPaths();
+	cc = new CheckCollectionDoubleEntryExtended(300, 300, 5, 5, gData.xStart, gData.yStart); 
+	ccTotal = new CheckCollectionDoubleEntryExtended(300, 300, 5, 5, gData.xStart, gData.yStart);
 	cc.add(gData.xStart, gData.yStart); // So we NEVER visit a room twice
 	var distance = -1;
 	var x, y, newList;
 	var count = 0;
+	var endCountP2 = false;
 	while (cc.list.length > 0) {
 		newList = [];
 		cc.list.forEach(coors => {
@@ -242,21 +186,20 @@ function conclusion_20_2() {
 			if (ccTotal.add(x, y)) {
 				if (distance >= 1000-1) {
 					count++;
-				}
-				if (gData.rooms[y][x-1].wallR == OPEN) {
+				} 
+				if (gData.rooms.getSafe(x-1, y).wallR == OPEN) {    // With the former grid we are always in bounds, so no need to check
 					newList.push({x : x-1, y : y});
 				}
-				if (gData.rooms[y-1][x].wallD == OPEN) {
+				if (gData.rooms.getSafe(x, y-1).wallD == OPEN) {
 					newList.push({x : x, y : y-1});
 				}
-				if (gData.rooms[y][x].wallR == OPEN) {
+				if (gData.rooms.getSafe(x, y).wallR == OPEN) {
 					newList.push({x : x+1, y : y});
 				}
-				if (gData.rooms[y][x].wallD == OPEN) {
+				if (gData.rooms.getSafe(x, y).wallD == OPEN) {
 					newList.push({x : x, y : y+1});
 				}
 			}
-
 		});
 		cc.clean();
 		newList.forEach(coors => {
@@ -266,5 +209,5 @@ function conclusion_20_2() {
 			distance++;
 		}
 	}
-	return count;
+	return p_isPart2 ? count : distance;
 }

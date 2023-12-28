@@ -44,3 +44,12 @@ function findInSortedArray_aux(p_array, p_indexMin, p_indexMax, p_element) {
 	}
 	return findInSortedArray_aux(p_array, iMid+1, p_indexMax, p_element);
 }
+
+// Items x, y;
+function superiorCoors(p_coors1, p_coors2) {
+	return (p_coors1.y > p_coors2.y) || (p_coors1.y == p_coors2.y && p_coors1.x > p_coors2.x);
+}
+
+function equalCoors(p_coors1, p_coors2) {
+	return (p_coors1.y == p_coors2.y && p_coors1.x == p_coors2.x);
+}

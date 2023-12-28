@@ -149,7 +149,7 @@ CheckCollectionDoubleEntryDirectional.prototype.add = function(p_x, p_y, p_dir) 
 // ------------------------
 // Same but with a 3rd dimension associated to fences. Uses {x, y, direction} items.
 
-function CheckCollectionDoubleEntryFencesGeneric(p_xLength, p_yLength, p_defaultValue) {
+/*function CheckCollectionDoubleEntryFencesGeneric(p_xLength, p_yLength, p_defaultValue) {
 	this.listRD = []; // Note : "listRD" and not list like most users to remember that only "right" and "down" directions can be contained here
 	this.defaultValue = p_defaultValue;
 	this.arrayH = [];
@@ -210,9 +210,47 @@ CheckCollectionDoubleEntryFencesGeneric.prototype.clean = function() {
 		}
 	});
 	this.listRD = [];
+} */ // Useless
+
+// ------------------------
+// The "extended array" version !
+function CheckCollectionDoubleEntryExtendedGeneric(p_xLengthBasis, p_yLengthBasis, p_xNumberGrids, p_yNumberGrids, p_xStart, p_yStart, p_defaultValue) {
+	this.list = [];
+	this.defaultValue = p_defaultValue;
+	this.ea = new ExpandableArray(p_xLengthBasis, p_yLengthBasis, p_xNumberGrids, p_yNumberGrids, p_xStart, p_yStart, p_defaultValue)
+} // TODO Review the classic CheckCollectionDoubleEntry initialization (now we have generateDoubleEntryArray) 
+
+CheckCollectionDoubleEntryExtendedGeneric.prototype.addGeneric = function(p_x, p_y, p_value) {
+	if (this.ea.get(p_x, p_y) != p_value) {
+		this.ea.put(p_x, p_y, p_value);
+		this.list.push({x : p_x, y : p_y});
+		return true;
+	}
+	return false;
 }
 
-// Considers that one space that has been added should be removed before general clean.
+CheckCollectionDoubleEntryExtendedGeneric.prototype.clean = function() {
+	this.list.forEach(space => {
+		this.ea.put(space.x, space.y, this.defaultValue);
+	});
+	this.list = [];
+}
+
+CheckCollectionDoubleEntryExtendedGeneric.prototype.get = function(p_x, p_y) { 
+	return this.ea.get(p_x, p_y);
+}
+
+function CheckCollectionDoubleEntryExtended(p_xLengthBasis, p_yLengthBasis, p_xNumberGrids, p_yNumberGrids, p_xStart, p_yStart) {
+	CheckCollectionDoubleEntryExtendedGeneric.call(this, p_xLengthBasis, p_yLengthBasis, p_xNumberGrids, p_yNumberGrids, p_xStart, p_yStart, false);
+}
+CheckCollectionDoubleEntryExtended.prototype = Object.create(CheckCollectionDoubleEntryExtendedGeneric.prototype);
+CheckCollectionDoubleEntryExtended.prototype.constructor = CheckCollectionDoubleEntryExtended;
+
+CheckCollectionDoubleEntryExtended.prototype.add = function(p_x, p_y) {
+	return this.addGeneric(p_x, p_y, true);
+}
+
+/*// Considers that one space that has been added should be removed before general clean.
 CheckCollectionDoubleEntryFencesGeneric.prototype.cleanOne = function(p_x, p_y, p_dir) {
 	switch(p_direction) {
 		case DIRECTION.LEFT : this.arrayH[p_y][p_x-1] = this.defaultValue; break;
@@ -230,4 +268,4 @@ CheckCollectionDoubleEntryFences.prototype.constructor = CheckCollectionDoubleEn
 
 CheckCollectionDoubleEntryFences.prototype.add = function(p_x, p_y, p_dir) {
 	return this.addGeneric(p_x, p_y, p_dir, true);
-}
+}*/ // Useless
