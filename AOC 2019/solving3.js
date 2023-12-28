@@ -66,14 +66,40 @@ function findBestCrossing(p_horiz, p_vert) {
 
 // --------------------
 function conclusion_3_2() {
-	const data1 = makeWireP2(rawData[0]);
-	const data2 = makeWireP2(rawData[1]);
-	var answer1 = findBestCrossingP2(data1.horiz, data2.vert);
-	var answer2 = findBestCrossingP2(data2.horiz, data1.vert);
-	return Math.min(answer1, answer2);
+	const extended = [new ExpandableArray(100, 100, 100, 100, 0, 0, -1), new ExpandableArray(100, 100, 100, 100, 0, 0, -1)];
+	const indexes = [0, 0];
+	const x = [0, 0];
+	const y = [0, 0];
+	const dx = [0, 0];
+	const dy = [0, 0];
+	const remain = [0, 0];
+	var tokens = [rawData[0].split(","), rawData[1].split(",")];
+	var nb;
+	var totalDist = 0;
+	while (true) {
+		totalDist++;
+		for (var i = 0 ; i <= 1 ; i++) {
+			if (remain[i] == 0) {
+				remain[i] = parseInt(tokens[i][indexes[i]].substring(1), 10);
+				switch(tokens[i][indexes[i]].charAt(0)) {
+					case 'L': dx[i] =-1; dy[i] = 0; break;
+					case 'U': dx[i] = 0; dy[i] =-1; break;
+					case 'R': dx[i] = 1; dy[i] = 0; break;
+					case 'D': dx[i] = 0; dy[i] = 1; break;
+				}
+				indexes[i]++;
+			}
+			x[i] += dx[i];
+			y[i] += dy[i];
+			extended[i].put(x[i], y[i], totalDist);
+			if (extended[1-i].get(x[i], y[i]) != -1) {
+				return extended[1-i].get(x[i], y[i]) + totalDist;
+			}
+			remain[i]--;
+		}
+	}
 }
 
-/* Dat epic fail !
 function makeWireP2(p_string) {
 	var horiz = [];
 	var vert = [];
@@ -104,37 +130,3 @@ function makeWireP2(p_string) {
 		vert : vert
 	}
 }
-
-function findBestCrossingP2(p_horiz, p_vert) {
-	var answer = 9999999999; 
-	var x1, x2, y, y1, y2, x;
-	var xx, yy;
-	var previousX = 0;
-	var previousY = 0;
-	var lastX = 0;
-	var lastY = 0;
-	var total;
-	for (var iH = 0 ; iH < p_horiz.length ; iH++) {
-		x1 = p_horiz[iH].x1;
-		x2 = p_horiz[iH].x2;
-		y = p_horiz[iH].y;
-		previousY = 0;
-		for (var iV = 0 ; iV < p_vert.length ; iV++) {
-			y1 = p_vert[iV].y1;
-			y2 = p_vert[iV].y2;
-			x = p_vert[iV].x;
-			if (x >= x1 && x <= x2 && y1 <= y && y2 >= y) {
-				total = previousX + previousY + (p_vert[iV].upToDown ? (y-y1) : (y2-y)) + (p_horiz[iH].leftToRight ? (x-x1) : (x2-x));
-				if (total < answer) {
-					answer = total;
-				}
-			}
-			previousY += y2-y1;
-		}
-		previousX += x2-x1;
-		if (answer <= previousX) {
-			return false;
-		}
-	}
-	return answer;
-}*/

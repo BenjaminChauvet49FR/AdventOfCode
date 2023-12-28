@@ -49,3 +49,8 @@ function digit(p_char) {
 	const d = charToASCIIRelativePosition(p_char, '0');
 	return (d >= 0 && d <= 9 ? d : UTILS_CHAR_INVALID);
 }
+
+function isUppercaseLetter(p_char) {
+	const c = charToASCIIRelativePosition(p_char, 'A');
+	return (c >= 0 && c <= 26);
+}
