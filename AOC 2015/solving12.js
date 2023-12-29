@@ -30,12 +30,11 @@ function conclusion_12_1() {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
 function conclusion_12_2() {
 	const object = JSON.parse(rawData);
-	var test;
-	console.log(sumNotRed(object[0]));
+	/*console.log(sumNotRed(object[0]));
 	console.log(sumNotRed(object[1]));
 	console.log(sumNotRed(object[2]));
 	console.log(sumNotRed(object[3]));
-	console.log(sumNotRed(object[4]));
+	console.log(sumNotRed(object[4]));*/
 	return sumNotRed(object);
 }
 
@@ -52,7 +51,7 @@ function sumNotRed(p_object) {
 		return 0;
 	} else {
 		for (const property in p_object) {
-			if (p_object[property] == "red") {
+			if (p_object[property] === "red") { 
 				return 0;
 			}
 		}
@@ -62,3 +61,4 @@ function sumNotRed(p_object) {
 	}
 	return answer;
 }  // 96566 too low
+// Error that I didn't see coming : ["red"] == red.
