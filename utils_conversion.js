@@ -32,10 +32,10 @@ function numberToBinary(p_number) {
 	var number = p_number;
 	var answer = [];
 	while (number > 0) {
-		answer.push([number % 2 == 1]);
+		answer.push(number % 2 == 1);
 		number = number >> 1;
 	}
-	return answer;
+	return answer.reverse();
 }
 
 // p_number must be between 0 and 2**32-1
