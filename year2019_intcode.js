@@ -154,6 +154,13 @@ function runAndOutputIntcodeProgram(p_reader) {
 	return outputs;
 }
 
+function provideInputAscii(p_reader, p_string) {
+	for (var i = 0 ; i < p_string.length ; i++) {
+		provideInput(p_reader, p_string.charCodeAt(i));
+	}
+	provideInput(p_reader, "\n".charCodeAt(0));
+}
+
 //--------------------------
 
 function getIntCodeParameters(p_opcode, p_nbParams, p_reader, p_writeInsteadOfRead) {
