@@ -87,3 +87,16 @@ function log3DArray(p_3DArray) {
 	"----------", "#", "."
 	);
 }
+
+function logAsciiArray(p_output) {
+	var data = [[]]; 
+	var str = "";
+	for (var i = 0 ; i < p_output.length ; i++) {
+		if (String.fromCharCode(p_output[i]) != "\n") {				
+			str += String.fromCharCode(p_output[i]);
+		} else {
+			console.log(str);
+			str = "";
+		}
+	}
+}
