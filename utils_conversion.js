@@ -38,6 +38,16 @@ function numberToBinary(p_number) {
 	return answer.reverse();
 }
 
+function bigIntToBinary(p_bigInt) {
+	var number = p_bigInt;
+	var answer = [];
+	while (number > 0n) {
+		answer.push(number % 2n == 1n);
+		number = number >> 1n;
+	}
+	return answer.reverse();
+}
+
 // p_number must be between 0 and 2**32-1
 function numberToHexadecimal(p_number) {
 	const digits = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];

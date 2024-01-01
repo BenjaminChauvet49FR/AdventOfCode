@@ -99,3 +99,49 @@ function lcm_all(p_list) {
 	}
 	return answer;
 }
+
+// Bring coefs u,v such that p_a*u+p_v*b = gcd...
+function findCombinationGCDBigInt(p_a, p_b) {
+	if (p_a < 0) {
+		const answer = findCombinationGCDBigInt(-p_a, p_b);
+		return [-answer[0], answer[1]];
+	}
+	if (p_b < 0) {
+		const answer = findCombinationGCDBigInt(p_a, -p_b);
+		return [answer[0], -answer[1]];
+	}
+	if (p_a < p_b) {
+		const answer = findCombinationGCDBigInt(p_b, p_a);
+		return [answer[1], answer[0]];		
+	}
+	return findCombinationGCDBigInt_aux(p_a, p_b);
+}
+
+// Note : we assume a > b && b > 0
+function findCombinationGCDBigInt_aux(p_a, p_b) {
+	var listRemainders = [];
+	var a = p_a;
+	var b = p_b;
+	var quot, nb;
+	var listA = [1n, 0n];
+	var listB = [0n, 1n];
+	var listNB;
+	do {
+		quot = a/b;
+		nb = a % b;
+		a = b;
+		b = nb;
+		// So... nb = a[Laa, Lab] - quot*b[Lba, Lbb]
+		listNB = [listA[0]-quot*listB[0], listA[1]-quot*listB[1]];
+		listA = listB;
+		listB = listNB;
+	} while (nb > 0n);
+	return listA;
+}
+
+function inverseModBigInt(p_a, p_modulator) {
+	var k = findCombinationGCDBigInt(p_a, p_modulator)[0];
+	if (k < 0n)
+		k += p_modulator;
+	return k;
+}
