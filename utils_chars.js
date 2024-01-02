@@ -54,3 +54,8 @@ function isUppercaseLetter(p_char) {
 	const c = charToASCIIRelativePosition(p_char, 'A');
 	return (c >= 0 && c <= 26);
 }
+
+function isLowercaseLetter(p_char) {
+	const c = charToASCIIRelativePosition(p_char, 'a');
+	return (c >= 0 && c <= 26);
+}
