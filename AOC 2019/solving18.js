@@ -1134,4 +1134,5 @@ function autoCheckKeysAndDistance(p_arrayKeys) {
 // -----------------------------
 
 // Claude's chain : [6, 9, 25, 8, 3, 21, 19, 11, 15, 23, 22, 17, 20, 5, 0, 24, 12, 1, 2, 10, 16, 7, 14] ; best = 5964 (or so I think). Found in nearly 3 hours. Phew ! 
+// Edit : gjzidvtlpxwruafymbcskqheno found humanly matches well.
 // My best : 3962

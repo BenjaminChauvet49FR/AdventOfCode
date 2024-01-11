@@ -12,7 +12,7 @@ Clé w ou x : l'une d'elles est triviale
 
 Analyser le cas des clés b et h
 
-Clés e,n,s : inutieles
+Clés e,n,s : inutiles
 
 Algorithme "glouton" : si on peut prendre TOUTES les clés à un noeud donné et repartir, il suffit de prendre la somme des poids de ce noeud
 
@@ -31,3 +31,57 @@ la k, la o, la q, la t (peu de sens pour elle), la w, la x
 Et dans mon propre labyrinthe : 
 m*, o*, t, u, w, y
 Permettez-moi d'en douter pour ces 2 là !
+
+==============
+
+Ordre des portes et clés (sans les clés inutiles) :
+NO 
+(gj)|(LPrDVu(f|aYmbHo))
+NE
+(zidvUFA(y|Mc))
+SE
+(t)|(Il(p)|(G(w|x)))
+SO
+(Zk)|((RCBh)|(Jq))
+
+Simplifications possibles : 
+-d est inutile (d et v obtenues consécutivement et D et V portes ensemble)
+-g et j sont équivalentes (on ne va pas prendre g sans j quand même !)
+-r est inutile (R et B ensemble, r sur le chemin de b)
+-u est inutile (U et F ensemble, u sur le chemin de f)
+-f et a sont équivalentes (accessible de la même maniere, leurs portes sont ensemble) : faire disparaître f et F
+-l est inutile (L et P ensemble, l sur le chemin de p
+
+Simplifications (fait apparaître un J doublé) :
+NO 
+(j)|(PVaYmbHo)
+NE
+(zivA(y|Mc))
+SE
+(t)|(I(p)|(J(w|x)))
+SO
+(Zk)|((CBh)|(Jq))
+
+-m,b : clé b nécessaire pour clé h, inutile de s'arrêter.
+-z,i,v : clé v nécessaire pour clé a, inutile de s'arrêter.
+
+Première chaîne de clés : zivpaymbcho
+Mieux : zivtpafymbcho
+(clés inutiles : delnrsu)
+Restent 6 clés : gj, q, w, x, k, 
+w et x : les prendre ensemble, la plus courte d'abord (j'ai pas compté mais ça doit être x)
+gj : à prendre avant ou après p ?
+k avant q c'est sûr (éloignement)
+Donc 3 triplets : kq, gj, xw
+
+Chaîne auto-complétée avec les clés inutiles  :
+zidvtlpruafymbcheno (s à rajouter à k)
+
+q avant h c'est sûr (on doit déjà avoir pris j)
+
+zidvtlpruafymbcskqheno
+
+Donc :
+gjzidvtlpxwruafymbcskqheno
+OU :
+zidvtlprugjafymbcskqhenoxw

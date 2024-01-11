@@ -145,3 +145,18 @@ function inverseModBigInt(p_a, p_modulator) {
 		k += p_modulator;
 	return k;
 }
+
+// Find a number N such that N % p[i][0] == p[i][1] for all i in the list (p[i][1] between 0 and p[i][0]-1 inclusive every time)
+// CRT([[5,1], [6,4]]) = 16
+// We assume this is possible. Don't try this with [[35, 7], [14, 1]] as the first one involves that we are looking for a multiple of 7 and not the second one
+function chineseRemainderTheorem(p_listCouples) {
+	var answer = 0;
+	var coef = 1;
+	for (var i = 0 ; i < p_listCouples.length ; i++) {
+		while ((answer - p_listCouples[i][1]) % p_listCouples[i][0] != 0) {
+			answer += coef;
+		}		
+		coef = lcm(coef, p_listCouples[i][0]);
+	}
+	return answer % coef;
+}

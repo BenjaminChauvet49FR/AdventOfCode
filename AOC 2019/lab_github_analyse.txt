@@ -1,0 +1,41 @@
+1 : AgIY(n)|(MBW(v)|(z))
+2 : R(u)|((dpCNk)|(xJt))
+3 : (a)|((GOi)|((c)|((ym((h)|(Qb))|(wVslf)))))
+4 : r(o)|(UDXPeKjTHq)
+
+Simplifications tentantes : 
+1 : AgIYnMBWzv
+2 : Ru(dpCNk)|(xJt)
+3 : a((GOi)|(cym(hQb)|(wVslf)))   
+4 : roUDXPeKjTHq
+
+(note pour 3 : rien n'empêche de récupérer h avant b, car même si h est terminale, b est nécessaire pour une autre clé de ce quadrant (et éloignement de h...) .
+
+Retraits clés inutiles (pas de porte correspondante) : eflsz
+
+Simplifications :
+1 : AgIYnMBWv
+2 : Ru(dpCNk)|(xJt)
+3 : a((GOi)|(cym(hQb)|(wVf)))   
+4 : roUDXPKjTHq
+
+4 : s'arrêter à r ? Non, o nécessaire pour débloquer i -> n -> k
+Pas d'arrêt à u ni à d (sur le chemin de p)
+Pas d'arrêt à c (y nécessaire pour débloquer n)
+Pas d'arrêt à m (w est derrière, M et W ensemble)
+Pas d'arrêt à y (h nécessaire pour ouvrir Q + w pour ouvrir V) (il fallait bien que h et w soient nécessaires toutes deux !) (pas évident celui-là)
+Pas d'arrêt à p (sur le chemin de k)
+
+Version simplifiée avec "les clés où on s'arrête pas" supprimées et leurs portes remplacées (ou supprimées si redondantes comme UDP) :
+1 : AgIHnBv
+2 : O(Nk)|(xJt)
+3 : a(GOi)|((hQb)|(wVf))
+4 : oXKjTHq
+
+k et x équivalentes, on ne peut pas prendre x sans j :
+2 : ONxJt
+
+Chaîne directe de clés : 
+aginkjtqbvf
+Autres chaînes : 
+onxjt
