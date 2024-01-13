@@ -75,7 +75,7 @@ function fallDown(p_array, p_ir) { // Index of rock
 			}
 		}
 		if (canPush) {
-			for (i = 0 ; i < coorRock.length ; i++ && canPush) { // Make a "var i"
+			for (i = 0 ; i < coorRock.length ; i++ && canPush) {
 				coorRock[i].x += dx;
 			}
 		}
@@ -144,7 +144,7 @@ function findCycle() {
 		}
 		cleanupIfNeeded();
 		numberCyclesPassed++;
-		if (firstShapeCycleThisGust[globalData.indexGasToPush] != -1) {
+		if (firstShapeCycleThisGust[globalData.indexGasToPush] != -1) { // Well, there was no periodic state searched here
 			return {
 				numberOfCyclesNow : numberCyclesPassed,
 				numberOfCycles1stObserved : firstShapeCycleThisGust[globalData.indexGasToPush],

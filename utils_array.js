@@ -115,3 +115,20 @@ function generateNumericArray(p_min, p_max) {
 	}
 	return answer;
 }
+
+
+function copyDoubleEntryArray(p_array) {
+	return generateArrangedDoubleEntryArray(p_array[0].length, p_array.length, function(x,y) {return p_array[y][x]});
+}
+
+// Arrays are supposed of compatible sizes
+function testEqualityDoubleEntryArray(p_array1, p_array2) {
+	for (var y = 0 ; y < p_array1.length ; y++) {
+		for (var x = 0 ; x < p_array1[y].length ; x++) {
+			if (p_array1[y][x] != p_array2[y][x]) {
+				return false;
+			}
+		}
+	}
+	return true;
+}

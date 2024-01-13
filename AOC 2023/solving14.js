@@ -143,23 +143,36 @@ function conclusion_14_2() {
 	}
 	var previousIter = -1;
 	const NB_GEN = 1000000000;
-	var treeOfSeenConfigs = {branches : []};
+	var couple = {period : -1, first : 300}
+	var savedState = [];
+	var nbTries = 300;
 	for (var i = 0 ; i < NB_GEN ; i++) {
 		rollOneCycle(field);
 		
 		// Trying to jump through time...
-		if (previousIter == -1) {			
-			previousIter = addNewConfig(treeOfSeenConfigs, i, field);
-			if (previousIter != -1) {
-				var periodDuration = i-previousIter;
-				while(periodDuration < 100) {
-					periodDuration *=2; // 7 is too few
-				}
-				while (i < NB_GEN-periodDuration) {
-					i += periodDuration; 
+		if (couple.period == -1) {
+			if (i == (couple.first + nbTries)) {
+				couple.first = i;
+				nbTries *= 2; 
+			}
+			if (i == couple.first) {
+				savedData = copyDoubleEntryArray(field);
+			} else if (i > couple.first) {
+				if (testEqualityDoubleEntryArray(field, savedData)) {					
+					// Fast forward !
+					couple.period = i-couple.first;
+					var speedUp = 256;
+					while (speedUp >= 1) {						
+						while (i < NB_GEN-couple.period*speedUp) {
+							i+= couple.period*speedUp;
+							// No score to increase in this problem
+						}
+						speedUp /= 2;
+					}
 				}
 			}
 		}
+
 		
 	}
 	
@@ -175,7 +188,7 @@ function conclusion_14_2() {
 		weight++;
 	}
 	return answer;
-}
+} // 104815
 
 function rollNorthLastRow(p_field) {
 	var h;
@@ -244,45 +257,5 @@ function rollOneCycle(p_field) {
 				}
 			}
 		}
-	}
-}
-
-// TODO : May be generalizable ; I copy-pasted it from 2018-18. However, I want to handle more problems with trees before I can do a great copy-paste.
-// So here, we sort land configurations by the time they were first observed in order to see if any land config appears twice (we are looking for that period !). 
-// The tree is actually of depth (nb of spaces + 1), as the leaf contains the iteration
-function addNewConfig(p_treeOfConfigs, p_iteration, p_data) {
-	var newBranch = {subtree : p_treeOfConfigs, actuallyNew : false};
-	var x, y;
-	for (y = 0 ; y < p_data.length ; y++) { // Run all spaces. 
-		for (x = 0 ; x < p_data[0].length ; x++) {
-			if (p_data[y][x] != '#') {				
-				newBranch = tryToInsert(newBranch.subtree, p_data[y][x]);
-			}
-		}
-	}
-	if (newBranch.actuallyNew) { // We have run (nb spaces) but there is still one leaf to insert... or to read
-		tryToInsert(newBranch.subtree, p_iteration); 
-		return -1;
-	} else {
-		return newBranch.subtree.branches[0].node; 
-	}
-}
-
-// Tries to insert an array in a subtree (imbricated arrays)
-// If successful, return {true, singleton of the new tree}
-// Otherwise, return the subtree containing it
-function tryToInsert(p_subtree, p_eltToAdd) {
-	for (var i = 0 ; i < p_subtree.branches.length ; i++) {
-		if (p_subtree.branches[i].node == p_eltToAdd) {
-			return {actuallyNew : false, subtree : p_subtree.branches[i]}
-		} 
-	}
-	p_subtree.branches.push({ 
-		node : p_eltToAdd,
-		branches : []
-	});
-	return {
-		actuallyNew : true,
-		subtree : p_subtree.branches[p_subtree.branches.length-1]
 	}
 }
