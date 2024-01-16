@@ -53,3 +53,13 @@ function superiorCoors(p_coors1, p_coors2) {
 function equalCoors(p_coors1, p_coors2) {
 	return (p_coors1.y == p_coors2.y && p_coors1.x == p_coors2.x);
 }
+
+// Simple comparison of arrays with numeric values (same length supposed !)
+function compareArrays(p_array1, p_array2) {
+	for (var i = 0 ; i < p_array1.length ; i++) {
+		if (p_array1[i] > p_array2[i]) {return 1;}
+		if (p_array1[i] < p_array2[i]) {return -1;}
+	}
+	return 0;
+}
+

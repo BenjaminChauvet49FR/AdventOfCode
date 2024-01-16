@@ -48,3 +48,43 @@ function getIndexInListWithAdd(p_list, p_elt) {
 	p_list.push(p_elt);
 	return p_list.length-1;
 }
+
+// p_comparison : comparison function(a, b) such that it returns > 0 if a > b, < 0 if a < b, with possible equalities
+function getIndexInListWithAddArranged(p_ascendingList, p_element, p_comparison) {
+	var iMin = 0;
+	var iMax = p_ascendingList.length;	
+	var iMed;
+	var comp;
+	while (iMax - iMin > 4) {
+		iMed = Math.floor((iMin+iMax)/2);
+		comp = p_comparison(p_element, p_ascendingList[iMed]);
+		if (comp > 0) {
+			iMin = iMed+1;
+		} else if (comp < 0) {
+			iMax = iMed;
+		} else {
+			return iMed;
+		}
+	}  
+	// They're close enough !
+	for (var i = iMin ; i < iMax ; i++) {
+		comp = p_comparison(p_element, p_ascendingList[i]);
+		if (comp < 0) {
+			p_ascendingList.splice(i, 0, p_element);
+			return i;
+		} else if (comp == 0) {
+			return i;
+		}
+	}
+	p_ascendingList.splice(i, 0, p_element);
+	return i;
+}
+
+/*
+var arr = [];
+for (var i = 0 ; i < 100 ; i++) {
+	getIndexInListWithAddArranged(arr, [randomNumber(0, 100), randomNumber(0, 100)], compareArrays);
+}
+getIndexInListWithAddArranged(arr, [50, 50], compareArrays);
+getIndexInListWithAddArranged(arr, [50, 50], compareArrays);
+*/

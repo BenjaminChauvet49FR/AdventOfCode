@@ -1,7 +1,7 @@
 const rawData7 = [3,8,1001,8,10,8,105,1,0,0,21,34,55,68,85,106,187,268,349,430,99999,3,9,1001,9,5,9,1002,9,5,9,4,9,99,3,9,1002,9,2,9,1001,9,2,9,1002,9,5,9,1001,9,2,9,4,9,99,3,9,101,3,9,9,102,3,9,9,4,9,99,3,9,1002,9,5,9,101,3,9,9,102,5,9,9,4,9,99,3,9,1002,9,4,9,1001,9,2,9,102,3,9,9,101,3,9,9,4,9,99,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,99,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,99];
 
 function conclusion_7_1() {
-	const allPerms = generateAllPermutations();
+	const allPerms = generateAllPermutations(5);
 	for (var i = 0 ; i < allPerms.length ; i++) {
 		val = tryCombination(allPerms[i]);
 		if (i == 0) {
@@ -10,7 +10,7 @@ function conclusion_7_1() {
 			best = Math.max(best, val);
 		}
 	}
-	return best;
+	return best; // 255840
 }
 
 function tryCombination(p_list) {
@@ -26,35 +26,10 @@ function tryCombination(p_list) {
 	return Number(itinerant);
 }
 
-
-// TODO : generalizable ! (but will it serve again ?)
-function generateAllPermutations() {
-	var taken = [false, false, false, false, false];
-	var answer = [];
-	generateAllPermutations_aux([], taken, answer);
-	return answer;
-}
-
-function generateAllPermutations_aux(p_currentList, p_taken, p_accumulator) {
-	if (p_currentList.length == 5) {
-		p_accumulator.push(p_currentList.slice());
-	} else {
-		for (var i = 0 ; i < 5 ; i++) {
-			if (!p_taken[i]) {
-				p_taken[i] = true;
-				p_currentList.push(i);
-				generateAllPermutations_aux(p_currentList, p_taken, p_accumulator);
-				p_currentList.pop(i);
-				p_taken[i] = false;
-			}
-		}
-	}
-}
-
 // -----------------
 
 function conclusion_7_2() {
-	const allPerms = generateAllPermutations();
+	const allPerms = generateAllPermutations(5);
 	for (var i = 0 ; i < allPerms.length ; i++) {
 		for (var j = 0 ; j < 5 ; j++) {
 			allPerms[i][j] += 5;
@@ -66,7 +41,7 @@ function conclusion_7_2() {
 			best = Math.max(best, val);
 		}
 	}
-	return best;
+	return best; // 84088865
 }
 
 // So, 56789 disordonated

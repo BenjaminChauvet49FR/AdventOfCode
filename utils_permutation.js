@@ -96,3 +96,31 @@ s.ban(5,0);
 s.ban(5,4);
 s.arrayImage;
 */
+
+
+// ---------------
+// Now, it's about listing all permutations !
+
+// Generate all permutations of [0, 1, ..., p_length-1]
+function generateAllPermutations(p_length) {
+	var taken = generateArray(p_length, false);
+	var answer = [];
+	generateAllPermutations_aux([], taken, answer, p_length);
+	return answer;
+}
+
+function generateAllPermutations_aux(p_currentList, p_taken, p_accumulator, p_length) {
+	if (p_currentList.length == p_length) {
+		p_accumulator.push(p_currentList.slice());
+	} else {
+		for (var i = 0 ; i < p_length ; i++) {
+			if (!p_taken[i]) {
+				p_taken[i] = true;
+				p_currentList.push(i);
+				generateAllPermutations_aux(p_currentList, p_taken, p_accumulator, p_length);
+				p_currentList.pop(i);
+				p_taken[i] = false;
+			}
+		}
+	}
+}

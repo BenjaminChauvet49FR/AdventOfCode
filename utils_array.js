@@ -132,3 +132,12 @@ function testEqualityDoubleEntryArray(p_array1, p_array2) {
 	}
 	return true;
 }
+
+function testEqualityArray(p_array1, p_array2) {
+	for (var x = 0 ; x < p_array1.length ; x++) {
+		if (p_array1[x] != p_array2[x]) {
+			return false;
+		}
+	}
+	return true;
+}
