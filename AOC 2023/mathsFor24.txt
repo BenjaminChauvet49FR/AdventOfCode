@@ -1,3 +1,5 @@
+Part 1 : 
+
 Discriminator : 
 ax+by=e
 cx+dy=f
@@ -20,3 +22,38 @@ c(de-bf)-d(ce-af) = f(ad-bc) ?
 If (ad-bc) == 0, either all or nothing depending on a,b,c,d,e,f :
 y(bc-ad) = ce-af : we need ce = af
 x(bc-ad) = bf-de : we need bf = de
+
+
+
+
+
+Looking for something part 2 :
+
+// Okay. We have T0 and T1 with T1 != T0
+/* 
+So : point on line 0 P'0 is P0 + T0V0 ; point on line 1 P'1 is P1 + T1V1
+Desired line that is in "P'0 in T0 and P'1 in T1" is such that :
+p+T0v = P'0 ; p+T1v = P'1
+v = (P'1-P'0)/(T1-T0)
+p = P'0-vT0
+
+Line = p+tv, t real.
+We need to have p and v such that it intersects p2+tV2.
+
+So : 
+We need t0 and t1 such that T EXIST SUCH THAT (p+Tv == p2 + Tv2)
+p2-p = T(v2-v) (or T2/T1...)
+
+Remember : 
+v = (P1+v1T1-P0-v0T0)/(T1-T0)
+p = P0+v0T0 - (P1+v1T1-P0-v0T0)T0/(T1-T0)
+
+p2-( P0+v0T0 - (P1+v1T1-P0-v0T0)T0/(T1-T0) ) colinear with 
+v2- (P1+v1T1-P0-v0T0)/(T1-T0)
+
+(T1-T0)(p2-P0-v0T0) - (P1+v1T1-P0-v0T0)T0 colinear with
+(T1-T0)v2 - (P1+v1T1-P0-v0T0)
+
+aT1 + bT0**2 + cT0 + dT1T0 colinear with 
+eT0 + fT1 +g
+*/

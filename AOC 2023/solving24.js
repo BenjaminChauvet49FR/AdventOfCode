@@ -309,10 +309,11 @@ const rawDataExample = [
 ];
 
 
-const gData = [];
+var gData = [];
 
 function init() {
 	var tokens;
+	gData = [];
 	for (var i = 0 ; i < rawData.length ; i++) {
 		tokens = rawData[i].split(/,|@/);
 		gData.push({position : 
@@ -396,13 +397,38 @@ function crossingPaths(p_hs1, p_hs2) {
 }
 
 // --------------------
+// Now, let the part 2 begin !
+// This solution is about finding values of t0 and t1 such that the stone hits hailstone [gInd0] and hailstone [gInd1] at times t0 and t1 respectively (indexes of hailstones given)
+// At first I changed the values of t0 and t1 manually and had some operations : they are above the conclusion_24_2 function before it got automatized.
+// (the manual version has a suffix _lol below, it "worked wonders"), 
+// but then I autmoatized it. Any functions created for the automatization part are below conclusion_24_2.
+
+gInd0 = 0; // Real : 383159719021 ; Fake : 168565376037.1785
+gInd1 = 1;
+gInd2 = 2;
+// getLine(383159719021,173838346972) = correct answer
+// getLine(173838346972,383159719021) = (-238, -472, -151)
+
+/*gInd0 = 3; // 121 : 971305391850 ; 3 : 531549109510 (I just looked not right)
+gInd1 = 4; // tcol = 0.0019729355289*M
+gInd2 = 5; */ // Roots 531549109510 and 1623608401244.078 and... that's it.
+// Speed if I reverse 4 and 3 : -71, -137, 1001...
+
+/*gInd0 = 121; //getLine(M*0.009713053, M*.....) is winner ! For 12 : 0.0064849000695
+gInd1 = 1;
+gInd2 = 4;*/
+
+gInd0 = 13; 
+gInd1 = 47;
+gInd2 = 11;
+M = 100000000000000;
 
 // Generate the straight line from the point (t1) in path 1 and (t2) in path 2 (t2 != t1), identified by P0 = time in t0, and P1 = time in t1  (make it great)
 function getLine(p_tP0, p_tP1) {
-	const p0 = gData[0].position;
-	const v0 = gData[0].speed;	
-	const p1 = gData[1].position;
-	const v1 = gData[1].speed;
+	const p0 = gData[gInd0].position;
+	const v0 = gData[gInd0].speed;	
+	const p1 = gData[gInd1].position;
+	const v1 = gData[gInd1].speed;
 	var p0New = [];
 	var p1New = [];
 	var vNew = [];
@@ -416,48 +442,17 @@ function getLine(p_tP0, p_tP1) {
 		pFinal.push(p0New[i]-vNew[i]*p_tP0);
 	}
 	return {position : pFinal.slice(), speed : vNew.slice()}
-}
-
-// Okay. We have T0 and T1 with T1 != T0
-/* 
-So : point on line 0 P'0 is P0 + T0V0 ; point on line 1 P'1 is P1 + T1V1
-Desired line that is in "P'0 in T0 and P'1 in T1" is such that :
-p+T0v = P'0 ; p+T1v = P'1
-v = (P'1-P'0)/(T1-T0)
-p = P'0-vT0
-
-Line = p+tv, t real.
-We need to have p and v such that it intersects p2+tV2.
-
-So : 
-We need t0 and t1 such that T EXIST SUCH THAT (p+Tv == p2 + Tv2)
-p2-p = T(v2-v) (or T2/T1...)
-
-Remember : 
-v = (P1+v1T1-P0-v0T0)/(T1-T0)
-p = P0+v0T0 - (P1+v1T1-P0-v0T0)T0/(T1-T0)
-
-p2-( P0+v0T0 - (P1+v1T1-P0-v0T0)T0/(T1-T0) ) colinear with 
-v2- (P1+v1T1-P0-v0T0)/(T1-T0)
-
-(T1-T0)(p2-P0-v0T0) - (P1+v1T1-P0-v0T0)T0 colinear with
-(T1-T0)v2 - (P1+v1T1-P0-v0T0)
-
-aT1 + bT0**2 + cT0 + dT1T0 colinear with 
-eT0 + fT1 +g
-*/
-
+} // x(t) = x0+t0v0+(t-t0)(x1+v1t1-x0-v0t0)/(t1-t0) : if t and t1 are fixed and t0 moves, degree 2 above and degree 1 below
+// v : degree 1 above, degree 1 below
 
 // Draw a (x0, x1) line and see how the (y,z) from that line and the (y,z) from the 2nd hailstone are relative to each other when at the same time T both xs are equal. (no hailstone has a null x speed)
 function inXFromLineDelta(p_tP0, p_tP1) { 
 	var l = getLine(p_tP0, p_tP1);
-	var l2 = gData[2];
+	var l2 = gData[gInd2];
 	var vL = l.speed;
 	var pL = l.position;
 	var v2 = l2.speed;
-	var p2 = l2.position;
-	
-	
+	var p2 = l2.position;	
 	// So x = pxL + t*vxL = pX2 + t*vX2 
 	// t = (pxL-pX2)/(vX2-vXL)
 	if (vL[0] != v2[0]) {		
@@ -466,7 +461,7 @@ function inXFromLineDelta(p_tP0, p_tP1) {
 		return [p2[1]+t*v2[1] - (pL[1]+t*vL[1]), p2[2]+t*v2[2] - (pL[2]+t*vL[2])]; // Difference between zs, difference between ys
 	} else {
 		return [];
-	}
+	} // if t0 moves, expressions are (in t0 rational) : 2 deg above, 1 deg below
 }
 
 function calculateRatioYZForT0(p_tP0, p_tP1Ref1, p_tP1Ref2) {
@@ -486,105 +481,7 @@ function calculateRatioYZForT0(p_tP0, p_tP1Ref1, p_tP1Ref2) {
 		}
 		return ((dYdZref2[0]/dYdZref1[0])/(dYdZref2[1]/dYdZref1[1])); // If it is close to 1, our t0 is correct. 
 	}
-}
-
-function conclusion_24_2_then() {
-	rawData = rawDataOfficial;
-	init();
-	// Let's try all t0, t1 couples such that we have one couple that crosses the third line !
-	// Once we have the correct "t0", when we make t1 change, DZ is proportional with DY (assuming values for t0 and t1 are correct). 
-	// (See below)
-	
-	// I'll make a "plus or minus" to get the value... though idk what is the best position.
-	// Now, let's assume we have t0. Look for t1.
-	// Easy but I'm too lazy to program it.
-	console.log("try M = 100000000000000; inXFromLineDelta(0, M); calculateRatioYZForT0(0, M, 5*M);");
-	// calculateRatioYZForT0(M/10000, M, 5*M); : 1.057
-	// calculateRatioYZForT0(M/1000, M, 5*M); : 0.978
-	// calculateRatioYZForT0(M/100, M, 5*M); : 1.033
-	// calculateRatioYZForT0(0.975*M, M, 5*M) : 1.025
-	// calculateRatioYZForT0(4.9999*M, M, 5*M) : 1.0250421699481824
-	// calculateRatioYZForT0(5.0001*M, M, 5*M) : 1.0250421697404817
-	// So Once we have something decreasing falling to 1.025...  it won't be 1.
-	// We need to see where it oscillates I guess.
-}
-
-// With the example :
-// Let's assume t0, t1 are between 0 and 100 each.
-// First, t0 = 0. t1 = 10, t2 = 20 : (10.222, 2.666) and (10.631, 2.31) : obviously not linear. z1/y1 = 0.87 ; z2/y2 = 1.03  ; (z1/y1)/(z2/y2) < ! 
-// Then, t0 = 50. t1 = 10, t2 = 20 : (-123.111, -86.222) and (-131.473, -92.421) : not linear, but must we look below or above for t1 ? I'd say "in between" as : z2/z1 = 1.12 ; y2/y1 = 1.08
-
-// Not really evolutive !
-// By the way, still with the example data :
-// calculateRatioYZForT0(3.83333, 10, 50) : -35352.67920928439
-// calculateRatioYZForT0(3.83334, 10, 50) : 17677.623814129467
-// I assume setting a t0 = 23/6 is critical.
-// calculateRatioYZForT0(1.08333, 10, 50) : 118687.825804383
-// calculateRatioYZForT0(1.08334, 10, 50) : -59342.47719756665.
-// I assume t0 = 13/12 is also critical.
-// So we have sthg > 1, sthg < 0, sthg > 0 that intersects 1 and then falls before climbing to 1 again... okay ?
-
-// Let's see if it also apply with the official data. We already have :
-// calculateRatioYZForT0(M/10000, M, 5*M); : 1.057
-// calculateRatioYZForT0(M/1000, M, 5*M); : 0.978
-
-// calculateRatioYZForT0(5*M/10000, M, 5*M); // 1.4186593248213124
-// calculateRatioYZForT0(5.5*M/10000, M, 5*M); //-1.6987747477910595
-// calculateRatioYZForT0(6*M/10000, M, 5*M); 0.707567435378571
-// calculateRatioYZForT0(5.75*M/10000, M, 5*M); 0.4612866721406848
-// calculateRatioYZForT0(16*M/10000, M, 5*M); 0.9989519858182205
-// calculateRatioYZForT0(18*M/10000, M, 5*M); 1.0011229003284121
-// calculateRatioYZForT0(17*M/10000, M, 5*M); 1.000156795969393
-// calculateRatioYZForT0(169*M/100000, M, 5*M); 1.000048027239764
-// calculateRatioYZForT0(168*M/100000, M, 5*M); 0.9999368294724568
-// calculateRatioYZForT0(16856*M/10000000, M, 5*M); 0.9999994030384413
-// calculateRatioYZForT0(16857*M/10000000, M, 5*M); 1.0000005133935645
-// calculateRatioYZForT0(16857*M/10000000, M, 5*M); 1.0000005133935645
-//calculateRatioYZForT0(168565000000, M, 5*M); 0.99999995824669
-//calculateRatioYZForT0(168566000000, M, 5*M); 1.0000000692809756
-/*
-calculateRatioYZForT0(168565376037.2, M, 5*M);
-1.0000000000000004
-calculateRatioYZForT0(168565376037, M, 5*M);
-0.9999999999999805
-*/
-// Let's assume the value for T0 is... well, 168565376037.1785
-// So : 
-// T0 = 168565376037.1785
-// inXFromLineDelta(T0, M)
-// What if there were another T0 ?
-
-/*
-calculateRatioYZForT0(383159700000, M, 5*M); 
-1.000000001486473
-calculateRatioYZForT0(383159800000, M, 5*M); 
-0.9999999936715576
-...
-T0 = 383159719020.99
-
-inXFromLineDelta(T0, M*1)
-(2) [-266426344436976.88, 39686670040471.31]
-inXFromLineDelta(T0, M*0)
-(2) [82217438358939.53, -12247048446419.844]
-... 
-inXFromLineDelta(T0, 173838400000)
-(2) [-19198823.0625, 2859847.65625]
-inXFromLineDelta(T0, 173838300000)
-(2) [17006232.9375, -2533230.5625]
-
-inXFromLineDelta(T0, 173838346971.9)
- [29, 0.96875]
-T1 = 173838346971.9
-
-So now, the final (lol !) answer :
-getLine(T0, T1)
-*/
-
-/*position
-(3) [118378223846878.56, 228996474589387.06, 259397320329532.72] 
-(3) [262.99999999990933, 119.9999999998333, 20.999999999906173]
-The speed seems to be 263, 120, 21. But what is the exact position ? 
-*/
+} // So : (deg2/deg1)/(deg2/deg1) = deg3/deg3
 
 function inXFromLineDeltaAccuracy(p_p1, p_p2, p_p3, p_v1, p_v2, p_v3) { 
 	var l = {position : [p_p1, p_p2, p_p3], speed : [p_v1, p_v2, p_v3]};
@@ -617,6 +514,283 @@ function inXFromLineDeltaAccuracy(p_p1, p_p2, p_p3, p_v1, p_v2, p_v3) {
 }
 
 function conclusion_24_2() {
+	rawData = rawDataOfficial;
+	init();
+	var unluckyT0 = 0;
+	var unluckyT1 = 0;
+	var unluckyT0andT1 = 0;
+	// Let's try all t0, t1 couples such that we have one couple that crosses the third line !
+	// Once we have the correct "t0", when we make t1 change, DZ is proportional with DY (assuming values for t0 and t1 are correct). 	
+	var t0, t1;
+	var best = {}
+	while (true) {
+		t1 = -1;
+		while (t1 == -1) {		
+			// Select random indexes
+			/*gInd0 = 196;
+			gInd1 = 204;
+			gInd2 = 55;*/ 
+			gInd0 = randomNumber(0, gData.length-1);
+			gInd1 = randomNumber(0, gData.length-1);
+			gInd2 = randomNumber(0, gData.length-1);
+			if (gInd1 == gInd0) {
+				gInd1++;
+				gInd1%=gData.length;
+			}
+			while (gInd2 == gInd1 || gInd2 == gInd0) {
+				gInd2++;
+				gInd2%=gData.length;			
+			}
+			//console.log(gInd0+","+gInd1+","+gInd2);
+			// First, find a correct approximation of t0 in power of tens.
+			var m = M;
+			var foundStep = false;
+			while (m > 1000 && !foundStep) {			
+				m /= 10;
+				foundStep = findTheTensForT0(m); // not monotonous between m and 10*m ?
+			}
+			if (m == 1000) {
+				unluckyT0++;
+				continue; // Unlucky (maybe the function was monotonous when it shouldn't have been). Try again.
+			}
+			// Now, go after t0 and t1.
+			var m2, m3;
+			for (m2 = m ; m2 < 10*m ; m2 += m/100) {
+				t0 = findGoodValueForT0(m2, m2+m/100);
+				if (t0 != -1) {
+					for (m3 = m/10 ; m3 < m*100 ; m3 += m/1000) {					
+						t1 = findGoodValueForT1(t0, m3, m3+m/1000);
+						if (t1 != -1) {
+							break; // Found
+						}
+						// False t0 ? Try for another one !
+					}
+				}
+				if (t1 != -1) {
+					break; // Found
+				}
+			}
+			if (m2 == 10*m) {
+				unluckyT1++;
+				continue; // t1 not in the bounds of t0 : unlucky. Try again.
+			}
+		}
+		// Great ! We have good approximations of t0 and t1, with almost integer values of speed. But we should minimize the approximation as much as possible.
+		var line = getLine(t0, t1);
+		var speed = []; // Definitive !
+		var position = [];
+		for (var i = 0 ; i < 3 ; i++) {
+			speed.push(closeInteger(line.speed[i]));
+			position.push(closeInteger(line.position[i]));
+		}
+		// We don't know how close we are from the goal now ! Speed is set, but position isn't...
+		best.position = position;
+		best.acc = inXFromLineDeltaAccuracy(position[0], position[1], position[2], speed[0], speed[1], speed[2]);
+		best.foundThisTime = false;
+		var x1, x2, y1, y2, z1, z2, xF, yF, zF;
+		var x, y, z;
+		const radius = 25;
+		var iNbDir;
+		var nbDirLimit = 1000;
+		for (iNbDir = 0 ; iNbDir < nbDirLimit ; iNbDir++) {
+			best.foundThisTime = false;
+			x1 = best.position[0]-radius;
+			x2 = best.position[0]+radius;
+			y1 = best.position[1]-radius;
+			y2 = best.position[1]+radius;
+			z1 = best.position[2]-radius;
+			z2 = best.position[2]+radius;
+			xF = best.position[0];  // x former
+			yF = best.position[1];
+			zF = best.position[2];
+			// First, look on the 6 faces of the cube. Can we get lower ? 
+			lookBestPositionInACuboid(speed, best, x1, x1, y1, y2, z1, z2);
+			lookBestPositionInACuboid(speed, best, x2, x2, y1, y2, z1, z2);
+			lookBestPositionInACuboid(speed, best, x1, x2, y1, y1, z1, z2);
+			lookBestPositionInACuboid(speed, best, x1, x2, y2, y2, z1, z2);
+			lookBestPositionInACuboid(speed, best, x1, x2, y1, y2, z1, z1);
+			lookBestPositionInACuboid(speed, best, x1, x2, y1, y2, z2, z2);
+			if (best.foundThisTime) { // Walk in that direction 'til... we are fed up
+				var vRel = [0, 0, 0];
+				vRel[0] = best.position[0]-xF;
+				vRel[1] = best.position[1]-yF;
+				vRel[2] = best.position[2]-zF;
+				var x = best.position[0];
+				var y = best.position[1];
+				var z = best.position[2];
+				var gettingCloser = true;
+				var goingSameDir = 0;
+				const limitSteps = 150000;
+				while (gettingCloser && goingSameDir < limitSteps) { // Sometimes we just go closer but to a small slope. I assume 150000 is enough to put a stop
+					x += vRel[0];
+					y += vRel[1];
+					z += vRel[2];
+					acc2 = inXFromLineDeltaAccuracy(x, y, z, speed[0], speed[1], speed[2]);
+					if (best.acc > acc2) {
+						best.acc = acc2;
+						best.position = [x, y, z];	
+						goingSameDir++;
+					} else {
+						gettingCloser = false;
+					}
+				}
+				if (goingSameDir == limitSteps) {
+					best.foundThisTime = false;
+					iNbDir = nbDirLimit;
+				}
+			} else { // Not on the faces of the cube ? Then it must be inside ! (I hope)
+				lookBestPositionInACuboid(speed, best, x1+1, x2-1, y1+1, y2-1, z1+1, z2-1);			
+			}
+			if (!best.foundThisTime) {
+				iNbDir = nbDirLimit;
+			}
+			position = best.position;
+			if (best.acc == 0) { // Jackpot !
+				break;
+			}
+		} // for loop
+		if (iNbDir < nbDirLimit) {
+			break;
+		} else {
+			unluckyT0andT1++;
+		}
+	} // The main "while (true)" loop
+	const correct = (position[0] == 118378223846841 && position[1] == 228996474589321 && position[2] == 259397320329497);
+	return {index0 : gInd0, 
+			index1 : gInd1, 
+			index2 : gInd2, 
+			t0 : t0, 
+			t1 : t1, 
+			line : getLine(t0, t1), 
+			unluckyT0 : unluckyT0, 
+			unluckyT1 : unluckyT1, 
+			unluckyT0andT1 : unluckyT0andT1,
+			correct : correct};
+	
+}
+
+/*for (var i = 0 ; i < 50 ; i++) {
+	if (!conclusion_24_2().correct) {
+		break;
+	} else {
+		console.log("Score : " + i + "/50")
+	}
+}
+console.log("Final score : " + i + "/50")*/
+
+function lookBestPositionInACuboid(p_speed, p_best, p_xMin, p_xMax, p_yMin, p_yMax, p_zMin, p_zMax) {
+	var x, y, z, acc;
+	for (x = p_xMin ; x <= p_xMax ; x++) {
+		for (y = p_yMin ; y <= p_yMax ; y++) {
+			for (z = p_zMin ; z <= p_zMax ; z++) {
+				acc = inXFromLineDeltaAccuracy(x, y, z, p_speed[0], p_speed[1], p_speed[2]);
+				if (acc < p_best.acc) {
+					p_best.acc = acc;
+					p_best.position[0] = x;
+					p_best.position[1] = y;
+					p_best.position[2] = z;
+					p_best.foundThisTime = true;
+				}
+			}
+		}
+	}
+}
+
+function closeInteger(p_float) {
+	return Math.floor(p_float+0.01);
+}
+
+function ratio(p_t0) {
+	return calculateRatioYZForT0(p_t0, 2*M, 5*M);
+}
+
+function findTheTensForT0(p_t0) {
+	const analysis = [
+		ratio(p_t0),
+		ratio(2*p_t0),
+		ratio(4*p_t0),
+		ratio(6*p_t0),
+		ratio(8*p_t0),
+		ratio(10*p_t0)
+	];
+	// If all 5 gaps are monotonous : continue below. (Warning : it may mean we have a pole)
+	// Otherwise, the "1" value is between p_t0 and 10*p_t0.
+	var growth = analysis[0] > analysis[1];
+	for (var i = 1 ; i <= 4 ; i++) {
+		if (growth != (analysis[i] > analysis[i+1])) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function findGoodValueForT0(p_t0Min, p_t0Max) {
+	var val1 = ratio(p_t0Min);
+	var val2 = ratio(p_t0Max);
+	if (p_t0Max - p_t0Min == 10) {
+		if ((val1 < 1) == (val2 < 1)) {
+			return -1;
+		} else {			
+			return p_t0Min;
+		}
+	}
+	var gap = p_t0Max - p_t0Min;
+	if ((val1 < 1) == (val2 < 1)) {
+		return -1;
+	}
+	if (gap >= 100 && gap <= 10000) { // Time to worry about the poles !
+		var val125 = ratio(p_t0Min+gap/4);
+		var val150 = ratio(p_t0Min+gap/2);
+		var val175 = ratio(p_t0Min+3*gap/4);
+		var growth = (val1 > val125);
+		if (growth != (val125 > val150) || growth != (val150 > val175) || growth != (val175 > val2)) {
+			return -1;
+		}
+	}
+	var val;
+	for (var i = 0 ; i < 10 ; i++) {
+		val = findGoodValueForT0(p_t0Min + i*gap/10, p_t0Min+(i+1)*gap/10);
+		if (val != -1) {
+			return val;
+		}
+	}
+	return -1;
+}
+
+// We should hit something close to (0, 0). Otherwise, jump a level inner.
+function findGoodValueForT1(p_t0, p_t1Min, p_t1Max) {
+	var val1 = inXFromLineDelta(p_t0, p_t1Min);
+	var val2 = inXFromLineDelta(p_t0, p_t1Max); // So, ratios of DeltaZ and ratios of DeltaY.
+	if (Math.abs(val1[0]) < 1000000 && Math.abs(val1[1]) < 1000000 ) {
+		return p_t1Min; //Maybe not the best p_t0,p_t1 but we are really close. Now, speeds must be set.
+	}			
+	if (val1[0] > 0 == val2[0] > 0) {
+		return -1;
+	}
+	if (p_t1Min + 1 == p_t1Max) { // ERROR : considered "p_t1Min == p_t1Max" to stop...
+		return (val1[0] > 0 != val2[0] > 0) ? val1[0] : -1; // Last chance ! (we cannot descend deeper)
+	}
+	var val;
+	const gap = p_t1Max-p_t1Min;
+	for (var i = 0 ; i < 9 ; i++) {
+		val = findGoodValueForT1(p_t0, p_t1Min + i*gap/10, p_t1Min + (i+1)*gap/10); 
+		if (val != -1) {
+			return val;
+		}
+	}
+	return -1;
+}
+
+
+
+
+
+
+
+
+
+// This one worked wonders, but it was manual !
+function conclusion_24_2_lol() {
 	rawData = rawDataOfficial;
 	init();	
 	/*position
@@ -652,3 +826,40 @@ function conclusion_24_2() {
 	return best;
 }
 
+// Failed attempt :
+// Finding appropriate T0 and T1 when I had good approximations of it...
+/*	var epsilon = distanceFromCloseInteger(speed[0]) + distanceFromCloseInteger(speed[1]) + distanceFromCloseInteger(speed[2]); 
+	var t0Min, t1Min;
+	var tt0, tt1;
+	var manHatRadius = 500;
+	var tolerance = 1;
+	var foundLowerThisIter = false;
+	var epsilon2;
+	while (epsilon > 0.000000001*tolerance) {
+		foundLowerThisIter = false;
+		for (tt0 = t0-manHatRadius ; tt0 <= t0-manHatRadius ; tt0++) {
+			for (tt1 = t1-manHatRadius ; tt1 <= t1-manHatRadius ; tt1++) {
+				speed = getLine(tt0, tt1).speed;
+				epsilon2 = distanceFromCloseInteger(speed[0]) + distanceFromCloseInteger(speed[1]) + distanceFromCloseInteger(speed[2]); 
+				if (epsilon2 < epsilon) {
+					foundLowerThisIter = true;
+					epsilon = epsilon2;
+					t0Min = t0;
+					t1Min = t1;
+				}
+			}
+		}
+		if (foundLowerThisIter) {
+			t0 = t0Min;
+			t1 = t1Min;
+			manHatRadius -= 100;
+		} else {
+			tolerance += 0.000000001;
+			manHatRadius *=2;
+		}
+	}
+	
+	function distanceFromCloseInteger(p_float) {
+	return p_float-Math.floor(p_float+0.01);
+}
+*/
