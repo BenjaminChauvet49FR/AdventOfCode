@@ -79,7 +79,7 @@ const rawDataExample2 = String.raw`171 ORE => 8 CNZTR
 3 BHXH, 2 VRPVC => 7 MZWV
 121 ORE => 7 VRPVC
 7 XCVML => 6 RJRHP
-5 BHXH, 4 VRPVC => 5 LTCX`.split("\n"); // 2210736 ore per fuel
+5 BHXH, 4 VRPVC => 5 LTCX`.split("\n"); // 2210736 ore per fuel, 460664 to produce
 
 const rawDataExample3 = String.raw`157 ORE => 5 NZVS
 165 ORE => 6 DCFZ
@@ -89,7 +89,20 @@ const rawDataExample3 = String.raw`157 ORE => 5 NZVS
 177 ORE => 5 HKGWZ
 7 DCFZ, 7 PSHF => 2 XJWVT
 165 ORE => 2 GPVTF
-3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT`.split("\n"); // 13312 ore per fuel
+3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT`.split("\n"); // 13312 ore per fuel, 82892753 fuel to produce
+
+const rawDataExample1 = String.raw`2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
+17 NVRVD, 3 JNWZP => 8 VPVL
+53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV => 1 FUEL
+22 VJHF, 37 MNCFX => 5 FWMGM
+139 ORE => 4 NVRVD
+144 ORE => 7 JNWZP
+5 MNCFX, 7 RFSQX, 2 FWMGM, 2 VPVL, 19 CXFTF => 3 HVMC
+5 VJHF, 7 MNCFX, 9 VPVL, 37 CXFTF => 6 GNMV
+145 ORE => 6 MNCFX
+1 NVRVD => 8 CXFTF
+1 VJHF, 6 MNCFX => 4 RFSQX
+176 ORE => 6 VJHF`.split("\n"); // 180697 ore per fuel, 5586022 fuel to produce
 
 var gDataReactions;
 const gIOre = 0;
@@ -189,45 +202,48 @@ function calculate() {
 (In waiting list : reactions for AB, BC and CA, process them in that order) [0, 0, 6 8 0, 0 3 4] (need reactions for A and B) -> [0, 0, 6 23 21, 0 0 4] (add need reactions for C) -> [0, 0, 10 23 37, 0 0 0]
 (In waiting list : reactions for A, B, C, process them in that order (now, AB AC and BC entries are no longer represented here : ) [45, 0, 0 23 37] -> [109, 0, 0 1 37] -> [165, 0, 0 1 3])
 */
+
+
+
+
+
+// In order to reach the best amount of fuel when we consume 10^12 ore :
+// We alternate between 
+	//-slow but reliable fuel production (chemicals are consumed as much as possible so we don't have many left behind) 
+	//-and fast production (that multiplies the fuel produced and ore needed so far, but also multiply the left behind chemicals : they will have to be consumed in future reactions, before we reach 100% of the ore consumed)
+// We must make sure to never have a too important number of "extra materials" such that when we are close to 100% consumption, we can reduce these extra materials as well.
+// Hence the "progress chain". 
+// I made a "progress chain" (found manually) where entries are alternatively : 
+	// the new "amount of ore needed" threshold to multiply productions made so far (must be a multiple of the precedent entry, except for the first one which is free but must be balanced)
+	// the "amount of ore needed" until which we go in slow production
+		// the last one is missing (array has an odd-numbered length) but is meant to be 1.
+// I also added the initial slow production (fuelFirstStep), to be able to multiply the left behind chemicals by a smaller number.
+// The progress chain (+ initial slow production) might be found automatically depending on the ore for 1 fuel, and the number of reactions, but I didn't work around it.
+// Oh, btw the official example is slower than the other examples, but I guess this is due to the number of reactions in it.
 var rawData = rawDataExample3; 
 function conclusion_14_2() {
+	const fuelFirstStep = 100;
+	const progressChain = [0.009, 0.01, 0.08, 0.083, 0.996];
 	init();
 	initProductionsAndCosts();
 	gFuel = 0;
-	treeOfSeenConfigs = {branches : []};
-	var previousFuelAmount = -1;
-	while (gNeeded[gIOre] < LIMIT_AMOUNT) {		
+	var fastProduction, SPLimitCoef;
+	for (var k = 0 ; k < fuelFirstStep ; k++) {		
 		produce1Fuel();
-		
-		// Trying to jump through time...
-		if (previousFuelAmount == -1) {			
-			//previousFuelAmount = addNewConfig(treeOfSeenConfigs, {fuel : gFuel, oreTaken : gNeeded[gIOre]}, gNeeded);
-			var k;
-			for (k = 2 ; k < gNeeded.length ; k++) {
-				if (gNeeded[k] != 0) {
-					break;
-				}
-			} 
-			if (k == gNeeded.length) {
-				previousFuelAmount = {fuel : 0, oreTaken : 0};				
-			}
-			if (previousFuelAmount != -1) {
-				//const periodDuration = i-previousIter;
-				const periodDuration = gNeeded[gIOre]-previousFuelAmount.oreTaken;
-				const fuelPeriod = gFuel - previousFuelAmount.fuel;
-				var speedUp = 160000;
-				while (speedUp > 0) {	
-					while (gNeeded[gIOre] < LIMIT_AMOUNT-(periodDuration*speedUp)) {
-						gNeeded[gIOre] += periodDuration*speedUp; 
-						gFuel += fuelPeriod*speedUp;
-					}
-					speedUp = Math.floor(speedUp/20);
-				}
-			}
-		}
-		
-		
 	}
+	for (var iPr = 0 ; iPr < progressChain.length ; iPr+=2) {
+		// Fast part
+		fastProduction = Math.ceil((LIMIT_AMOUNT*progressChain[iPr])/gNeeded[gIOre]); // Multiply the production made so far by the coefficient needed to reach the amount of ore consumed
+		for (var k = 0 ; k < gNeeded.length ; k++) {
+			gNeeded[k] *= fastProduction;
+		}
+		gFuel *= fastProduction;
+		// Slow part
+		SPLimitCoef = (iPr < progressChain.length-2) ? progressChain[iPr+1] : 1;
+		while (gNeeded[gIOre] < LIMIT_AMOUNT*SPLimitCoef) {
+			produce1Fuel();
+		}
+	}	
 	return gFuel;
 }
 
@@ -241,4 +257,61 @@ function produce1Fuel() {
 	}
 }
 
-// TODO redo this problem. There is no period with the remaining stuff to help me, so I used the "good ol' " for loop !
+// Failed paths :
+// the one that consisted to find a period ! (there were none)
+
+// The one that consisted to produce 1 fuel, and then to multiply the quantities to consume nearly 98%, then nearly 95% of the ore
+// Leaves some products in too big quantities !
+/*
+function conclusion_14_2() {
+	init();
+	initProductionsAndCosts();
+	gFuel = 0;
+	produce1Fuel();
+	// Produce fuel "this way" until 95% of the amount is consumed by multiplying. (Ok, at first it was 98%)
+	// The remainder should be used. 
+	// Since we cannot seem to find a period the classic way...
+	var fastProduction = Math.floor((LIMIT_AMOUNT/20*19)/gNeeded[gIOre]);
+	for (var k = 0 ; k < gNeeded.length ; k++) {
+		gNeeded[k] *= fastProduction;
+		gFuel = fastProduction;
+	}
+	while (gNeeded[gIOre] < LIMIT_AMOUNT) {
+		produce1Fuel();
+	}
+	return gFuel;
+}
+
+A correct-but-not-satisfying solution (plus that takes some time) :
+function conclusion_14_2X() {
+	init();
+	initProductionsAndCosts();
+	gFuel = 0;
+	treeOfSeenConfigs = {branches : []};
+	var previousFuelAmount = -1;
+	produce1Fuel();
+	// Produce fuel "this way" until 1% of the amount is consumed by multiplying. 
+	var fastProduction = Math.floor((LIMIT_AMOUNT/100)/gNeeded[gIOre]);
+	for (var k = 0 ; k < gNeeded.length ; k++) {
+		gNeeded[k] *= fastProduction;
+	}
+	gFuel = fastProduction;
+	// Produce fuel the classic way until we reach 2.2% of ore consumption and multiply with 45... I guess ?
+	while (gNeeded[gIOre] < LIMIT_AMOUNT/1000*22) {
+		produce1Fuel();
+	}
+	for (var k = 0 ; k < gNeeded.length ; k++) {
+		gNeeded[k] *= 45;
+	}	
+	gFuel *= 45;
+	while (gNeeded[gIOre] < LIMIT_AMOUNT) {
+		produce1Fuel();
+	}
+	return gFuel;
+}
+
+
+
+
+*/
+
