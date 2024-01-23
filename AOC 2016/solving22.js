@@ -1030,18 +1030,22 @@ function viableNode(p_str1, p_str2) {
 // -----------------------
 
 var gData;
-var gXL, gYL;
+var gXMax, gYMax;
+
+const EMPTY = '.';
+const WALL = '#';
+const MOVABLE = 'N';
+const TARGET = '*';
 
 function init() {
-	gXL = 0;
-	gYL = 0;
-	// 551551 Do it well please !
-	gXL = 39;
-	gYL = 25;
-	gData = generateArrangedDoubleEntryArray(gXL, gYL, function() {return {}});
 	var x, y, avail, used, tokens;
 	var i, index;
 	var str;
+	var maxNotZeroAvbl = 0;
+	gXMax = 0;
+	gYMax = 0;
+	var allInfos = [];
+	var minNotZeroTaken = 999999999;
 	for (var k = 2 ; k < rawData.length ; k++) {
 		str = rawData[k];
 		i = 0;
@@ -1064,10 +1068,51 @@ function init() {
 		tokens = tokens[0].split("-");
 		x = parseInt(tokens[1].substring(1), 10);
 		y = parseInt(tokens[2].substring(1), 10);
-		gData[y][x] = {used : used, avail : avail}
-	};
+		allInfos.push({x : x, y : y, used : used, avail : avail});
+		gXMax = Math.max(x, gXMax);
+		gYMax = Math.max(y, gYMax);
+		if (used > 0) {			
+			maxNotZeroAvbl = Math.max(avail, maxNotZeroAvbl);
+			minNotZeroTaken = Math.min(minNotZeroTaken, used);
+		}
+	};	
+	if (minNotZeroTaken <= maxNotZeroAvbl) {
+		console.log("ALERT ! Not working as intended");
+	}
+	gData = generateDoubleEntryArray(gXMax+1, gYMax+1, WALL);
+	allInfos.forEach(infos => {
+		x = infos.x;
+		y = infos.y;
+		used = infos.used;
+		if (used < minNotZeroTaken*3) {
+			gData[y][x] = MOVABLE;
+		}
+		if (used == 0) {
+			gData[y][x] = EMPTY;
+		}
+	});
+	gData[0][gXMax-1] = TARGET;
+	logArrayCharsWithAlign(gData);
 }
 
 function conclusion_22_2() {
 	init();
+	var x, y;
+	// La suerte ! No obstacles on the first 2 lines ?
+	for (x = 0 ; x <= gXMax ; x++) {
+		if (gData[0][x] == WALL || gData[1][x] == WALL) {
+			console.log("OH NO, there's a wall ! Please try another function to solve part 2");
+			return -1;
+		}
+	}
+	// 1 : reach the space right to the goal as fast as possible
+	// TODO : make a good algorithm please. I was too lazy tonight.
+	var answer = 8 + 23 + 33;
+	// 2 : Now, hole is 1 space right to the "target". 
+	// We need to make 5*(length-2) moves to the left :
+	/*
+	M*.  M*M  M*M  M*M  .*M  *.M
+	MMM  MM.  M.M  .MM  MMM  MMM
+	*/
+	return answer + 5*(gXMax-1);
 }
