@@ -100,45 +100,45 @@ const rawData = [
 "7656889321256789876543434567899431234789843212987655433469894323478987698765565458932976543234567891",
 "8798995432367899989656657678976532345678932101298766545678965435689998799876676567891098764546678910"]
 
-var data = digitPseudoArray_to_digitArray(rawData);
+var gData;
 
 function conclusion_9_1() {
+	gData = digitPseudoArray_to_digitArray(rawData);
 	var total = 0;
 	var x, y;
-	const yLength = data.length;
-	const xLength = data[0].length;
+	const yLength = gData.length;
+	const xLength = gData[0].length;
 	var val;
 	for (y=0 ; y < yLength ; y++) {
 		for (x=0 ; x < xLength ; x++) {
-			val = data[y][x];
+			val = gData[y][x];
 			if (
-				(x == 0 || data[y][x-1] > val) && 
-				(x == xLength-1 || data[y][x+1] > val) && 
-				(y == 0 || data[y-1][x] > val) && 
-				(y == yLength-1 || data[y+1][x] > val) 
+				(x == 0 || gData[y][x-1] > val) && 
+				(x == xLength-1 || gData[y][x+1] > val) && 
+				(y == 0 || gData[y-1][x] > val) && 
+				(y == yLength-1 || gData[y+1][x] > val) 
 			) {
 				total += val+1;
 			}
 		}
 	} 
 	console.log(total);
-}
+} // 425
 
 // Note : takes into account the fact that : "all other locations will always be part of exactly one basin."
 // Then it becomes "All regions delimited by 9s. (fine because it was for the 9th)
 
-var dynamicData = data; // Warning : actually changes data !
-
 function conclusion_9_2() {
+	gData = digitPseudoArray_to_digitArray(rawData);
 	var x, y;
-	const yLength = data.length;
-	const xLength = data[0].length;
+	const yLength = gData.length;
+	const xLength = gData[0].length;
 	var size;
 	var highestTotals = [0, 0, 0];
 	for (y=0 ; y < yLength ; y++) {
 		for (x=0 ; x < xLength ; x++) {
-			if (dynamicData[y][x] != 9) {
-				size = countRegionSizeAndFill(x, y);
+			if (gData[y][x] != 9) {
+				size = countRegionSizeAndFill(gData, 9, x, y);
 				shiftGreatestNumbers(size, highestTotals);
 			}
 		}
@@ -146,34 +146,4 @@ function conclusion_9_2() {
 	console.log(
 		highestTotals[0] + " " + highestTotals[1] + " " + highestTotals[2] + " " + 
 		(highestTotals[0] * highestTotals[1] * highestTotals[2]) );
-}
-
-// Counts the region size (delimited by 9s) the space (p_x, p_y) falls into, and fills them with 9
-function countRegionSizeAndFill(p_x, p_y) {
-	var listCoors = [{x : p_x, y : p_y}];
-	var x, y;
-	var total = 0;
-	var coors;
-	while (listCoors.length > 0) {
-		coors = listCoors.pop();
-		x = coors.x;
-		y = coors.y;
-		if (dynamicData[y][x] != 9) {
-			total++;
-			dynamicData[y][x] = 9;
-			if (y > 0) {
-				listCoors.push({x : x, y : y-1});
-			}
-			if (x > 0) {
-				listCoors.push({x : x-1, y : y});
-			}
-			if (y < dynamicData.length-1) {
-				listCoors.push({x : x, y : y+1});
-			}
-			if (x < dynamicData[0].length-1) {
-				listCoors.push({x : x+1, y : y});
-			}
-		}
-	}
-	return total;
-}
+} // 1135260

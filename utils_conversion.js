@@ -7,8 +7,10 @@ function hexadecimalToBinary(p_string) {
 		charac = p_string[i];
 		if (charac >= 'A' && charac <= 'F') {
 			val = charToASCIIRelativePosition(charac, 'A')+10;
+		} else if (charac >= 'a' && charac <= 'f') {
+			val = charToASCIIRelativePosition(charac,'a')+10;
 		} else {
-			val = charToASCIIRelativePosition(charac,'0');
+			val = charToASCIIRelativePosition(charac,'0');			
 		}
 		hexadecimalToBinaryAddDigits(answer, val);
 	}
