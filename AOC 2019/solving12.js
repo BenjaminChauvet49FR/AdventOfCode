@@ -8,12 +8,16 @@ const rawData = [
 var gPos;
 var gVelo;
 
-function conclusion_12_1() {
+function init() {
 	gPos = [];
 	for (var i = 0 ; i < rawData.length ; i++) {
 		gPos.push(rawData[i].slice());
 	}
 	gVelo = generateDoubleEntryArray(rawData[0].length, rawData.length, 0);
+}
+
+function conclusion_12_1() {
+	init();
 	for (var i = 0 ; i < 1000 ; i++) {
 		performStep();	
 	}
@@ -60,4 +64,66 @@ function applyVelocities(p_i, p_j) {
 		}
 		
 	}
+}
+
+// ------------------------
+
+function conclusion_12_2() {
+	init();
+	var tree = {branches : []}
+	// First step : find repeat for the first moon. Who knows, we may find a pattern...
+	var alreadyMet;
+	for (var i = 0 ; i < 1000000 ; i++) {
+		arraySteps = addNewConfig(tree, i);
+		if (arraySteps.length > 1) {
+			console.log("Hey ! Repeated position for moon 1 at steps " + arraySteps[arraySteps.length-2] + "&" + arraySteps[arraySteps.length-1]
+			+ " : " + gPos[0][0] + "," + gPos[0][1] + "," + gPos[0][2]);
+		}
+		performStep();
+	}
+}
+
+// TODO : May be generalizable
+// First, only watch the first planet !
+// The generations in which each config is seen are memorized
+function addNewConfig(p_treeOfConfigs, p_iteration) {
+	var newBranch = {subtree : p_treeOfConfigs, 
+//	actuallyNew : false
+	};
+	var i;
+	for (i = 0 ; i <= 2 ; i++) {
+		newBranch = tryToInsert(newBranch.subtree, gPos[0][i]);
+	}
+	//for (i = 0 ; i <= 2 ; i++) {
+	//	newBranch = tryToInsert(newBranch.subtree, gVelo[0][i]);
+	//}
+	// Insert the generation where this has been met
+	insertLeaf(newBranch.subtree, p_iteration);	
+	return newBranch.subtree.branches;
+}
+
+// Tries to insert an array in a subtree (imbricated arrays)
+// If successful, return {true, singleton of the new tree}
+// Otherwise, return the subtree containing it
+function tryToInsert(p_subtree, p_eltToAdd) {
+	for (var i = 0 ; i < p_subtree.branches.length ; i++) {
+		if (p_subtree.branches[i].node == p_eltToAdd) {
+			return {
+				//actuallyNew : false, 
+			subtree : p_subtree.branches[i]}
+		} 
+	}
+	p_subtree.branches.push({ 
+		node : p_eltToAdd,
+		branches : []
+	});
+	return {
+		//actuallyNew : true,
+		subtree : p_subtree.branches[p_subtree.branches.length-1]
+	}
+}
+
+// The element must always be added, at this point. It must be a generation/step, typically.
+function insertLeaf(p_subtree, p_leafElt) {
+	p_subtree.branches.push(p_leafElt);
 }

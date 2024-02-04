@@ -6,6 +6,7 @@ var gData, gIOld, gINew;
 const pattern = [0, 1, 0, -1];
 
 function init() {
+	gLength = rawData.length;
 	gData = [generateArrangedArray(rawData.length, function(x) {return digit(rawData[x])} ), 
 			 generateArray(rawData.length, 0) ];
 	gIOld = 0;
@@ -26,9 +27,9 @@ function conclusion_16_1() {
 
 function mix() {
 	var count, k;
-	for (var i = 0 ; i < rawData.length ; i++) {
+	for (var i = 0 ; i < gLength ; i++) {
 		count = 0;
-		for (var j = 0 ; j < rawData.length ; j++) {
+		for (var j = 0 ; j < gLength ; j++) {
 			k = (Math.floor((j+1)/(i+1)) % 4);
 			count += pattern[k] * gData[gIOld][j];
 		}
@@ -40,4 +41,29 @@ function mix() {
 	}
 	gINew = 1-gINew;
 	gIOld = 1-gIOld;
+}
+
+// ------------------------
+// Try a direct approach
+
+var gLength;
+
+function initP2() {
+	gLength = rawData.length*10000
+	gData = [generateArrangedArray(gLength, function(x) {return digit(rawData[x%rawData.length])} ), 
+			 generateArray(gLength, 0) ];
+	gIOld = 0;
+	gINew = 1;
+}
+
+function conclusion_16_2() {
+	initP2();
+	for (var i = 0 ; i < 100 ; i++) {
+		mix();
+	}
+/*	var answer = "";
+	for (var i = 0 ; i < 8 ; i++) {
+		answer += gData[gIOld][i];
+	}
+	return answer;*/
 }
