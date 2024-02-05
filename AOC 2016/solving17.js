@@ -4,9 +4,9 @@ function conclusion_17_1() {
 
 var gBest = 0;
 function conclusion_17_2() {
-//	return conclusion_17_aux(true); Nope ! Way too long !
+	//return conclusion_17_aux(true); Nope ! Way too long !
 	gBest = 0;
-	conclusion_17_rec("", 0, 0);
+	conclusion_17_rec("",0, 0); // The recursive call WORKS WONDERS ! 
 	return gBest;
 }
 
@@ -15,7 +15,6 @@ function conclusion_17_aux(p_isPart2) {
 	var yLimit = 3;
 	var pathsToTest = [{path : "", x : 0, y : 0}];
 	var nextPathsToTest;
-	var salt = "qljzarfv";
 	var ptt;
 	var md5result;
 	var distanceAnswerP2 = 0;
@@ -31,17 +30,17 @@ function conclusion_17_aux(p_isPart2) {
 					continue;
 				}
 			}
-			md5result = md5(salt+ptt.path); // first 4 characters = up, down, left, right
+			md5result = md5(gSalt+ptt.path); // first 4 characters = up, down, left, right
 			if (ptt.y > 0 && isCharOpen(md5result, 0)) {
 				nextPathsToTest.push({path : ptt.path+"U", x : ptt.x, y : ptt.y-1});
 			}
-			if (ptt.y <= yLimit && isCharOpen(md5result, 1)) {
+			if (ptt.y < yLimit && isCharOpen(md5result, 1)) { // STUPID ERROR : why did I put <= in the first place ? No wonder I had so many long calls !
 				nextPathsToTest.push({path : ptt.path+"D", x : ptt.x, y : ptt.y+1});
 			}
 			if (ptt.x > 0 && isCharOpen(md5result, 2)) {
 				nextPathsToTest.push({path : ptt.path+"L", x : ptt.x-1, y : ptt.y});
 			}
-			if (ptt.x <= xLimit && isCharOpen(md5result, 3)) {
+			if (ptt.x < xLimit && isCharOpen(md5result, 3)) {
 				nextPathsToTest.push({path : ptt.path+"R", x : ptt.x+1, y : ptt.y});
 			}
 		}
@@ -54,9 +53,9 @@ function conclusion_17_aux(p_isPart2) {
 
 const gXLimit = 3;
 const gYLimit = 3;
-const gSalt = "qljzarfv";
+const gSalt = "qljzarfv";//"ulqzkmiv";//
 
-/* NOOOOO ! Maximum call stack size exceeded !
+// /* NOOOOO ! Maximum call stack size exceeded !
 function conclusion_17_rec(p_path, p_x, p_y) {
 	var md5result;
 	if (p_x == gXLimit && p_y == gYLimit) {
@@ -69,16 +68,16 @@ function conclusion_17_rec(p_path, p_x, p_y) {
 	if (p_y > 0 && isCharOpen(md5result, 0)) {
 		conclusion_17_rec(p_path+"U", p_x, p_y-1);
 	}
-	if (p_y <= gYLimit && isCharOpen(md5result, 1)) {
+	if (p_y < gYLimit && isCharOpen(md5result, 1)) {
 		conclusion_17_rec(p_path+"D", p_x, p_y+1);
 	}
 	if (p_x > 0 && isCharOpen(md5result, 2)) {
 		conclusion_17_rec(p_path+"L", p_x-1, p_y);
 	}
-	if (p_x <= gXLimit && isCharOpen(md5result, 3)) {
+	if (p_x < gXLimit && isCharOpen(md5result, 3)) {
 		conclusion_17_rec(p_path+"R", p_x+1, p_y);
 	}
-}*/
+}
 
 
 
