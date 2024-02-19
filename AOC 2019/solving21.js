@@ -3,16 +3,10 @@ const rawData21 = [109,2050,21101,966,0,1,21102,1,13,0,1105,1,1378,21102,20,1,0,
 function conclusion_21_1() {
 	var outputs;
 	var reader = new newIntCodeReader(rawData21);
-	 // Third tile hole but the fourth one is ground : jump !
+	 // Any of the third next ones are holes but fourth one is safe : jump !
 	provideInputAscii(reader, "NOT C J");
 	provideInputAscii(reader, "AND D J");
-	// Second tile hole but the third one is ground : jump ! (should have been the fourth... but it worked because the "3rd is hole" was already handled !)
-	provideInputAscii(reader, "NOT B T");
-	provideInputAscii(reader, "AND C T");
-	provideInputAscii(reader, "OR T J");
-	// Next tile hole but the one after is ground : jump !
 	provideInputAscii(reader, "NOT A T");
-	provideInputAscii(reader, "AND B T");
 	provideInputAscii(reader, "OR T J");
 	provideInputAscii(reader, "WALK");
 	outputs = runAndOutputIntcodeProgram(reader);
@@ -20,55 +14,37 @@ function conclusion_21_1() {
 	return outputs[outputs.length-1];
 
 } // 19352864
+// Wait ! I simplified my code, but what if we had (ABCDE) : #.##. ? (with the E not seen yet...)
+// So the "NOT B T OR T J should be mandatory even if it isn't !
 
 function conclusion_21_2() {
 	var outputs;
 	var reader = new newIntCodeReader(rawData21);
-	 // Ground ahead : . : we jump
-	 // Ground ahead : #. : we jump... unless :
-		//   !!?. 
-		//or !!?#.??.? 
-		//or !!?##.?..
-	 // Ground ahead : ##. : we jump... unless :
-		//   !!!. 
-		//or !!!#.??.?
-	    //or !!!##.?..
-
-	 // So... NEVER jump if :
-	 // ???. (1)
-	 // ???#.??. (2)
-	 // ???##.?.. (3)
-	 // Always jump otherwise because it is safe
-	// With only one temp variable and the not that forces us to use it... it's hard !
-	
-	// Jump if :
-	// .
-	// ?.??.
-	// ?.???.??.
-	// (I FORGOT THIS ONE ??.??.??. )
-	// 
-	// (the configuration .??. is deadly ! Avoid it at all costs !)
-	
-	provideInputAscii(reader, "NOT A J"); // Most obv.
-	provideInputAscii(reader, "OR B T");
-	provideInputAscii(reader, "OR E T");
+	//Don't jump now if neither E nor H are safe ????.??.? (as you would land in D and be forced to walk - E hole, or jump - H hole)
+	provideInputAscii(reader, "NOT E J"); 
+	provideInputAscii(reader, "NOT H T");
+	provideInputAscii(reader, "AND T J");
+	provideInputAscii(reader, "NOT J J");
+	// Don't jump if B and C are both safe - you don't need it ! (the A safe case is already covered below)
+	provideInputAscii(reader, "NOT B T");
 	provideInputAscii(reader, "NOT T T");
-	provideInputAscii(reader, "OR T J");
-	provideInputAscii(reader, "OR B T");
-	provideInputAscii(reader, "OR F T");
-	provideInputAscii(reader, "OR I T");
+	provideInputAscii(reader, "AND C T");
 	provideInputAscii(reader, "NOT T T");
-	provideInputAscii(reader, "OR T J");
-	provideInputAscii(reader, "OR C T");
-	provideInputAscii(reader, "OR E T");
-	provideInputAscii(reader, "OR F T");
-	provideInputAscii(reader, "NOT T T");
-	provideInputAscii(reader, "OR T J");
-	provideInputAscii(reader, "RUN"); // It isn't a springscript instruction, right ?
+	provideInputAscii(reader, "AND T J");
+	// Always jump if A is a hole ; never jump if D is a hole
+	provideInputAscii(reader, "NOT A T"); 
+	provideInputAscii(reader, "OR T J"); 
+	provideInputAscii(reader, "AND D J"); 
+	provideInputAscii(reader, "RUN");
 	outputs = runAndOutputIntcodeProgram(reader);
 	logAsciiArray(outputs);
 	return outputs[outputs.length-1];
 	
 }
 
-
+/*
+NOT E J
+NOT H T
+AND T J
+NOT J J
+*/
