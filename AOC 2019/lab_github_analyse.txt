@@ -32,7 +32,7 @@ Version simplifiée avec "les clés où on s'arrête pas" supprimées et leurs p
 3 : a(GOi)|((hQb)|(wVf))
 4 : oXKjTHq
 
-k et x équivalentes, on ne peut pas prendre x sans j :
+k et x équivalentes, on ne peut pas prendre x sans k :
 2 : ONxJt
 
 Chaîne directe de clés : 

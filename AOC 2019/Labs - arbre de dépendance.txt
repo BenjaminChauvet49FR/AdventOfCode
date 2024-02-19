@@ -7,3 +7,61 @@ Lab. github : a, g, i, n, k, j, t, q, b, v, f
 Lab. perso : a, z, k, q, n, u
 Lab. paternel : v, a/f, y, m, c, h, o
 
+
+
+____________
+
+Moi j'ai mieux pour transformer l'arbre
+(ATTENTION : ça résulte en plusieurs clés qui fusionnent, et plusieurs portes ouvertes par une seule clé)
+
+Etapes qui ne sont faites qu'au début
+1) extraire le tableau des arbres selon les données du problème + initialiser la DS à 0
+DS : distance supplémentaire : distance parcourue pour aller chercher une clé non représentée dans l'arbre
+2) repérer les clés inutiles (toute clé qui n'ouvre aucune porte et n'est pas dans une impasse) et les supprimer 
+3) repérer les clés terminales
+CLE TERMINALE : toute clé dans une impasse qui ne sert pas à ouvrir une autre porte
+4) pour chaque porte, vérifier si sa clé est située dans le même secteur (si oui, la clé pourra être supprimée plus tard...)
+
+Etapes qui peuvent être faites en boucle
+*) si 2 clés terminales sortent du même embranchement et il n'y a pas de clé intermédiaire, supprimer la cle de la branche la plus courte et augmenter la DS de 2
+*) si une clé est dans une impasse, supprimer les clés dans la même branche et renommer les portes des clés correspondantes (la clé peut perdre sa terminalité).
+*) si un noeud a 2+ sorties dont un avec une seule clé non terminale dans une impasse, supprimer la branche, déplacer la clé (fusionner si nécessaire) et augmenter la DS de 2* la branche supprimée
+*) chaque noeud à 2 arêtes doit être supprimé et ses bords raccordés
+
+Puis, une fois cela fait :
+Etablir le tableau des dépendances clés-portes ("méga algo", ci-dessous)
+*) si une clé est juste avant une porte (pas de clé ni de noeud intermédiaire - éventuellement des portes) et la porte ne peut pas être ouverte sans la clé, 
+	supprimer les clés dans la même branche et renommer les portes correspondantes
+*) si une clé a est nécessaire à une clé b et la porte B nécéssaire à la porte A ou si A et B sont ouvertes en même temps : supprimer a
+(à noter : la porte A ou la porte B peut désigner plusieurs portes en même temps)
+*) pour chaque clé hors-impasse, supprimer toute porte bloquée par cette clé qu'on atteint en progressant dans l'arbre. S'il n'y a plus de porte associée à cette clé, la supprimer.
+
+Lorsqu'on ne peut plus avancer : on peut passer à la résolution !
+---
+Méga-algo des dépendances clés-portes
+1) Etablir une liste des dépendances directes clés-portes (chaque clé bloque sa porte, une clé/porte peut bloquer une autre clé/porte, 2 portes au même endroit ne se bloquent pas)
+
+*) Pour chaque élément de la liste, établir les éléments qu'il bloque et qui le bloquent (en parcourant la liste des dépendances).
+*) Pour chaque élément, s'il bloque et est bloqué simultanément, ajouter tout à la liste des dépendances, sans doublons.
+
+Mener l'enquête pour savoir si des portes sont au même endroit, aussi.
+---
+Résolution :
+Ne pas oublier la DS
+Lister les clés possibles au départ.
+En prendre une, révéler la/les nouvelles clés possibles, poursuivre. 
+
+
+---
+A quoi ressemble un noeud d'un arbre ? (PN = précédent noeud)
+{blocagesPN : (liste des portes utiles interposées), distancePN : (distance du précédent noeud), clé : "", noeudsDescendants : []}
+
+De temps en temps, opération de renommage d'une clé : 
+Il faut avoir une idée d'où est chaque porte associée à une clé. Connaître le nombre de portes de cette clé par secteur et le nombre de portes de cette clé total, ça peut servir.
+Le nouveau secteur de la clé renommée devient -1 
+
+Comment supprimer une clé ?
+1) la repérer (connaître le secteur de la clé) : fouiller jusqu'à tomber sur le noeud associé
+2) {blocagesPN : ListX, distancePN : d, clé : A, noeudsDescendants : [{ListY, d2, B, [...]}]} => {blocagesPN : ListX+ListY, distancePN : d+d2, clé : B, noeudsDescendants : [...]}
+OU : {blocagesPN : ListX, distancePN : d, clé : A, noeudsDescendants : [noeud1, noeud2, ...]} => ne supprimer que la clé A.
+3) son nouveau secteur devient -1

@@ -620,7 +620,7 @@ function buildTreeAndDistancesRequiredByKeys() {
 			gData.keys[idDoor].requiredByKeys.push(keyId);
 		});
 		gData.keys[keyId].requiresKeys.forEach(idDoor => {
-			if (gData.keys[idDoor].useful) {				
+			if (gData.keys[idDoor].useful) {
 				gData.keys[idDoor].requiredByKeys.push(keyId);
 			}
 		});
@@ -799,10 +799,10 @@ function conclusion_18_1() {
 	console.log(new Date());
 	initKeys();
 	initGlobalAnswerData();
-	gData.potentiallyFinalKeyIDs.forEach(idFinalKey => {		
+	/*gData.potentiallyFinalKeyIDs.forEach(idFinalKey => {		
 		initOnePathData(idFinalKey);
 		startFromNode({isStartingNode : true});
-	});	
+	});*/	
 	console.log(new Date());
 	return gAnswer;
 }
