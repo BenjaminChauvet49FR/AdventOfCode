@@ -1,0 +1,33 @@
+#day2019_18FamousMaze {
+    font-family: "Courier New";
+	font-size:0.4em;
+}
+.wall {
+	background-color:#222222;
+}
+.addedWall {
+	background-color:#444444;
+}
+
+.key0 {
+	background-color:#00ffff;
+	color:#004444;
+}
+.door0 {
+	background-color:#008888;
+	color:#ffffff;
+}
+.key1 {
+	background-color:#ff8800;
+	color:#ffff00;
+}
+.door1 {
+	background-color:#cc4400;
+	color:#ffffff;
+}
+
+
+.placeholder {
+	background-color:#ffff88;
+	color:#dd0000;
+}

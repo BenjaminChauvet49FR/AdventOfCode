@@ -1,8 +1,10 @@
 var rawDataNoKeys;				
 var gFieldInConstruction;
 const PLACEHOLDER = -10;
-const EMPTY = -1;
-const WALL = -2;
+const SEED = {
+	EMPTY : -1,
+	WALL : -2
+};
 
 function switchRawDataNoKeys(p_index) {
 	rawDataNoKeys = rawDataNoKeysBank[p_index];
@@ -22,7 +24,7 @@ function addKeysAndDoors() {
 	
 	
 	gFieldInConstruction = generateArrangedDoubleEntryArray(xL, yL,function(x, y) {
-		return (rawDataNoKeys[y].charAt(x) == '#' ? WALL : EMPTY);
+		return (rawDataNoKeys[y].charAt(x) == '#' ? SEED.WALL : SEED.EMPTY);
 	});
 	
 	// Variable part !
@@ -64,8 +66,8 @@ function doorToKey(p_door) {
 
 function addPlaceHolder(p_x, p_y) {
 	for (var dir = 0 ; dir <= 3 ; dir++) { // High convention : directions 0123
-		if (gFieldInConstruction[p_y+DeltaY[dir]][p_x+DeltaX[dir]] == EMPTY) {
-			gFieldInConstruction[p_y+DeltaY[dir]][p_x+DeltaX[dir]] = PLACEHOLDER;
+		if (gFieldInConstruction[p_y+DeltaY[dir]][p_x+DeltaX[dir]] == SEED.EMPTY) {
+			gFieldInConstruction[p_y+DeltaY[dir]][p_x+DeltaX[dir]] = SEED.PLACEHOLDER;
 			return;
 		}
 	}
@@ -112,8 +114,8 @@ function displayTheFieldInConstruction() {
 			} else {
 				switch(gFieldInConstruction[y][x]) {
 					//case ADDED_WALL : c = '&'; class_ = "addedWall";  break;
-					case WALL : c = '#'; class_ = "wall"; break;
-					case PLACEHOLDER : 
+					case SEED.WALL : c = '#'; class_ = "wall"; break;
+					case SEED.PLACEHOLDER : 
 						for (dir = 0 ; dir <= 3 ; dir++) {
 							k = gFieldInConstruction[y+DeltaY[dir]][x+DeltaX[dir]];
 							if (k >= 1000) {

@@ -8,7 +8,7 @@ function switchRawData(p_index) {
 	gXLength = rawData[0].length;
 	gYLength = rawData.length;
 }
-switchRawData(0);
+switchRawData(3);
 
 // All keys = [0 : (gNbKeys-1)].
 const NO_KEY = -1;
@@ -27,7 +27,7 @@ function getKeyDoorFromRawData_aux(p_x, p_y, p_charRef) {
 	for (var dir = 0 ; dir <= 3 ; dir++) {
 		xx = p_x + DeltaX[dir];
 		yy = p_y + DeltaY[dir];
-		c2 = charToASCIIRelativePosition(rawData[p_y].charAt(p_x), '0');
+		c2 = charToASCIIRelativePosition(rawData[yy].charAt(xx), '0');
 		if (c2 >= 0 && c2 <= 9) {
 			add = c2+1;
 			break;
@@ -46,7 +46,7 @@ function getDoorFromRawData(p_x, p_y) {
 
 function keyValue(p_x, p_y) {
 	const c = gField[p_y][p_x];
-	return ((c <= 25) && (c >= 0)) ? c : NO_KEY;
+	return ((c < gNbKeys) && (c >= 0)) ? c : NO_KEY;
 }
 
 function isSolid(p_x, p_y) {
@@ -112,6 +112,22 @@ function calculateNbKeys() {
 	}
 }
 
+function generateKeyData(p_index) {
+	var coef = "";
+	if (p_index > 26) {
+		coef += ("" + (Math.floor(p_index/26)-1))
+	}
+	return {
+		index : p_index,
+		x : -1,
+		y : -1,
+		isTerminal : false,
+		matchingDoorIDs : [],
+		doorsCodeName : coef+asciiRelativePositionToChar(p_index%26, 'A'),
+		keyCodeName : coef+asciiRelativePositionToChar(p_index%26, 'a')
+	};	
+}
+
 function initP1() {	
 
 	calculateNbKeys(); // Initialize gNbKeys
@@ -119,15 +135,8 @@ function initP1() {
 	
 	gPotentialDeadEndsToPurge = [];
 	gUsefulKeyList = generateNumericArray(0, gNbKeys-1);
-	gKeysDataBuild = generateArrangedArray(gNbKeys, function(i) {return {
-		index : i,
-		x : -1,
-		y : -1,
-		isTerminal : false,
-		matchingDoorIDs : [],
-		doorsCodeName : asciiRelativePositionToChar(i, 'A'),
-		keyCodeName : asciiRelativePositionToChar(i, 'a')
-	}});
+		gKeysDataBuild = generateArrangedArray(gNbKeys, generateKeyData);
+
 	gDoorsDataBuild = []; // Contains : x, y, key, doorGroup
 	gField = [];
 	gExtraDistance = 0;
@@ -684,19 +693,21 @@ function logTheField() {
 }
 
 function displayTheField(p_isPart2) {
+	// TODO I will need to find something a colorblind-friendly system if the number of keys become too important (> 130, 5 distinct colours used)
 	var eltID = document.getElementById("day2019_18FamousMaze");
-	eltID.innerHTML = "";
+	eltID.innerHTML = "";	
 	var eltChar, c, class_, k;
 	for (var y = 0 ; y < gYLength ; y++) {
 		for (var x = 0 ; x < gXLength ; x++) {
 			if (gDoorsField[y][x] != NO_KEY) {
-				c = asciiRelativePositionToChar(gDoorsDataBuild[gDoorsField[y][x]].key , 'A');
-				class_ = "door"; 
+				k = gDoorsDataBuild[gDoorsField[y][x]].key;
+				c = asciiRelativePositionToChar(k%26 , 'A');
+				class_ = "door" + Math.floor(k/26); 
 			} else {
 				k = keyValue(x, y);
 				if (k != NO_KEY) {
-					c = asciiRelativePositionToChar(k , 'a');
-					class_ = "key"; 
+					c = asciiRelativePositionToChar(k%26 , 'a');
+					class_ = "key" + Math.floor(k/26); 
 				} else {
 					switch(gField[y][x]) {
 						case ADDED_WALL : 
@@ -993,15 +1004,7 @@ function initP2() {
 	
 	gUsefulKeyList = generateNumericArray(0, gNbKeys-1);
 	gPotentialDeadEndsToPurge = [];
-	gKeysDataBuild = generateArrangedArray(gNbKeys, function(i) {return {
-		index : i,
-		x : -1,
-		y : -1,
-		isTerminal : false,
-		matchingDoorIDs : [],
-		doorsCodeName : asciiRelativePositionToChar(i, 'A'),
-		keyCodeName : asciiRelativePositionToChar(i, 'a')
-	}});
+	gKeysDataBuild = generateArrangedArray(gNbKeys, generateKeyData);
 	gDoorsDataBuild = []; // Contains : x, y, key, doorGroup
 	gField = [];
 	gExtraDistance = 0;
