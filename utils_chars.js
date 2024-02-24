@@ -17,6 +17,15 @@ function stringToCharArray(p_string) {
 	return answer;
 }
 
+function stringListToCharArray(p_stringList) { // TODO reuse it through the code (with the raw datas)
+	var field = [];
+	for (var i = 0 ; i < p_stringList.length ; i++) {
+		field.push(stringToCharArray(p_stringList[i]));
+	}
+	return field;
+}
+
+
 function sortString(p_string) {
 	return stringToCharArray(p_string).sort();
 }
