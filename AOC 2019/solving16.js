@@ -60,12 +60,12 @@ function getPattern(p_base, p_index) {
 	return pattern[Math.floor((p_index+1)/p_base) % 4];
 }
 
-function mixP2() {
+function mixP2(p_positionToSearch) {
 	var count;
 	var iChange, iChangeBegin, iChangeEnd, iNb; // See details below
 	var total = 0;
 	var base;
-	for (var iCal = gLength-1 ; iCal >= 0 ; iCal--) {
+	for (var iCal = gLength-1 ; iCal >= p_positionToSearch ; iCal--) {
 		// iChange will take all values where the pattern changes between iCal and iCal+1 (assuming the pattern of "iCal" is full of 0)
 		// See details below for how it is calculated for each iCal
 		iChange = 0;
@@ -130,8 +130,8 @@ function conclusion_16_2() {
 		positionToSearch *= 10;
 		positionToSearch += gData[gIOld][i];
 	}
-	for (var i = 0 ; i < 1 ; i++) {
-		mixP2(); // This method can be used in P1 instead of mix() as well :)
+	for (var i = 0 ; i < 100 ; i++) {
+		mixP2(positionToSearch); // This method can be used in P1 instead of mix() as well :)
 	} 
 	var answer = 0;
 	for (var i = positionToSearch ; i <= positionToSearch+7 ; i++) {
