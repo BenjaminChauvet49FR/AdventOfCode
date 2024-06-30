@@ -40,6 +40,10 @@ CheckCollection.prototype.add = function(p_arg) {
 	return this.addGeneric(p_arg, true);
 }
 
+CheckCollection.prototype.get = function(p_arg) {
+	return this.getGeneric(p_arg, true);
+}
+
 // ------------------------
 // Same but with 2 dimensions. Uses {x, y} items.
 // Who knows, maybe "use generic" with other values instead of pure true/false will find some uses later ?

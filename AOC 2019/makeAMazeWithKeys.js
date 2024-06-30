@@ -1,9 +1,10 @@
 var rawDataNoKeys;				
 var gFieldInConstruction;
-const PLACEHOLDER = -10;
 const SEED = {
 	EMPTY : -1,
-	WALL : -2
+	WALL : -2,
+	FUTURE_DOOR : -3,
+	PLACEHOLDER : -10
 };
 
 function switchRawDataNoKeys(p_index) {
@@ -13,8 +14,13 @@ function switchRawDataNoKeys(p_index) {
 }
 switchRawDataNoKeys(0);
 
+const gNbKeysAndDoors = 26;
+var gXStart;
+var gYStart;
+// Seeding part 1 (we have a maze with only walls and the start/hub space)
+
 //from the value set in rawDataNoKeys (an array of strings) that corresponds to a maze with only its walls removed to the hub, just add keys and doors at random
-function addKeysAndDoors() {
+function addKeysInRawMaze() {
 	const xL = gXLength;
 	const yL = gYLength;
 	const yLDiscrete = (yL-1)/2;
@@ -28,16 +34,17 @@ function addKeysAndDoors() {
 	});
 	
 	// Variable part !
-	const nbKeys = 36;
 	for (y = 39 ; y <= 41 ; y++) {
 		for (x = 39 ; x <= 41 ; x++) {
 			allowedSpaces[x][y] = false;
 		}
 	}
+	gXStart = 40;
+	gYStart = 40; // Reused in seeding part 2
 	
 	var key = 0;
 	var xA, yA, xx, yy, xx2, yy2, dir, dir2;
-	while (key < nbKeys) {
+	while (key < gNbKeysAndDoors) {
 		do {			
 			xA = 2*randomNumber(0, xLDiscrete-1)+1;
 			yA = 2*randomNumber(0, yLDiscrete-1)+1;
@@ -52,8 +59,25 @@ function addKeysAndDoors() {
 	
 	key = 0;
 	
-	// TODO Automatic door placement can wait. I will add a few manually to make a solvable maze.
-	displayTheFieldInConstruction();
+	/*
+	Automatic door placement : 1) place the doors without thinking, symbolizing them with a (!)
+	2) Solving time : collect as many keys as you can without crossing a door.
+	Couldn't collect any key ? Too bad, our door placement was wrong !
+	*/
+	
+	// Automatic door placement !
+	const nbDoors = gNbKeysAndDoors;
+	var door = 0;
+	while (door < nbDoors) {
+		do {			
+			xA = randomNumber(0, xL-2)+1; // First and last of the field that can have '.'
+			yA = randomNumber(0, yL-2)+1; // Same
+		} while (!allowedSpaces[yA][xA]);
+		gFieldInConstruction[yA][xA] = SEED.FUTURE_DOOR;
+		spreadForbiddenSpacesAround(allowedSpaces, xA, yA);
+		door++;
+	}
+	
 }
 
 function keyToDoor(p_key) {
@@ -89,13 +113,101 @@ function spreadForbiddenSpacesAround(p_allowedArray, p_x, p_y) {
 	}
 }
 
+// --------------
+// Seeding part 2 (we have labelled keys and unlabelled doors)
+function addDoorsInMaze() {
+	var keysUsed = new CheckCollection(gNbKeysAndDoors);
+	var keysCollected = new CheckCollection(gNbKeysAndDoors);
+	var doorsToBreakCoors = []; 
+	var dejaVuMaze = generateArrangedDoubleEntryArray(gXLength, gYLength, function(p_x, p_y) {return rawDataNoKeys[p_y].charAt(p_x) == '#'});
+
+	var yetToSeeCoors = [{x : gXStart, y : gYStart}];
+	var x, y;
+	var coors;
+	do {
+		// Explore as much as possible from the starting point (inspirated by a method in "utils_propagation.js")
+		while (yetToSeeCoors.length > 0) {
+			coors = yetToSeeCoors.pop();
+			x = coors.x;
+			y = coors.y;
+			if (dejaVuMaze[y][x]) { // Wall or already explored space
+				// Nope, continue
+			} else if (gFieldInConstruction[y][x] == SEED.FUTURE_DOOR) {
+				doorsToBreakCoors.push({x : x, y : y});
+			} else {
+				dejaVuMaze[y][x] = true;
+				if (gFieldInConstruction[y][x] >= 0 && gFieldInConstruction[y][x] < 1000) { // Got stuck for a little while : if not for the "< 1000", it would unavoidably "collect" doors on which keys were used.
+					keysCollected.add(gFieldInConstruction[y][x]);
+				}
+				//if (y > 0) // Not needed because of the walls to the boundaries of the maze
+					yetToSeeCoors.push({x : x, y : y-1});
+				//if (x > 0)
+					yetToSeeCoors.push({x : x-1, y : y});
+				//if (y < p_array.length-1)
+					yetToSeeCoors.push({x : x, y : y+1});
+				//if (x < p_array[0].length-1)
+					yetToSeeCoors.push({x : x+1, y : y});
+			}
+		}
+
+		// Now that we have explored, select a random door to break and assign it one of the keys we have collected
+		// If it's impossible... too bad !
+		if (keysCollected.list.length <= keysUsed.list.length) {
+			console.log("We are stuck :( please try again");
+			return false;
+		}
+		var breakInd = randomNumber(0, doorsToBreakCoors.length-1);
+		x = doorsToBreakCoors[breakInd].x;
+		y = doorsToBreakCoors[breakInd].y;
+		yetToSeeCoors.push({x : x, y : y});
+		doorsToBreakCoors.splice(breakInd, 1);
+		var keyToAffect = -1;
+		do {
+			keyToAffect = keysCollected.list[randomNumber(0, keysCollected.list.length-1)];
+		} while (!keysUsed.add(keyToAffect));
+		gFieldInConstruction[y][x] = keyToDoor(keyToAffect);
+		if (keyToAffect >= 26) {
+			addPlaceHolder(x, y);
+		}
+	} while (keysCollected.list.length < gNbKeysAndDoors);
+
+	// Good :) now, just shuffle the remaining unopened doors at random !
+	var remainingUnopenedDoors = [];
+	var k;
+	for (k = 0 ; k < gNbKeysAndDoors ; k++) {
+		if (!keysUsed.get(k)) {
+			remainingUnopenedDoors.push(k);
+		}
+	}
+	var permut = generateRandomPermutation(remainingUnopenedDoors.length);
+	var i = 0;
+	for (y = 0 ; y < gYLength ; y++) {
+		for (x = 0 ; x < gXLength ; x++) {
+			if (gFieldInConstruction[y][x] == SEED.FUTURE_DOOR) {
+				k = remainingUnopenedDoors[permut[i]];
+				gFieldInConstruction[y][x] = keyToDoor(k);
+				if (k >= 26) {
+					addPlaceHolder(x, y);
+				}
+				i++;
+			}
+		}
+	}
+	return true;
+}
+
+// --------------
+// Input / output part
 function construction_18_1() { // Yes, it's a pun with the usual "conclusion_X_1"
-	addKeysAndDoors();
-	rawDataNoKeys = gFieldChar;
+	addKeysInRawMaze();
+	var isMade = addDoorsInMaze();
+	displayTheFieldInConstruction();
+	if (isMade) {		
+		// ...
+	}
 }
 
 var gFieldChar;
-
 function displayTheFieldInConstruction() {
 	gFieldChar = [];
 	var eltID = document.getElementById("day2019_18FamousMaze");
@@ -115,6 +227,7 @@ function displayTheFieldInConstruction() {
 				switch(gFieldInConstruction[y][x]) {
 					//case ADDED_WALL : c = '&'; class_ = "addedWall";  break;
 					case SEED.WALL : c = '#'; class_ = "wall"; break;
+					case SEED.FUTURE_DOOR : c = '!'; class_ = ""; break;
 					case SEED.PLACEHOLDER : 
 						for (dir = 0 ; dir <= 3 ; dir++) {
 							k = gFieldInConstruction[y+DeltaY[dir]][x+DeltaX[dir]];
@@ -136,7 +249,7 @@ function displayTheFieldInConstruction() {
 							class_ = "";
 						}
 					break;
-					default : c = c = rawDataNoKeys[y].charAt(x); class_ = ""; break;
+					default : c = rawDataNoKeys[y].charAt(x); class_ = ""; break;
 				}
 			}
 			eltChar = document.createElement("span");
@@ -147,4 +260,10 @@ function displayTheFieldInConstruction() {
 		}
 		eltID.appendChild(document.createElement("br"));
 	}
+	rawData = gFieldChar;
 }
+
+console.log(`Please call the following functions : 
+construction_18_1() (build the maze)
+conclusion_18_1() (solve)
+displayTheFieldInConstruction() (also sets rawData to get conclusion call ready)`)
